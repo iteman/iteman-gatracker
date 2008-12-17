@@ -4,8 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008 KUBO Atsuhiro <kubo@iteman.jp>,
- * All rights reserved.
+ * Copyright (c) 2008 ITEMAN, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,7 +28,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    ITEMAN_GANoJS
- * @copyright  2008 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
