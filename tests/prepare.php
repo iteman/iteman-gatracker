@@ -39,8 +39,7 @@ error_reporting(E_ALL);
 set_include_path(realpath(dirname(__FILE__)) . PATH_SEPARATOR .
                  realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR .
                  realpath(dirname(__FILE__) . '/../imports/PEAR/src') . PATH_SEPARATOR .
-                 realpath(dirname(__FILE__) . '/../imports/PEAR') . PATH_SEPARATOR .
-                 get_include_path()
+                 realpath(dirname(__FILE__) . '/../imports/PEAR')
                  );
 
 require_once 'PHPUnit/Framework.php';
