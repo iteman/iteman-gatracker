@@ -34,7 +34,7 @@
  * @since      File available since Release 0.1.0
  */
 
-error_reporting(E_ALL);
+error_reporting(E_ALL | E_STRICT);
 
 set_include_path(realpath(dirname(__FILE__)) . PATH_SEPARATOR .
                  realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR .
