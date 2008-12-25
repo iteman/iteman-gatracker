@@ -75,7 +75,7 @@ class ITEMAN_GANoJS_TrackingCodeTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function generateTrackingUri()
+    public function トラッキングUriを生成する()
     {
         $trackingCode = new ITEMAN_GANoJS_TrackingCode('UA-6415151-2');
         $trackingCode->setGAVersion('4.3');
@@ -127,7 +127,7 @@ class ITEMAN_GANoJS_TrackingCodeTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function generateTrackingUriForSsl()
+    public function SslのためのトラッキングUriを生成する()
     {
         $trackingCode = new ITEMAN_GANoJS_TrackingCode('UA-6415151-2', true);
         $trackingCode->setGAVersion('4.3');
