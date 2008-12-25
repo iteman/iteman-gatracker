@@ -77,7 +77,8 @@ class ITEMAN_GANoJS_TrackingCodeTest extends PHPUnit_Framework_TestCase
      */
     public function トラッキングUriを生成する()
     {
-        $trackingCode = new ITEMAN_GANoJS_TrackingCode('UA-6415151-2');
+        $trackingCode = new ITEMAN_GANoJS_TrackingCode();
+        $trackingCode->setWebPropertyID('UA-6415151-2');
         $trackingCode->setGAVersion('4.3');
         $trackingCode->setHost('iteman.jp');
         $trackingCode->setDocumentEncoding('UTF-8');
@@ -129,7 +130,8 @@ class ITEMAN_GANoJS_TrackingCodeTest extends PHPUnit_Framework_TestCase
      */
     public function SslのためのトラッキングUriを生成する()
     {
-        $trackingCode = new ITEMAN_GANoJS_TrackingCode('UA-6415151-2', true);
+        $trackingCode = new ITEMAN_GANoJS_TrackingCode(true);
+        $trackingCode->setWebPropertyID('UA-6415151-2');
         $trackingCode->setGAVersion('4.3');
         $trackingCode->setHost('iteman.jp');
         $trackingCode->setDocumentEncoding('UTF-8');

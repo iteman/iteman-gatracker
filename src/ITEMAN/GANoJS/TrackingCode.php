@@ -81,10 +81,9 @@ class ITEMAN_GANoJS_TrackingCode
     // {{{ __construct()
 
     /**
-     * @param string  $webPropertyID
      * @param boolean $useSSL
      */
-    public function __construct($webPropertyID, $useSSL = false)
+    public function __construct($useSSL = false)
     {
         $this->_queryVariables = array('utmwv'  => '4.3',
                                        'utmn'   => mt_rand(0, 2147483647),
@@ -98,7 +97,7 @@ class ITEMAN_GANoJS_TrackingCode
                                        'utmhid' => mt_rand(0, 2147483647),
                                        'utmr'   => '-',
                                        'utmp'   => null,
-                                       'utmac'  => $webPropertyID,
+                                       'utmac'  => null,
                                        'utmcc'  => array($this, 'generateCookieConfiguration')
                                        );
 
@@ -273,6 +272,17 @@ class ITEMAN_GANoJS_TrackingCode
         return $url->getURL();
     }
 
+    // }}}
+    // {{{ setWebPropertyID()
+
+    /**
+     * @param string $webPropertyID
+     */
+    public function setWebPropertyID($webPropertyID)
+    {
+        $this->_queryVariables['utmac'] = $webPropertyID;
+    }
+
     /**#@-*/
 
     /**#@+
@@ -295,7 +305,7 @@ class ITEMAN_GANoJS_TrackingCode
 /*
  * Local Variables:
  * mode: php
- * coding: iso-8859-1
+ * coding: utf-8
  * tab-width: 4
  * c-basic-offset: 4
  * c-hanging-comment-ender-p: nil
