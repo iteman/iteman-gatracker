@@ -122,23 +122,6 @@ class ITEMAN_GANoJS_TrackingCodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/blog/', $queryVariables['utmp']);
         $this->assertEquals('UA-6415151-2', $queryVariables['utmac']);
         $this->assertEquals('__utma%3D269003561.3095504869349727700.1229619879.1229923372.1229940603.8%3B%2B__utmz%3D269003561.1229781229.4.4.utmcsr%3Dmt.iteman.jp%7Cutmccn%3D(referral)%7Cutmcmd%3Dreferral%7Cutmcct%3D%2Fmt.cgi%3B', $queryVariables['utmcc']);
-
-/* o http://www.google-analytics.com/__utm.gif */
-/* o utmwv=4.3 */
-/* o utmn=1327950861 */
-/* o utmhn=iteman.jp */
-/* o utmcs=UTF-8 */
-/* o utmsr=1024x768 */
-/* o utmsc=24-bit */
-/* o utmul=ja */
-/* o utmje=0 */
-/* o utmfl=9.0%20r152 */
-/* o utmdt=ITEMAN%20Blog%20-%20%E3%82%A2%E3%82%A4%E3%83%86%E3%83%9E%E3%83%B3%E3%83%96%E3%83%AD%E3%82%B0 */
-/* o utmhid=1642844647 */
-/* o utmr=- */
-/* o utmp=/blog/ */
-/* o utmac=UA-6415151-2 */
-/* utmcc=__utma%3D269003561.3095504869349727700.1229619879.1229785742.1229864886.6%3B%2B__utmz%3D269003561.1229781229.4.4.utmcsr%3Dmt.iteman.jp%7Cutmccn%3D(referral)%7Cutmcmd%3Dreferral%7Cutmcct%3D%2Fmt.cgi%3B */
     }
 
     /**#@-*/
