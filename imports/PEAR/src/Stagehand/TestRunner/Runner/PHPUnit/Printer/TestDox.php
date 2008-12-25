@@ -48,7 +48,7 @@ require_once 'PHPUnit/Framework/AssertionFailedError.php';
  * @package    Stagehand_TestRunner
  * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.0
+ * @version    Release: 2.6.1
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.4.0
  */

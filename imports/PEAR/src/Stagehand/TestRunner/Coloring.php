@@ -31,7 +31,7 @@
  * @package    Stagehand_TestRunner
  * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: Coloring.php 172 2008-09-18 02:47:42Z iteman $
+ * @version    SVN: $Id: Coloring.php 204 2008-12-22 16:44:30Z iteman $
  * @since      File available since Release 2.4.0
  */
 
@@ -45,7 +45,7 @@ require_once 'Console/Color.php';
  * @package    Stagehand_TestRunner
  * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.0
+ * @version    Release: 2.6.1
  * @since      Class available since Release 2.4.0
  */
 class Stagehand_TestRunner_Coloring
@@ -84,7 +84,10 @@ class Stagehand_TestRunner_Coloring
      */
     public static function green($text)
     {
-        return Console_Color::convert("%g$text%n");
+        $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
+        $green = Console_Color::convert("%g$text%n");
+        error_reporting($oldErrorReportingLevel);
+        return $green;
     }
 
     // }}}
@@ -96,7 +99,10 @@ class Stagehand_TestRunner_Coloring
      */
     public static function red($text)
     {
-        return Console_Color::convert("%r$text%n");
+        $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
+        $red = Console_Color::convert("%r$text%n");
+        error_reporting($oldErrorReportingLevel);
+        return $red;
     }
 
     // }}}
@@ -108,7 +114,10 @@ class Stagehand_TestRunner_Coloring
      */
     public static function magenta($text)
     {
-        return Console_Color::convert("%m$text%n");
+        $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
+        $magenta = Console_Color::convert("%m$text%n");
+        error_reporting($oldErrorReportingLevel);
+        return $magenta;
     }
 
     // }}}
@@ -120,7 +129,10 @@ class Stagehand_TestRunner_Coloring
      */
     public static function yellow($text)
     {
-        return Console_Color::convert("%y$text%n");
+        $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
+        $yellow = Console_Color::convert("%y$text%n");
+        error_reporting($oldErrorReportingLevel);
+        return $yellow;
     }
 
     /**#@-*/

@@ -47,7 +47,7 @@ if (!@include_once 'simpletest/unit_tester.php') {
  * @package    Stagehand_TestRunner
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.0
+ * @version    Release: 2.6.1
  * @since      Class available since Release 2.0.0
  */
 class Stagehand_TestRunner_SimpleTestFailureTest extends UnitTestCase

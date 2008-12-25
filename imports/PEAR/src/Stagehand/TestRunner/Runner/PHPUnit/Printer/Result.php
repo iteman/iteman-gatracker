@@ -31,7 +31,7 @@
  * @package    Stagehand_TestRunner
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: Result.php 193 2008-10-15 11:52:39Z iteman $
+ * @version    SVN: $Id: Result.php 204 2008-12-22 16:44:30Z iteman $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 1.2.0
  */
@@ -53,7 +53,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @package    Stagehand_TestRunner
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.0
+ * @version    Release: 2.6.1
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 1.2.0
  */
@@ -323,6 +323,7 @@ class Stagehand_TestRunner_Runner_PHPUnit_Printer_Result extends PHPUnit_TextUI_
             $colorLabel = 'magenta';
         }
 
+        $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
         $this->write(
           Stagehand_TestRunner_Coloring::$colorLabel(Console_Color::escape($defect->toStringVerbose($this->verbose))) .
           PHPUnit_Util_Filter::getFilteredStacktrace(
@@ -330,6 +331,7 @@ class Stagehand_TestRunner_Runner_PHPUnit_Printer_Result extends PHPUnit_TextUI_
             FALSE
           )
         );
+        error_reporting($oldErrorReportingLevel);
     }
 
     // }}}

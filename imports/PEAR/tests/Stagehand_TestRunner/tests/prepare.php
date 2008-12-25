@@ -31,11 +31,11 @@
  * @package    Stagehand_TestRunner
  * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: prepare.php 176 2008-09-18 03:16:10Z iteman $
+ * @version    SVN: $Id: prepare.php 203 2008-12-21 11:32:38Z iteman $
  * @since      File available since Release 2.4.0
  */
 
-error_reporting(E_ALL);
+error_reporting(E_ALL | E_STRICT);
 
 if (file_exists(dirname(__FILE__) . '/../src/Stagehand/TestRunner.php')) {
     set_include_path(realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR . get_include_path());

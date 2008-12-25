@@ -50,7 +50,7 @@ require_once 'simpletest/test_case.php';
  * @copyright  2007 Masahiko Sakamoto <msakamoto-sf@users.sourceforge.net>
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.0
+ * @version    Release: 2.6.1
  * @link       http://simpletest.org/
  * @since      Class available since Release 2.1.0
  */

@@ -31,7 +31,7 @@
  * @package    Stagehand_TestRunner
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: Reporter.php 179 2008-09-18 03:29:25Z iteman $
+ * @version    SVN: $Id: Reporter.php 204 2008-12-22 16:44:30Z iteman $
  * @link       http://www.phpspec.org/
  * @since      File available since Release 2.0.0
  */
@@ -46,7 +46,7 @@ require_once 'PHPSpec/Runner/Result.php';
  * @package    Stagehand_TestRunner
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.0
+ * @version    Release: 2.6.1
  * @link       http://www.phpspec.org/
  * @since      Class available since Release 2.0.0
  */
@@ -153,6 +153,7 @@ class Stagehand_TestRunner_Runner_PHPSpec_Reporter extends PHPSpec_Runner_Report
                 $colorLabel = 'red';
             }
 
+            $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
             $output = preg_replace(array('/^(\d+ examples?.*)/m',
                                          '/^(  -)(.+)( \(ERROR|EXCEPTION\))/m',
                                          '/^(  -)(.+)( \(FAIL\))/m',
@@ -181,6 +182,7 @@ class Stagehand_TestRunner_Runner_PHPSpec_Reporter extends PHPSpec_Runner_Report
                                          ),
                                    Console_Color::escape($output)
                                    );
+            error_reporting($oldErrorReportingLevel);
         }
 
         print $output;
