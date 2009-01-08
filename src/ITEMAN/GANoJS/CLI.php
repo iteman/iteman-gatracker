@@ -62,7 +62,11 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
 
     protected $exceptionClass = 'ITEMAN_GANoJS_Exception';
     protected $shortOptions = 'hV';
-    protected $longOptions = array('web-property-id=');
+    protected $longOptions = array('web-property-id=',
+                                   'host=',
+                                   'document=',
+                                   'user-agent='
+                                   );
 
     /**#@-*/
 
@@ -73,7 +77,6 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
     private $_config = array('displayUsage' => false,
                              'displayVersion' => false
                              );
-    private $_trackingCode;
 
     /**#@-*/
 
@@ -82,13 +85,14 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
      */
 
     // }}}
-    // {{{ __construct()
+    // {{{ createTracker()
 
     /**
+     * @return ITEMAN_GANoJS_Tracker
      */
-    public function __construct()
+    public function createTracker()
     {
-        $this->_trackingCode = new ITEMAN_GANoJS_Tracker();
+        return new ITEMAN_GANoJS_Tracker();
     }
 
     /**#@-*/
@@ -116,6 +120,15 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
             return false;
         case '--web-property-id':
             $this->_config['webPropertyID'] = $value;
+            break;
+        case '--host':
+            $this->_config['host'] = $value;
+            break;
+        case '--document':
+            $this->_config['document'] = $value;
+            break;
+        case '--user-agent':
+            $this->_config['userAgent'] = $value;
             break;
         }
 
@@ -152,13 +165,14 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
             return;
         }
 
+        $tracker = $this->createTracker();
         foreach ($this->_config as $key => $value) {
-            if (method_exists($this->_trackingCode, "set$key")) {
-                $this->_trackingCode->{ "set$key" }($value);
+            if (method_exists($tracker, "set$key")) {
+                $tracker->{ "set$key" }($value);
             }
         }
 
-        $this->_trackingCode->trackPageView();
+        $tracker->trackPageView();
     }
 
     /**#@-*/
@@ -190,6 +204,20 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
     を指定します。
     WEB-PROPERTY-ID のフォーマットは UA-XXX-X であり、
     https://www.google.com/analytics/settings/home で確認することができます。
+
+  --host=HOST
+    トラッキングの対象となる URI のホスト部分を指定します。
+    例えば URI が http://www.example.com/foo/bar.tar.gz の場合、ホスト部分は
+    www.example.com となります。
+
+  --document=DOCUMENT
+    トラッキングの対象となる URI のパス部分を指定します。
+    例えば URI が http://www.example.com/foo/bar.tar.gz の場合、パス部分は
+    /foo/bar.tar.gz となります。
+
+  --user-agent=USER-AGENT
+    トラッキングの対象となる URI にリクエストを行ったユーザエージェントを指定し
+    ます。
 ";
     }
 

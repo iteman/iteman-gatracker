@@ -69,6 +69,7 @@ class ITEMAN_GANoJS_Tracker
     private $_queryVariables = array();
     private $_cookieA;
     private $_cookieZ;
+    private $_userAgent;
 
     /**#@-*/
 
@@ -254,12 +255,6 @@ class ITEMAN_GANoJS_Tracker
      */
     public function generateTrackingURI()
     {
-        foreach (array('utmwv', 'utmhn', 'utmcs', 'utmje', 'utmp', 'utmac') as $requiredVariable) {
-            if (is_null($this->_queryVariables[$requiredVariable])) {
-                throw new ITEMAN_GANoJS_Exception("The value of the variable [ $requiredVariable ] is required");
-            }
-        }
-
         $queryVariables = array();
         foreach ($this->_queryVariables as $name => $value) {
             if (!is_callable($value)) {
@@ -289,10 +284,42 @@ class ITEMAN_GANoJS_Tracker
     // {{{ trackPageView()
 
     /**
+     * @throws ITEMAN_GANoJS_Exception
      */
     public function trackPageView()
     {
-        $trackingURI = $this->generateTrackingURI();
+        $this->_validate();
+        $request = $this->createHTTPRequest();
+        $request->setUrl($this->generateTrackingURI());
+        $request->setMethod(HTTP_Request2::METHOD_GET);
+        $request->setConfig(array('connect_timeout' => 10, 'timeout' => 30));
+        $request->setHeader('User-Agent', $this->_userAgent);
+        $response = $request->send();
+        if ($response->getStatus() != '200') {
+            throw new ITEMAN_GANoJS_Exception('200 以外のステータスコードが返されました');
+        }
+    }
+
+    // }}}
+    // {{{ setUserAgent()
+
+    /**
+     * @param string $userAgent
+     */
+    public function setUserAgent($userAgent)
+    {
+        $this->_userAgent = $userAgent;
+    }
+
+    // }}}
+    // {{{ createHTTPRequest()
+
+    /**
+     * @return HTTP_Request2
+     */
+    public function createHTTPRequest()
+    {
+        return new HTTP_Request2();
     }
 
     /**#@-*/
@@ -306,6 +333,24 @@ class ITEMAN_GANoJS_Tracker
     /**#@+
      * @access private
      */
+
+    // }}}
+    // {{{ _validate()
+
+    /**
+     */
+    private function _validate()
+    {
+        foreach (array('utmwv', 'utmhn', 'utmcs', 'utmje', 'utmp', 'utmac') as $requiredVariable) {
+            if (is_null($this->_queryVariables[$requiredVariable])) {
+                throw new ITEMAN_GANoJS_Exception("クエリ変数 [ $requiredVariable ] は必須です");
+            }
+        }
+
+        if (is_null($this->_userAgent)) {
+            throw new ITEMAN_GANoJS_Exception('ユーザエージェントは必須です');
+        }
+    }
 
     /**#@-*/
 

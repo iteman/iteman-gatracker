@@ -126,6 +126,40 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
         ob_end_clean();
 
         $this->assertEquals(1, $result);
+        $this->assertRegExp('/^ERROR: クエリ変数 \[ [a-z]+ \] は必須です/', $content);
+    }
+
+    /**
+     * @test
+     */
+    public function トラッキングを実行する()
+    {
+        $_SERVER['SCRIPT_NAME'] = 'bin/iteman-ganojs';
+        $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'],
+                                 '--web-property-id=UA-6415151-2',
+                                 '--host=iteman.jp',
+                                 '--document=/blog/',
+                                 '--user-agent=Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5'
+                                 );
+        $GLOBALS['argc'] = count($_SERVER['argv']);
+
+        $adapter = new HTTP_Request2_Adapter_Mock();
+        $adapter->addResponse('HTTP/1.1 200 OK');
+        $request = new HTTP_Request2();
+        $request->setAdapter($adapter);
+
+        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker', array('createHTTPRequest'));
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($request));
+
+        $cli = $this->getMock('ITEMAN_GANoJS_CLI', array('createTracker'));
+        $cli->expects($this->any())
+            ->method('createTracker')
+            ->will($this->returnValue($tracker));
+        $result = $cli->run();
+
+        $this->assertEquals(0, $result);
     }
 
     /**#@-*/
