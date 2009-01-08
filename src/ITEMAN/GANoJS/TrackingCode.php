@@ -67,7 +67,6 @@ class ITEMAN_GANoJS_TrackingCode
      */
 
     private $_queryVariables = array();
-    private $_gaURI;
     private $_cookieA;
     private $_cookieZ;
 
@@ -81,9 +80,8 @@ class ITEMAN_GANoJS_TrackingCode
     // {{{ __construct()
 
     /**
-     * @param boolean $useSSL
      */
-    public function __construct($useSSL = false)
+    public function __construct()
     {
         $this->_queryVariables = array('utmwv'  => '4.3',
                                        'utmn'   => mt_rand(0, 2147483647),
@@ -100,9 +98,6 @@ class ITEMAN_GANoJS_TrackingCode
                                        'utmac'  => null,
                                        'utmcc'  => array($this, 'generateCookieConfiguration')
                                        );
-
-        $this->_gaURI = !$useSSL ? 'http://www.google-analytics.com/__utm.gif'
-                                 : 'https://ssl.google-analytics.com/__utm.gif';
     }
 
     // }}}
@@ -267,7 +262,7 @@ class ITEMAN_GANoJS_TrackingCode
             }
         }
 
-        $url = new Net_URL2($this->_gaURI);
+        $url = new Net_URL2('http://www.google-analytics.com/__utm.gif');
         $url->setQueryVariables($queryVariables);
         return $url->getURL();
     }

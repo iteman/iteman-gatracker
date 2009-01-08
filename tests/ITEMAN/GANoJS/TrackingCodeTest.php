@@ -125,59 +125,6 @@ class ITEMAN_GANoJS_TrackingCodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('__utma%3D269003561.3095504869349727700.1229619879.1229923372.1229940603.8%3B%2B__utmz%3D269003561.1229781229.4.4.utmcsr%3Dmt.iteman.jp%7Cutmccn%3D(referral)%7Cutmcmd%3Dreferral%7Cutmcct%3D%2Fmt.cgi%3B', $queryVariables['utmcc']);
     }
 
-    /**
-     * @test
-     */
-    public function SslのためのトラッキングUriを生成する()
-    {
-        $trackingCode = new ITEMAN_GANoJS_TrackingCode(true);
-        $trackingCode->setWebPropertyID('UA-6415151-2');
-        $trackingCode->setGAVersion('4.3');
-        $trackingCode->setHost('iteman.jp');
-        $trackingCode->setDocumentEncoding('UTF-8');
-        $trackingCode->setScreenResolution('1024x768');
-        $trackingCode->setScreenColor('24-bit');
-        $trackingCode->setUserLanguage('ja');
-        $trackingCode->setJavaEnabled(false);
-        $trackingCode->setFlashVersion('9.0 r152');
-        $trackingCode->setDocumentTitle('ITEMAN Blog - アイテマンブログ');
-        $trackingCode->setDocument('/blog/');
-        $trackingCode->setCookieA('269003561.3095504869349727700.1229619879.1229923372.1229940603.8');
-        $trackingCode->setCookieZ('269003561.1229781229.4.4.utmcsr=mt.iteman.jp|utmccn=(referral)|utmcmd=referral|utmcct=/mt.cgi');
-        $trackingURI = $trackingCode->generateTrackingURI();
-        $uriElements = parse_url($trackingURI);
-
-        $this->assertEquals('https', $uriElements['scheme']);
-        $this->assertEquals('ssl.google-analytics.com', $uriElements['host']);
-        $this->assertEquals('/__utm.gif', $uriElements['path']);
-
-        $queryVariables = array();
-        foreach (explode('&', $uriElements['query']) as $queryVariable) {
-            list($name, $value) = explode('=', $queryVariable);
-            $queryVariables[$name] = $value;
-        }
-
-        $this->assertEquals('4.3', $queryVariables['utmwv']);
-        $this->assertGreaterThanOrEqual(0, $queryVariables['utmn']);
-        $this->assertLessThanOrEqual(2147483647, $queryVariables['utmn']);
-        $this->assertLessThanOrEqual('iteman.jp', $queryVariables['utmhn']);
-        $this->assertEquals('UTF-8', $queryVariables['utmcs']);
-        $this->assertEquals('1024x768', $queryVariables['utmsr']);
-        $this->assertEquals('24-bit', $queryVariables['utmsc']);
-        $this->assertEquals('ja', $queryVariables['utmul']);
-        $this->assertEquals('0', $queryVariables['utmje']);
-        $this->assertEquals(rawurlencode('9.0 r152'), $queryVariables['utmfl']);
-        $this->assertEquals(rawurlencode('ITEMAN Blog - アイテマンブログ'),
-                            $queryVariables['utmdt']
-                            );
-        $this->assertGreaterThanOrEqual(0, $queryVariables['utmhid']);
-        $this->assertLessThanOrEqual(2147483647, $queryVariables['utmhid']);
-        $this->assertEquals('-', $queryVariables['utmr']);
-        $this->assertEquals('/blog/', $queryVariables['utmp']);
-        $this->assertEquals('UA-6415151-2', $queryVariables['utmac']);
-        $this->assertEquals('__utma%3D269003561.3095504869349727700.1229619879.1229923372.1229940603.8%3B%2B__utmz%3D269003561.1229781229.4.4.utmcsr%3Dmt.iteman.jp%7Cutmccn%3D(referral)%7Cutmcmd%3Dreferral%7Cutmcct%3D%2Fmt.cgi%3B', $queryVariables['utmcc']);
-    }
-
     /**#@-*/
 
     /**#@+
