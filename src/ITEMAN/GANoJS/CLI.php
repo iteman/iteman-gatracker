@@ -88,7 +88,7 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
      */
     public function __construct()
     {
-        $this->_trackingCode = new ITEMAN_GANoJS_TrackingCode();
+        $this->_trackingCode = new ITEMAN_GANoJS_Tracker();
     }
 
     /**#@-*/

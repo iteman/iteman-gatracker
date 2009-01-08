@@ -35,7 +35,7 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_TrackingCode
+// {{{ ITEMAN_GANoJS_Tracker
 
 /**
  * @package    ITEMAN_GANoJS
@@ -45,7 +45,7 @@
  * @link       http://www.vdgraaf.info/google-analytics-without-javascript.html
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_TrackingCode
+class ITEMAN_GANoJS_Tracker
 {
 
     // {{{ properties

@@ -34,10 +34,10 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_TrackingCodeTest
+// {{{ ITEMAN_GANoJS_TrackerTest
 
 /**
- * Some tests for ITEMAN_GANoJS_TrackingCode.
+ * ITEMAN_GANoJS_Tracker のためのテスト。
  *
  * @package    ITEMAN_GANoJS
  * @copyright  2008 ITEMAN, Inc.
@@ -45,7 +45,7 @@
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_TrackingCodeTest extends PHPUnit_Framework_TestCase
+class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -77,7 +77,7 @@ class ITEMAN_GANoJS_TrackingCodeTest extends PHPUnit_Framework_TestCase
      */
     public function トラッキングUriを生成する()
     {
-        $trackingCode = new ITEMAN_GANoJS_TrackingCode();
+        $trackingCode = new ITEMAN_GANoJS_Tracker();
         $trackingCode->setWebPropertyID('UA-6415151-2');
         $trackingCode->setGAVersion('4.3');
         $trackingCode->setHost('iteman.jp');
