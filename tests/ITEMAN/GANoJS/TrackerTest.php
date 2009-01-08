@@ -77,21 +77,21 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
      */
     public function トラッキングUriを生成する()
     {
-        $trackingCode = new ITEMAN_GANoJS_Tracker();
-        $trackingCode->setWebPropertyID('UA-6415151-2');
-        $trackingCode->setGAVersion('4.3');
-        $trackingCode->setHost('iteman.jp');
-        $trackingCode->setDocumentEncoding('UTF-8');
-        $trackingCode->setScreenResolution('1024x768');
-        $trackingCode->setScreenColor('24-bit');
-        $trackingCode->setUserLanguage('ja');
-        $trackingCode->setJavaEnabled(false);
-        $trackingCode->setFlashVersion('9.0 r152');
-        $trackingCode->setDocumentTitle('ITEMAN Blog - アイテマンブログ');
-        $trackingCode->setDocument('/blog/');
-        $trackingCode->setCookieA('269003561.3095504869349727700.1229619879.1229923372.1229940603.8');
-        $trackingCode->setCookieZ('269003561.1229781229.4.4.utmcsr=mt.iteman.jp|utmccn=(referral)|utmcmd=referral|utmcct=/mt.cgi');
-        $trackingURI = $trackingCode->generateTrackingURI();
+        $tracker = new ITEMAN_GANoJS_Tracker();
+        $tracker->setWebPropertyID('UA-6415151-2');
+        $tracker->setGAVersion('4.3');
+        $tracker->setHost('iteman.jp');
+        $tracker->setDocumentEncoding('UTF-8');
+        $tracker->setScreenResolution('1024x768');
+        $tracker->setScreenColor('24-bit');
+        $tracker->setUserLanguage('ja');
+        $tracker->setJavaEnabled(false);
+        $tracker->setFlashVersion('9.0 r152');
+        $tracker->setDocumentTitle('ITEMAN Blog - アイテマンブログ');
+        $tracker->setDocument('/blog/');
+        $tracker->setCookieA('269003561.3095504869349727700.1229619879.1229923372.1229940603.8');
+        $tracker->setCookieZ('269003561.1229781229.4.4.utmcsr=mt.iteman.jp|utmccn=(referral)|utmcmd=referral|utmcct=/mt.cgi');
+        $trackingURI = $tracker->generateTrackingURI();
         $uriElements = parse_url($trackingURI);
 
         $this->assertEquals('http', $uriElements['scheme']);
