@@ -86,10 +86,10 @@ class ITEMAN_GANoJS_TrackingCode
         $this->_queryVariables = array('utmwv'  => '4.3',
                                        'utmn'   => mt_rand(0, 2147483647),
                                        'utmhn'  => null,
-                                       'utmcs'  => null,
+                                       'utmcs'  => 'UTF-8',
                                        'utmsr'  => null,
                                        'utmsc'  => null,
-                                       'utmje'  => null,
+                                       'utmje'  => '0',
                                        'utmfl'  => null,
                                        'utmdt'  => null,
                                        'utmhid' => mt_rand(0, 2147483647),
@@ -250,9 +250,16 @@ class ITEMAN_GANoJS_TrackingCode
 
     /**
      * @return string
+     * @throws ITEMAN_GANoJS_Exception
      */
     public function generateTrackingURI()
     {
+        foreach (array('utmwv', 'utmhn', 'utmcs', 'utmje', 'utmp', 'utmac') as $requiredVariable) {
+            if (is_null($this->_queryVariables[$requiredVariable])) {
+                throw new ITEMAN_GANoJS_Exception("The value of the variable [ $requiredVariable ] is required");
+            }
+        }
+
         $queryVariables = array();
         foreach ($this->_queryVariables as $name => $value) {
             if (!is_callable($value)) {
@@ -276,6 +283,16 @@ class ITEMAN_GANoJS_TrackingCode
     public function setWebPropertyID($webPropertyID)
     {
         $this->_queryVariables['utmac'] = $webPropertyID;
+    }
+
+    // }}}
+    // {{{ trackPageView()
+
+    /**
+     */
+    public function trackPageView()
+    {
+        $trackingURI = $this->generateTrackingURI();
     }
 
     /**#@-*/
