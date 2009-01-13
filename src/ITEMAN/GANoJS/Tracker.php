@@ -86,7 +86,7 @@ class ITEMAN_GANoJS_Tracker
     {
         $this->_queryVariables = array('utmwv'  => '4.3',
                                        'utmn'   => mt_rand(0, 2147483647),
-                                       'utmhn'  => null,
+                                       'utmhn'  => array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : null,
                                        'utmcs'  => 'UTF-8',
                                        'utmsr'  => null,
                                        'utmsc'  => null,

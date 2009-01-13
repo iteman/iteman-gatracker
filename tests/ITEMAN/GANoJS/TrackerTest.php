@@ -107,7 +107,7 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('4.3', $queryVariables['utmwv']);
         $this->assertGreaterThanOrEqual(0, $queryVariables['utmn']);
         $this->assertLessThanOrEqual(2147483647, $queryVariables['utmn']);
-        $this->assertLessThanOrEqual('iteman.jp', $queryVariables['utmhn']);
+        $this->assertEquals('iteman.jp', $queryVariables['utmhn']);
         $this->assertEquals('UTF-8', $queryVariables['utmcs']);
         $this->assertEquals('1024x768', $queryVariables['utmsr']);
         $this->assertEquals('24-bit', $queryVariables['utmsc']);
@@ -123,6 +123,38 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/blog/', $queryVariables['utmp']);
         $this->assertEquals('UA-6415151-2', $queryVariables['utmac']);
         $this->assertEquals('__utma%3D269003561.3095504869349727700.1229619879.1229923372.1229940603.8%3B%2B__utmz%3D269003561.1229781229.4.4.utmcsr%3Dmt.iteman.jp%7Cutmccn%3D(referral)%7Cutmcmd%3Dreferral%7Cutmcct%3D%2Fmt.cgi%3B', $queryVariables['utmcc']);
+    }
+
+    /**
+     * @test
+     */
+    public function ホスト名が与えられなかった場合環境変数Server_nameの値を使用すること()
+    {
+        $_SERVER['SERVER_NAME'] = 'iteman.jp';
+
+        $tracker = new ITEMAN_GANoJS_Tracker();
+        $tracker->setWebPropertyID('UA-6415151-2');
+        $tracker->setGAVersion('4.3');
+        $tracker->setDocumentEncoding('UTF-8');
+        $tracker->setScreenResolution('1024x768');
+        $tracker->setScreenColor('24-bit');
+        $tracker->setUserLanguage('ja');
+        $tracker->setJavaEnabled(false);
+        $tracker->setFlashVersion('9.0 r152');
+        $tracker->setDocumentTitle('ITEMAN Blog - アイテマンブログ');
+        $tracker->setDocument('/blog/');
+        $tracker->setCookieA('269003561.3095504869349727700.1229619879.1229923372.1229940603.8');
+        $tracker->setCookieZ('269003561.1229781229.4.4.utmcsr=mt.iteman.jp|utmccn=(referral)|utmcmd=referral|utmcct=/mt.cgi');
+        $trackingURI = $tracker->generateTrackingURI();
+        $uriElements = parse_url($trackingURI);
+
+        $queryVariables = array();
+        foreach (explode('&', $uriElements['query']) as $queryVariable) {
+            list($name, $value) = explode('=', $queryVariable);
+            $queryVariables[$name] = $value;
+        }
+
+        $this->assertEquals('iteman.jp', $queryVariables['utmhn']);
     }
 
     /**#@-*/
