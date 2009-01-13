@@ -62,7 +62,7 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
 
     protected $exceptionClass = 'ITEMAN_GANoJS_Exception';
     protected $shortOptions = 'hV';
-    protected $longOptions = array();
+    protected $longOptions = array('run-as-filter==');
 
     /**#@-*/
 
