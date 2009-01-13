@@ -77,6 +77,7 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
      */
     public function トラッキングUriを生成する()
     {
+        $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
         $_SERVER['SERVER_NAME'] = 'iteman.jp';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REQUEST_URI'] = '/blog/';
@@ -90,7 +91,6 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($request));
 
-        $tracker->setWebPropertyID('UA-6415151-2');
         $tracker->setGAVersion('4.3');
         $tracker->setDocumentEncoding('UTF-8');
         $tracker->setScreenResolution('1024x768');

@@ -96,7 +96,7 @@ class ITEMAN_GANoJS_Tracker
                                        'utmhid' => mt_rand(0, 2147483647),
                                        'utmr'   => '-',
                                        'utmp'   => array_key_exists('REQUEST_URI', $_SERVER) ? $_SERVER['REQUEST_URI'] : null,
-                                       'utmac'  => null,
+                                       'utmac'  => array_key_exists('ITEMAN_GANOJS_WEBPROPERTYID', $_SERVER) ? $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] : null,
                                        'utmcc'  => array($this, 'generateCookieConfiguration')
                                        );
 
