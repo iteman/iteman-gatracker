@@ -91,17 +91,6 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($request));
 
-        $tracker->setGAVersion('4.3');
-        $tracker->setDocumentEncoding('UTF-8');
-        $tracker->setScreenResolution('1024x768');
-        $tracker->setScreenColor('24-bit');
-        $tracker->setUserLanguage('ja');
-        $tracker->setJavaEnabled(false);
-        $tracker->setFlashVersion('9.0 r152');
-        $tracker->setDocumentTitle('ITEMAN Blog - アイテマンブログ');
-        $tracker->setCookieA('269003561.3095504869349727700.1229619879.1229923372.1229940603.8');
-        $tracker->setCookieZ('269003561.1229781229.4.4.utmcsr=mt.iteman.jp|utmccn=(referral)|utmcmd=referral|utmcct=/mt.cgi');
-
         $tracker->trackPageView();
         $url = $request->getUrl();
 
@@ -120,21 +109,20 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertLessThanOrEqual(2147483647, $queryVariables['utmn']);
         $this->assertEquals('iteman.jp', $queryVariables['utmhn']);
         $this->assertEquals('UTF-8', $queryVariables['utmcs']);
-        $this->assertEquals('1024x768', $queryVariables['utmsr']);
-        $this->assertEquals('24-bit', $queryVariables['utmsc']);
-        $this->assertEquals('ja', $queryVariables['utmul']);
+        $this->assertEquals('-', $queryVariables['utmsr']);
+        $this->assertEquals('-', $queryVariables['utmsc']);
+        $this->assertEquals('-', $queryVariables['utmul']);
         $this->assertEquals('0', $queryVariables['utmje']);
-        $this->assertEquals(rawurlencode('9.0 r152'), $queryVariables['utmfl']);
-        $this->assertEquals(rawurlencode('ITEMAN Blog - アイテマンブログ'),
-                            $queryVariables['utmdt']
-                            );
+        $this->assertEquals('-', $queryVariables['utmfl']);
+        $this->assertEquals('-', $queryVariables['utmdt']);
         $this->assertGreaterThanOrEqual(0, $queryVariables['utmhid']);
         $this->assertLessThanOrEqual(2147483647, $queryVariables['utmhid']);
         $this->assertEquals('-', $queryVariables['utmr']);
         $this->assertEquals('/blog/', $queryVariables['utmp']);
         $this->assertEquals('UA-6415151-2', $queryVariables['utmac']);
-        $this->assertEquals('__utma%3D269003561.3095504869349727700.1229619879.1229923372.1229940603.8%3B%2B__utmz%3D269003561.1229781229.4.4.utmcsr%3Dmt.iteman.jp%7Cutmccn%3D(referral)%7Cutmcmd%3Dreferral%7Cutmcct%3D%2Fmt.cgi%3B', $queryVariables['utmcc']);
+        $this->assertRegExp('/^__utma%3D\d+\.\d+\.\d+\.\d+\.\d+.2%3B%2B__utmb%3D\d+%3B%2B__utmc%3D\d+%3B%2B__utmz%3D\d+\.\d+\.2\.2\.utmccn%3D\(direct\)%7Cutmcsr%3D\(direct\)%7Cutmcmd%3D\(none\)%3B$/', $queryVariables['utmcc']);
     }
+
     /**#@-*/
 
     /**#@+

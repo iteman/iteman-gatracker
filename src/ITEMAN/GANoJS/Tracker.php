@@ -32,6 +32,7 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @link       http://www.vdgraaf.info/google-analytics-without-javascript.html
+ * @link       http://www.ianlewis.org/jp/google-analytics
  * @since      File available since Release 0.1.0
  */
 
@@ -43,6 +44,7 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @link       http://www.vdgraaf.info/google-analytics-without-javascript.html
+ * @link       http://www.ianlewis.org/jp/google-analytics
  * @since      Class available since Release 0.1.0
  */
 class ITEMAN_GANoJS_Tracker
@@ -85,154 +87,23 @@ class ITEMAN_GANoJS_Tracker
     public function __construct()
     {
         $this->_queryVariables = array('utmwv'  => '4.3',
-                                       'utmn'   => mt_rand(0, 2147483647),
-                                       'utmhn'  => array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : null,
+                                       'utmn'   => mt_rand(1000000000, 9999999999),
                                        'utmcs'  => 'UTF-8',
-                                       'utmsr'  => null,
-                                       'utmsc'  => null,
+                                       'utmsr'  => '-',
+                                       'utmsc'  => '-',
+                                       'utmul'  => '-',
                                        'utmje'  => '0',
-                                       'utmfl'  => null,
-                                       'utmdt'  => null,
+                                       'utmfl'  => '-',
+                                       'utmdt'  => '-',
+                                       'utmhn'  => @$_SERVER['SERVER_NAME'],
+                                       'utmr'   => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : '-',
+                                       'utmp'   => @$_SERVER['REQUEST_URI'],
+                                       'utmac'  => @$_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'],
                                        'utmhid' => mt_rand(0, 2147483647),
-                                       'utmr'   => '-',
-                                       'utmp'   => array_key_exists('REQUEST_URI', $_SERVER) ? $_SERVER['REQUEST_URI'] : null,
-                                       'utmac'  => array_key_exists('ITEMAN_GANOJS_WEBPROPERTYID', $_SERVER) ? $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] : null,
                                        'utmcc'  => array($this, 'generateCookieConfiguration')
                                        );
 
-        $this->_userAgent = array_key_exists('HTTP_USER_AGENT', $_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : null;
-    }
-
-    // }}}
-    // {{{ setGAVersion()
-
-    /**
-     * @param string $gaVersion
-     */
-    public function setGAVersion($gaVersion)
-    {
-        $this->_queryVariables['utmwv'] = $gaVersion;
-    }
-
-    // }}}
-    // {{{ setHost()
-
-    /**
-     * @param string $host
-     */
-    public function setHost($host)
-    {
-        $this->_queryVariables['utmhn'] = $host;
-    }
-
-    // }}}
-    // {{{ setDocumentEncoding()
-
-    /**
-     * @param string $documentEncoding
-     */
-    public function setDocumentEncoding($documentEncoding)
-    {
-        $this->_queryVariables['utmcs'] = $documentEncoding;
-    }
-
-    // }}}
-    // {{{ setScreenResolution()
-
-    /**
-     * @param string $screenResolution
-     */
-    public function setScreenResolution($screenResolution)
-    {
-        $this->_queryVariables['utmsr'] = $screenResolution;
-    }
-
-    // }}}
-    // {{{ setScreenColor()
-
-    /**
-     * @param string $screenColor
-     */
-    public function setScreenColor($screenColor)
-    {
-        $this->_queryVariables['utmsc'] = $screenColor;
-    }
-
-    // }}}
-    // {{{ setUserLanguage()
-
-    /**
-     * @param string $userLanguage
-     */
-    public function setUserLanguage($userLanguage)
-    {
-        $this->_queryVariables['utmul'] = $userLanguage;
-    }
-
-    // }}}
-    // {{{ setJavaEnabled()
-
-    /**
-     * @param boolean $javaEnabled
-     */
-    public function setJavaEnabled($javaEnabled)
-    {
-        $this->_queryVariables['utmje'] = $javaEnabled ? '1' : '0';
-    }
-
-    // }}}
-    // {{{ setFlashVersion()
-
-    /**
-     * @param string $flashVersion
-     */
-    public function setFlashVersion($flashVersion)
-    {
-        $this->_queryVariables['utmfl'] = rawurlencode($flashVersion);
-    }
-
-    // }}}
-    // {{{ setDocumentTitle()
-
-    /**
-     * @param string $documentTitle
-     */
-    public function setDocumentTitle($documentTitle)
-    {
-        $this->_queryVariables['utmdt'] = rawurlencode($documentTitle);
-    }
-
-    // }}}
-    // {{{ setDocument()
-
-    /**
-     * @param string $document
-     */
-    public function setDocument($document)
-    {
-        $this->_queryVariables['utmp'] = $document;
-    }
-
-    // }}}
-    // {{{ setCookieA()
-
-    /**
-     * @param string $cookieA
-     */
-    public function setCookieA($cookieA)
-    {
-        $this->_cookieA = $cookieA;
-    }
-
-    // }}}
-    // {{{ setCookieZ()
-
-    /**
-     * @param string $cookieZ
-     */
-    public function setCookieZ($cookieZ)
-    {
-        $this->_cookieZ = $cookieZ;
+        $this->_userAgent = @$_SERVER['HTTP_USER_AGENT'];
     }
 
     // }}}
@@ -243,43 +114,16 @@ class ITEMAN_GANoJS_Tracker
      */
     public function generateCookieConfiguration()
     {
-        return strtr(rawurlencode("__utma={$this->_cookieA};+__utmz={$this->_cookieZ};"),
+        $cookieNumber = mt_rand(0, 2147483647);
+        $currentTimestamp = time();
+        return strtr(rawurlencode(sprintf('__utma=%d.%d.%d.%d.%d.2;+__utmb=%d;+__utmc=%d;+__utmz=%d.%d.2.2.utmccn=(direct)|utmcsr=(direct)|utmcmd=(none);',
+                       $cookieNumber, mt_rand(1000000000, 2147483647), $currentTimestamp, $currentTimestamp, $currentTimestamp, // __utma
+                       $cookieNumber, // __utmb
+                       $cookieNumber, // __utmc
+                       $cookieNumber, $currentTimestamp // __utmz
+                                          )),
                      array('%28' => '(', '%29' => ')')
                      );
-    }
-
-    // }}}
-    // {{{ generateTrackingURI()
-
-    /**
-     * @return string
-     * @throws ITEMAN_GANoJS_Exception
-     */
-    public function generateTrackingURI()
-    {
-        $queryVariables = array();
-        foreach ($this->_queryVariables as $name => $value) {
-            if (!is_callable($value)) {
-                $queryVariables[$name] = $value;
-            } else {
-                $queryVariables[$name] = call_user_func($value);
-            }
-        }
-
-        $url = new Net_URL2('http://www.google-analytics.com/__utm.gif');
-        $url->setQueryVariables($queryVariables);
-        return $url->getURL();
-    }
-
-    // }}}
-    // {{{ setWebPropertyID()
-
-    /**
-     * @param string $webPropertyID
-     */
-    public function setWebPropertyID($webPropertyID)
-    {
-        $this->_queryVariables['utmac'] = $webPropertyID;
     }
 
     // }}}
@@ -292,7 +136,7 @@ class ITEMAN_GANoJS_Tracker
     {
         $this->_validate();
         $request = $this->createHTTPRequest();
-        $request->setUrl($this->generateTrackingURI());
+        $request->setUrl($this->_generateTrackingURI());
         $request->setMethod(HTTP_Request2::METHOD_GET);
         $request->setConfig(array('connect_timeout' => 10, 'timeout' => 30));
         $request->setHeader('User-Agent', $this->_userAgent);
@@ -300,17 +144,6 @@ class ITEMAN_GANoJS_Tracker
         if ($response->getStatus() != '200') {
             throw new ITEMAN_GANoJS_Exception('200 以外のステータスコードが返されました');
         }
-    }
-
-    // }}}
-    // {{{ setUserAgent()
-
-    /**
-     * @param string $userAgent
-     */
-    public function setUserAgent($userAgent)
-    {
-        $this->_userAgent = $userAgent;
     }
 
     // }}}
@@ -343,7 +176,7 @@ class ITEMAN_GANoJS_Tracker
      */
     private function _validate()
     {
-        foreach (array('utmwv', 'utmhn', 'utmcs', 'utmje', 'utmp', 'utmac') as $requiredVariable) {
+        foreach (array('utmhn', 'utmp', 'utmac') as $requiredVariable) {
             if (is_null($this->_queryVariables[$requiredVariable])) {
                 throw new ITEMAN_GANoJS_Exception("クエリ変数 [ $requiredVariable ] は必須です");
             }
@@ -353,6 +186,30 @@ class ITEMAN_GANoJS_Tracker
             throw new ITEMAN_GANoJS_Exception('ユーザエージェントは必須です');
         }
     }
+
+    // }}}
+    // {{{ _generateTrackingURI()
+
+    /**
+     * @return string
+     * @throws ITEMAN_GANoJS_Exception
+     */
+    private function _generateTrackingURI()
+    {
+        $queryVariables = array();
+        foreach ($this->_queryVariables as $name => $value) {
+            if (!is_callable($value)) {
+                $queryVariables[$name] = $value;
+            } else {
+                $queryVariables[$name] = call_user_func($value);
+            }
+        }
+
+        $url = new Net_URL2('http://www.google-analytics.com/__utm.gif');
+        $url->setQueryVariables($queryVariables);
+        return $url->getURL();
+    }
+
 
     /**#@-*/
 
