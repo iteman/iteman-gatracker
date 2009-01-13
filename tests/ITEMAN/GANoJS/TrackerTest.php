@@ -128,7 +128,7 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function ホスト名が与えられなかった場合環境変数Server_nameの値を使用すること()
+    public function ホスト名のデフォルトとして環境変数Server_nameの値を使用すること()
     {
         $_SERVER['SERVER_NAME'] = 'iteman.jp';
 
