@@ -62,11 +62,7 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
 
     protected $exceptionClass = 'ITEMAN_GANoJS_Exception';
     protected $shortOptions = 'hV';
-    protected $longOptions = array('web-property-id=',
-                                   'host=',
-                                   'document=',
-                                   'user-agent='
-                                   );
+    protected $longOptions = array();
 
     /**#@-*/
 
@@ -75,7 +71,8 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
      */
 
     private $_config = array('displayUsage' => false,
-                             'displayVersion' => false
+                             'displayVersion' => false,
+                             'runAsFilter' => false
                              );
 
     /**#@-*/
@@ -118,17 +115,8 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
         case 'V':
             $this->_config['displayVersion'] = true;
             return false;
-        case '--web-property-id':
-            $this->_config['webPropertyID'] = $value;
-            break;
-        case '--host':
-            $this->_config['host'] = $value;
-            break;
-        case '--document':
-            $this->_config['document'] = $value;
-            break;
-        case '--user-agent':
-            $this->_config['userAgent'] = $value;
+        case '--run-as-filter':
+            $this->_config['runAsFilter'] = true;
             break;
         }
 
@@ -173,6 +161,19 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
         }
 
         $tracker->trackPageView();
+
+        if ($this->_config['runAsFilter']) {
+            $stdin = @fopen('php://stdin', 'r');
+            if ($stdin === false) {
+                return;
+            }
+
+            while (!feof($stdin)) {
+                echo fgets($stdin);
+            }
+
+            fclose($stdin);
+        }
     }
 
     /**#@-*/
@@ -199,25 +200,39 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
   -V
     バージョンを表示します。
 
-  --web-property-id=WEB-PROPERTY-ID
-    トラッキングの対象となる Google Analytics プロファイルとして WEB-PROPERTY-ID
-    を指定します。
-    WEB-PROPERTY-ID のフォーマットは UA-XXX-X であり、
-    https://www.google.com/analytics/settings/home で確認することができます。
+  --run-as-filter (任意)
+    フィルタとして実行します。このコマンドを Apache のフィルタとして動作させる場
+    合、このオプションを指定する必要があります。
+    Apache のフィルタについては、
+    http://httpd.apache.org/docs/2.2/mod/mod_ext_filter.html を参照してください。
 
-  --host=HOST
-    トラッキングの対象となる URI のホスト部分を指定します。
-    例えば URI が http://www.example.com/foo/bar.tar.gz の場合、ホスト部分は
-    www.example.com となります。
+環境変数:
 
-  --document=DOCUMENT
-    トラッキングの対象となる URI のパス部分を指定します。
-    例えば URI が http://www.example.com/foo/bar.tar.gz の場合、パス部分は
-    /foo/bar.tar.gz となります。
-
-  --user-agent=USER-AGENT
-    トラッキングの対象となる URI にリクエストを行ったユーザエージェントを指定し
-    ます。
+  ITEMAN_GANOJS_WEBPROPERTYID: WEB-PROPERTY-ID
+     トラッキングの対象となる Google Analytics プロファイルとして WEB-PROPERTY-ID
+     を指定します。
+     WEB-PROPERTY-ID のフォーマットは UA-XXX-X であり、
+     https://www.google.com/analytics/settings/home で確認することができます。
+  
+  SERVER_NAME: HOST
+     トラッキングの対象となる URI のホスト部分を指定します。
+     例えば URI が http://www.example.com/foo/bar.tar.gz の場合、ホスト部分は
+     www.example.com となります。
+     この環境変数は Apache によって自動的に設定されるため、通常は指定する必要は
+     ありません。
+  
+  REQUEST_URI: DOCUMENT
+     トラッキングの対象となる URI のパス部分を指定します。
+     例えば URI が http://www.example.com/foo/bar.tar.gz の場合、パス部分は
+     /foo/bar.tar.gz となります。
+     この環境変数は Apache によって自動的に設定されるため、通常は指定する必要は
+     ありません。
+  
+  HTTP_USER_AGENT: USER-AGENT
+     トラッキングの対象となる URI にリクエストを行ったユーザエージェントを指定し
+     ます。
+     この環境変数は Apache によって自動的に設定されるため、通常は指定する必要は
+     ありません。
 ";
     }
 
