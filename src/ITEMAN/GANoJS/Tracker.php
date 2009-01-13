@@ -95,10 +95,12 @@ class ITEMAN_GANoJS_Tracker
                                        'utmdt'  => null,
                                        'utmhid' => mt_rand(0, 2147483647),
                                        'utmr'   => '-',
-                                       'utmp'   => null,
+                                       'utmp'   => array_key_exists('REQUEST_URI', $_SERVER) ? $_SERVER['REQUEST_URI'] : null,
                                        'utmac'  => null,
                                        'utmcc'  => array($this, 'generateCookieConfiguration')
                                        );
+
+        $this->_userAgent = array_key_exists('HTTP_USER_AGENT', $_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : null;
     }
 
     // }}}

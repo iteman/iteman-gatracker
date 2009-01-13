@@ -77,10 +77,21 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
      */
     public function トラッキングUriを生成する()
     {
-        $tracker = new ITEMAN_GANoJS_Tracker();
+        $_SERVER['SERVER_NAME'] = 'iteman.jp';
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
+        $_SERVER['REQUEST_URI'] = '/blog/';
+
+        $adapter = new HTTP_Request2_Adapter_Mock();
+        $adapter->addResponse('HTTP/1.1 200 OK');
+        $request = new HTTP_Request2();
+        $request->setAdapter($adapter);
+        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker', array('createHTTPRequest'));
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($request));
+
         $tracker->setWebPropertyID('UA-6415151-2');
         $tracker->setGAVersion('4.3');
-        $tracker->setHost('iteman.jp');
         $tracker->setDocumentEncoding('UTF-8');
         $tracker->setScreenResolution('1024x768');
         $tracker->setScreenColor('24-bit');
@@ -88,18 +99,18 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $tracker->setJavaEnabled(false);
         $tracker->setFlashVersion('9.0 r152');
         $tracker->setDocumentTitle('ITEMAN Blog - アイテマンブログ');
-        $tracker->setDocument('/blog/');
         $tracker->setCookieA('269003561.3095504869349727700.1229619879.1229923372.1229940603.8');
         $tracker->setCookieZ('269003561.1229781229.4.4.utmcsr=mt.iteman.jp|utmccn=(referral)|utmcmd=referral|utmcct=/mt.cgi');
-        $trackingURI = $tracker->generateTrackingURI();
-        $uriElements = parse_url($trackingURI);
 
-        $this->assertEquals('http', $uriElements['scheme']);
-        $this->assertEquals('www.google-analytics.com', $uriElements['host']);
-        $this->assertEquals('/__utm.gif', $uriElements['path']);
+        $tracker->trackPageView();
+        $url = $request->getUrl();
+
+        $this->assertEquals('http', $url->getScheme());
+        $this->assertEquals('www.google-analytics.com', $url->getHost());
+        $this->assertEquals('/__utm.gif', $url->getPath());
 
         $queryVariables = array();
-        foreach (explode('&', $uriElements['query']) as $queryVariable) {
+        foreach (explode('&', $url->getQuery()) as $queryVariable) {
             list($name, $value) = explode('=', $queryVariable);
             $queryVariables[$name] = $value;
         }
@@ -124,39 +135,6 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('UA-6415151-2', $queryVariables['utmac']);
         $this->assertEquals('__utma%3D269003561.3095504869349727700.1229619879.1229923372.1229940603.8%3B%2B__utmz%3D269003561.1229781229.4.4.utmcsr%3Dmt.iteman.jp%7Cutmccn%3D(referral)%7Cutmcmd%3Dreferral%7Cutmcct%3D%2Fmt.cgi%3B', $queryVariables['utmcc']);
     }
-
-    /**
-     * @test
-     */
-    public function ホスト名のデフォルトとして環境変数Server_nameの値を使用すること()
-    {
-        $_SERVER['SERVER_NAME'] = 'iteman.jp';
-
-        $tracker = new ITEMAN_GANoJS_Tracker();
-        $tracker->setWebPropertyID('UA-6415151-2');
-        $tracker->setGAVersion('4.3');
-        $tracker->setDocumentEncoding('UTF-8');
-        $tracker->setScreenResolution('1024x768');
-        $tracker->setScreenColor('24-bit');
-        $tracker->setUserLanguage('ja');
-        $tracker->setJavaEnabled(false);
-        $tracker->setFlashVersion('9.0 r152');
-        $tracker->setDocumentTitle('ITEMAN Blog - アイテマンブログ');
-        $tracker->setDocument('/blog/');
-        $tracker->setCookieA('269003561.3095504869349727700.1229619879.1229923372.1229940603.8');
-        $tracker->setCookieZ('269003561.1229781229.4.4.utmcsr=mt.iteman.jp|utmccn=(referral)|utmcmd=referral|utmcct=/mt.cgi');
-        $trackingURI = $tracker->generateTrackingURI();
-        $uriElements = parse_url($trackingURI);
-
-        $queryVariables = array();
-        foreach (explode('&', $uriElements['query']) as $queryVariable) {
-            list($name, $value) = explode('=', $queryVariable);
-            $queryVariables[$name] = $value;
-        }
-
-        $this->assertEquals('iteman.jp', $queryVariables['utmhn']);
-    }
-
     /**#@-*/
 
     /**#@+
