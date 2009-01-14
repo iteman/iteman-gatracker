@@ -92,6 +92,11 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
                 ->will($this->returnValue($request));
 
         $tracker->trackPageView();
+
+        $headers = $request->getHeaders();
+
+        $this->assertEquals($_SERVER['HTTP_USER_AGENT'], $headers['user-agent']);
+
         $url = $request->getUrl();
 
         $this->assertEquals('http', $url->getScheme());
@@ -107,7 +112,7 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('4.3', $queryVariables['utmwv']);
         $this->assertGreaterThanOrEqual(0, $queryVariables['utmn']);
         $this->assertLessThanOrEqual(2147483647, $queryVariables['utmn']);
-        $this->assertEquals('iteman.jp', $queryVariables['utmhn']);
+        $this->assertEquals($_SERVER['SERVER_NAME'], $queryVariables['utmhn']);
         $this->assertEquals('UTF-8', $queryVariables['utmcs']);
         $this->assertEquals('-', $queryVariables['utmsr']);
         $this->assertEquals('-', $queryVariables['utmsc']);
@@ -118,9 +123,13 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThanOrEqual(0, $queryVariables['utmhid']);
         $this->assertLessThanOrEqual(2147483647, $queryVariables['utmhid']);
         $this->assertEquals('-', $queryVariables['utmr']);
-        $this->assertEquals('/blog/', $queryVariables['utmp']);
-        $this->assertEquals('UA-6415151-2', $queryVariables['utmac']);
-        $this->assertRegExp('/^__utma%3D\d+\.\d+\.\d+\.\d+\.\d+.2%3B%2B__utmb%3D\d+%3B%2B__utmc%3D\d+%3B%2B__utmz%3D\d+\.\d+\.2\.2\.utmccn%3D\(direct\)%7Cutmcsr%3D\(direct\)%7Cutmcmd%3D\(none\)%3B$/', $queryVariables['utmcc']);
+        $this->assertEquals($_SERVER['REQUEST_URI'], $queryVariables['utmp']);
+        $this->assertEquals($_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'],
+                            $queryVariables['utmac']
+                            );
+        $this->assertRegExp('/^__utma%3D\d+\.\d+\.\d+\.\d+\.\d+.2%3B%2B__utmb%3D\d+%3B%2B__utmc%3D\d+%3B%2B__utmz%3D\d+\.\d+\.2\.2\.utmccn%3D\(direct\)%7Cutmcsr%3D\(direct\)%7Cutmcmd%3D\(none\)%3B$/',
+                            $queryVariables['utmcc']
+                            );
     }
 
     /**#@-*/
