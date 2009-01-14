@@ -72,6 +72,7 @@ class ITEMAN_GANoJS_Tracker
     private $_cookieA;
     private $_cookieZ;
     private $_userAgent;
+    private $_acceptLanguage;
 
     /**#@-*/
 
@@ -104,6 +105,7 @@ class ITEMAN_GANoJS_Tracker
                                        );
 
         $this->_userAgent = @$_SERVER['HTTP_USER_AGENT'];
+        $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
     }
 
     // }}}
@@ -140,6 +142,10 @@ class ITEMAN_GANoJS_Tracker
         $request->setMethod(HTTP_Request2::METHOD_GET);
         $request->setConfig(array('connect_timeout' => 10, 'timeout' => 30));
         $request->setHeader('User-Agent', $this->_userAgent);
+        if (!is_null($this->_acceptLanguage)) {
+            $request->setHeader('Accept-Language', $this->_acceptLanguage);
+        }
+
         $response = $request->send();
         if ($response->getStatus() != '200') {
             throw new ITEMAN_GANoJS_Exception('200 以外のステータスコードが返されました');

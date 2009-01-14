@@ -133,6 +133,37 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
                             );
     }
 
+    /**
+     * @test
+     */
+    public function acceptlanguageヘッダが与えられた場合リクエストヘッダに含める()
+    {
+        $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
+        $_SERVER['SERVER_NAME'] = 'iteman.jp';
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
+        $_SERVER['REQUEST_URI'] = '/blog/';
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja,en-us;q=0.7,en;q=0.3';
+
+        $adapter = new HTTP_Request2_Adapter_Mock();
+        $adapter->addResponse('HTTP/1.1 200 OK');
+        $request = new HTTP_Request2();
+        $request->setAdapter($adapter);
+        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker', array('createHTTPRequest'));
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($request));
+
+        $tracker->trackPageView();
+
+        $headers = $request->getHeaders();
+
+        $this->assertEquals(2, count($headers));
+        $this->assertEquals($_SERVER['HTTP_USER_AGENT'], $headers['user-agent']);
+        $this->assertEquals($_SERVER['HTTP_ACCEPT_LANGUAGE'],
+                            $headers['accept-language']
+                            );
+    }
+
     /**#@-*/
 
     /**#@+
