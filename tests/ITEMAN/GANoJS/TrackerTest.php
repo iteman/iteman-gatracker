@@ -163,6 +163,35 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
                             );
     }
 
+    /**
+     * @test
+     */
+    public function refererヘッダが与えられた場合クエリ変数に設定する()
+    {
+        $_SERVER['HTTP_REFERER'] = 'http://www.example.com/';
+
+        $adapter = new HTTP_Request2_Adapter_Mock();
+        $adapter->addResponse('HTTP/1.1 200 OK');
+        $request = new HTTP_Request2();
+        $request->setAdapter($adapter);
+        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker', array('createHTTPRequest'));
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($request));
+
+        $tracker->trackPageView();
+
+        $headers = $request->getHeaders();
+
+        $queryVariables = array();
+        foreach (explode('&', $request->getUrl()->getQuery()) as $queryVariable) {
+            list($name, $value) = explode('=', $queryVariable);
+            $queryVariables[$name] = $value;
+        }
+
+        $this->assertEquals($_SERVER['HTTP_REFERER'], $queryVariables['utmr']);
+    }
+
     /**#@-*/
 
     /**#@+
