@@ -66,6 +66,8 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
      * @access private
      */
 
+    private $_request;
+
     /**#@-*/
 
     /**#@+
@@ -78,6 +80,11 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $_SERVER['SERVER_NAME'] = 'iteman.jp';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REQUEST_URI'] = '/blog/';
+
+        $adapter = new HTTP_Request2_Adapter_Mock();
+        $adapter->addResponse('HTTP/1.1 200 OK');
+        $this->_request = new HTTP_Request2();
+        $this->_request->setAdapter($adapter);
     }
 
     /**
@@ -85,23 +92,19 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
      */
     public function トラッキングUriを生成する()
     {
-        $adapter = new HTTP_Request2_Adapter_Mock();
-        $adapter->addResponse('HTTP/1.1 200 OK');
-        $request = new HTTP_Request2();
-        $request->setAdapter($adapter);
         $tracker = $this->getMock('ITEMAN_GANoJS_Tracker', array('createHTTPRequest'));
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
-                ->will($this->returnValue($request));
+                ->will($this->returnValue($this->_request));
 
         $tracker->trackPageView();
 
-        $headers = $request->getHeaders();
+        $headers = $this->_request->getHeaders();
 
         $this->assertEquals(1, count($headers));
         $this->assertEquals($_SERVER['HTTP_USER_AGENT'], $headers['user-agent']);
 
-        $url = $request->getUrl();
+        $url = $this->_request->getUrl();
 
         $this->assertEquals('http', $url->getScheme());
         $this->assertEquals('www.google-analytics.com', $url->getHost());
@@ -143,18 +146,14 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja,en-us;q=0.7,en;q=0.3';
 
-        $adapter = new HTTP_Request2_Adapter_Mock();
-        $adapter->addResponse('HTTP/1.1 200 OK');
-        $request = new HTTP_Request2();
-        $request->setAdapter($adapter);
         $tracker = $this->getMock('ITEMAN_GANoJS_Tracker', array('createHTTPRequest'));
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
-                ->will($this->returnValue($request));
+                ->will($this->returnValue($this->_request));
 
         $tracker->trackPageView();
 
-        $headers = $request->getHeaders();
+        $headers = $this->_request->getHeaders();
 
         $this->assertEquals(2, count($headers));
         $this->assertEquals($_SERVER['HTTP_USER_AGENT'], $headers['user-agent']);
@@ -170,21 +169,17 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_REFERER'] = 'http://www.example.com/';
 
-        $adapter = new HTTP_Request2_Adapter_Mock();
-        $adapter->addResponse('HTTP/1.1 200 OK');
-        $request = new HTTP_Request2();
-        $request->setAdapter($adapter);
         $tracker = $this->getMock('ITEMAN_GANoJS_Tracker', array('createHTTPRequest'));
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
-                ->will($this->returnValue($request));
+                ->will($this->returnValue($this->_request));
 
         $tracker->trackPageView();
 
-        $headers = $request->getHeaders();
+        $headers = $this->_request->getHeaders();
 
         $queryVariables = array();
-        foreach (explode('&', $request->getUrl()->getQuery()) as $queryVariable) {
+        foreach (explode('&', $this->_request->getUrl()->getQuery()) as $queryVariable) {
             list($name, $value) = explode('=', $queryVariable);
             $queryVariables[$name] = $value;
         }
