@@ -95,6 +95,7 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
 
         $headers = $request->getHeaders();
 
+        $this->assertEquals(1, count($headers));
         $this->assertEquals($_SERVER['HTTP_USER_AGENT'], $headers['user-agent']);
 
         $url = $request->getUrl();
