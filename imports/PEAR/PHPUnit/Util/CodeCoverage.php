@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2008, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2002-2009, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,9 +37,9 @@
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: CodeCoverage.php 4055 2008-11-19 05:05:19Z sb $
+ * @version    SVN: $Id: CodeCoverage.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.1.0
  */
@@ -54,9 +54,9 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.7
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.1.0
  * @abstract
@@ -297,8 +297,11 @@ abstract class PHPUnit_Util_CodeCoverage
         $result = array();
 
         foreach ($data as $file => $coverage) {
-            end($coverage);
-            $maxLine = key($coverage);
+            if (empty($coverage)) {
+                continue;
+            }
+
+            $maxLine = max(array_keys($coverage));
 
             if ($maxLine == 0) {
                 $bitArray = array();

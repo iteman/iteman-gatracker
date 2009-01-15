@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2008, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2002-2009, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,9 +37,9 @@
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Command.php 4228 2008-12-10 20:41:07Z sb $
+ * @version    SVN: $Id: Command.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -63,9 +63,9 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.7
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -234,12 +234,12 @@ class PHPUnit_TextUI_Command
                 case '--ansi':
                 case '--colors': {
                     $arguments['colors'] = TRUE;
-                    PHPUnit_Util_Fileloader::load($arguments['bootstrap']);
                 }
                 break;
 
                 case '--bootstrap': {
                     $arguments['bootstrap'] = $option[1];
+                    PHPUnit_Util_Fileloader::load($arguments['bootstrap']);
                 }
                 break;
 
@@ -567,7 +567,7 @@ class PHPUnit_TextUI_Command
                 if (!isset($arguments['bootstrap'])) {
                     $phpunitConfiguration = $configuration->getPHPUnitConfiguration();
 
-                    if ($phpunitConfiguration['bootstrap']) {
+                    if (isset($phpunitConfiguration['bootstrap'])) {
                         PHPUnit_Util_Fileloader::load($phpunitConfiguration['bootstrap']);
                     }
                 }
