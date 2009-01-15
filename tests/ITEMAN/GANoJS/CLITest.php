@@ -139,9 +139,9 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
         $GLOBALS['argc'] = count($_SERVER['argv']);
 
         $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
-        $_SERVER['SERVER_NAME'] = 'iteman.jp';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REQUEST_URI'] = '/blog/';
+        $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
 
         $adapter = new HTTP_Request2_Adapter_Mock();
         $adapter->addResponse('HTTP/1.1 200 OK');
