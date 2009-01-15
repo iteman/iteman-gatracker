@@ -89,6 +89,7 @@ class ITEMAN_GANoJS_Tracker
     {
         $this->_queryVariables = array('utmwv'  => '4.3',
                                        'utmn'   => mt_rand(1000000000, 9999999999),
+                                       'utmhn'  => @$_SERVER['SERVER_NAME'],
                                        'utmcs'  => 'UTF-8',
                                        'utmsr'  => '-',
                                        'utmsc'  => '-',
@@ -96,11 +97,10 @@ class ITEMAN_GANoJS_Tracker
                                        'utmje'  => '0',
                                        'utmfl'  => '-',
                                        'utmdt'  => '-',
-                                       'utmhn'  => @$_SERVER['SERVER_NAME'],
+                                       'utmhid' => mt_rand(0, 2147483647),
                                        'utmr'   => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : '-',
                                        'utmp'   => @$_SERVER['REQUEST_URI'],
                                        'utmac'  => @$_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'],
-                                       'utmhid' => mt_rand(0, 2147483647),
                                        'utmcc'  => array($this, 'generateCookieConfiguration')
                                        );
 
