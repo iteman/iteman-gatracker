@@ -72,12 +72,20 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
      * @access public
      */
 
+    public function setUp()
+    {
+        $_SERVER['SCRIPT_NAME'] = 'bin/iteman-ganojs';
+        $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
+        $_SERVER['REQUEST_URI'] = '/blog/';
+        $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
+    }
+
     /**
      * @test
      */
     public function 使い方を表示する()
     {
-        $_SERVER['SCRIPT_NAME'] = 'bin/iteman-ganojs';
         $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'], '-h');
         $GLOBALS['argc'] = count($_SERVER['argv']);
 
@@ -96,7 +104,6 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
      */
     public function バージョンを表示する()
     {
-        $_SERVER['SCRIPT_NAME'] = 'bin/iteman-ganojs';
         $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'], '-V');
         $GLOBALS['argc'] = count($_SERVER['argv']);
 
@@ -115,9 +122,9 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
      */
     public function 実行に必要なオプションが不足している場合メッセージを表示しエラーにする()
     {
-        $_SERVER['SCRIPT_NAME'] = 'bin/iteman-ganojs';
         $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME']);
         $GLOBALS['argc'] = count($_SERVER['argv']);
+        unset($_SERVER['ITEMAN_GANOJS_WEBPROPERTYID']);
 
         $cli = new ITEMAN_GANoJS_CLI();
         ob_start();
@@ -134,24 +141,24 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
      */
     public function トラッキングを実行する()
     {
-        $_SERVER['SCRIPT_NAME'] = 'bin/iteman-ganojs';
         $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME']);
         $GLOBALS['argc'] = count($_SERVER['argv']);
-
-        $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
-        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
-        $_SERVER['REQUEST_URI'] = '/blog/';
-        $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
 
         $adapter = new HTTP_Request2_Adapter_Mock();
         $adapter->addResponse('HTTP/1.1 200 OK');
         $request = new HTTP_Request2();
         $request->setAdapter($adapter);
 
-        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker', array('createHTTPRequest'));
+        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
+                                  array('createHTTPRequest',
+                                        'getHostByAddr')
+                                  );
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($request));
+        $tracker->expects($this->any())
+                ->method('getHostByAddr')
+                ->will($this->returnValue('www.example.com'));
 
         $cli = $this->getMock('ITEMAN_GANoJS_CLI', array('createTracker'));
         $cli->expects($this->any())

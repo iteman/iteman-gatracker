@@ -89,7 +89,7 @@ class ITEMAN_GANoJS_Tracker
     {
         $this->_queryVariables = array('utmwv'  => '4.3',
                                        'utmn'   => mt_rand(1000000000, 9999999999),
-                                       'utmhn'  => @$_SERVER['REMOTE_ADDR'],
+                                       'utmhn'  => $_SERVER['REMOTE_ADDR'],
                                        'utmcs'  => 'UTF-8',
                                        'utmsr'  => '-',
                                        'utmsc'  => '-',
@@ -99,12 +99,12 @@ class ITEMAN_GANoJS_Tracker
                                        'utmdt'  => '-',
                                        'utmhid' => mt_rand(0, 2147483647),
                                        'utmr'   => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : '-',
-                                       'utmp'   => @$_SERVER['REQUEST_URI'],
+                                       'utmp'   => $_SERVER['REQUEST_URI'],
                                        'utmac'  => @$_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'],
                                        'utmcc'  => array($this, 'generateCookieConfiguration')
                                        );
 
-        $this->_userAgent = @$_SERVER['HTTP_USER_AGENT'];
+        $this->_userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
     }
 
@@ -137,6 +137,8 @@ class ITEMAN_GANoJS_Tracker
     public function trackPageView()
     {
         $this->_validate();
+        $this->_queryVariables['utmhn'] =
+            $this->getHostByAddr($this->_queryVariables['utmhn']);
         $request = $this->createHTTPRequest();
         $request->setUrl($this->_generateTrackingURI());
         $request->setMethod(HTTP_Request2::METHOD_GET);
@@ -161,6 +163,18 @@ class ITEMAN_GANoJS_Tracker
     public function createHTTPRequest()
     {
         return new HTTP_Request2();
+    }
+
+    // }}}
+    // {{{ getHostByAddr()
+
+    /**
+     * @param string $addr
+     * @return string
+     */
+    public function getHostByAddr($addr)
+    {
+        return gethostbyaddr($addr);
     }
 
     /**#@-*/

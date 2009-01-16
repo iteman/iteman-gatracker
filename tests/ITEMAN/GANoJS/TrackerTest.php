@@ -92,10 +92,16 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
      */
     public function トラッキングUriを生成する()
     {
-        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker', array('createHTTPRequest'));
+        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
+                                  array('createHTTPRequest',
+                                        'getHostByAddr')
+                                  );
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($this->_request));
+        $tracker->expects($this->any())
+                ->method('getHostByAddr')
+                ->will($this->returnValue('www.example.com'));
 
         $tracker->trackPageView();
 
@@ -119,7 +125,7 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('4.3', $queryVariables['utmwv']);
         $this->assertGreaterThanOrEqual(0, $queryVariables['utmn']);
         $this->assertLessThanOrEqual(2147483647, $queryVariables['utmn']);
-        $this->assertEquals($_SERVER['REMOTE_ADDR'], $queryVariables['utmhn']);
+        $this->assertEquals('www.example.com', $queryVariables['utmhn']);
         $this->assertEquals('UTF-8', $queryVariables['utmcs']);
         $this->assertEquals('-', $queryVariables['utmsr']);
         $this->assertEquals('-', $queryVariables['utmsc']);
@@ -146,10 +152,16 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja,en-us;q=0.7,en;q=0.3';
 
-        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker', array('createHTTPRequest'));
+        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
+                                  array('createHTTPRequest',
+                                        'getHostByAddr')
+                                  );
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($this->_request));
+        $tracker->expects($this->any())
+                ->method('getHostByAddr')
+                ->will($this->returnValue('www.example.com'));
 
         $tracker->trackPageView();
 
@@ -169,10 +181,16 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_REFERER'] = 'http://www.example.com/';
 
-        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker', array('createHTTPRequest'));
+        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
+                                  array('createHTTPRequest',
+                                        'getHostByAddr')
+                                  );
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($this->_request));
+        $tracker->expects($this->any())
+                ->method('getHostByAddr')
+                ->will($this->returnValue('www.example.com'));
 
         $tracker->trackPageView();
 
