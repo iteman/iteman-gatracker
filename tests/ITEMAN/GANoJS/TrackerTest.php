@@ -116,11 +116,7 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('www.google-analytics.com', $url->getHost());
         $this->assertEquals('/__utm.gif', $url->getPath());
 
-        $queryVariables = array();
-        foreach (explode('&', $url->getQuery()) as $queryVariable) {
-            list($name, $value) = explode('=', $queryVariable);
-            $queryVariables[$name] = $value;
-        }
+        $queryVariables = $this->_extractQueryVariables();
 
         $this->assertEquals('4.3', $queryVariables['utmwv']);
         $this->assertGreaterThanOrEqual(0, $queryVariables['utmn']);
@@ -194,13 +190,7 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
 
         $tracker->trackPageView();
 
-        $headers = $this->_request->getHeaders();
-
-        $queryVariables = array();
-        foreach (explode('&', $this->_request->getUrl()->getQuery()) as $queryVariable) {
-            list($name, $value) = explode('=', $queryVariable);
-            $queryVariables[$name] = $value;
-        }
+        $queryVariables = $this->_extractQueryVariables();
 
         $this->assertEquals($_SERVER['HTTP_REFERER'], $queryVariables['utmr']);
     }
@@ -225,13 +215,7 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
 
         $tracker->trackPageView();
 
-        $headers = $this->_request->getHeaders();
-
-        $queryVariables = array();
-        foreach (explode('&', $this->_request->getUrl()->getQuery()) as $queryVariable) {
-            list($name, $value) = explode('=', $queryVariable);
-            $queryVariables[$name] = $value;
-        }
+        $queryVariables = $this->_extractQueryVariables();
 
         $this->assertEquals('Stagehand_TestRunner 2.6.1', $queryVariables['utmdt']);
     }
@@ -247,6 +231,20 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
     /**#@+
      * @access private
      */
+
+    /**
+     * @return string
+     */
+    private function _extractQueryVariables()
+    {
+        $queryVariables = array();
+        foreach (explode('&', $this->_request->getUrl()->getQuery()) as $queryVariable) {
+            list($name, $value) = explode('=', $queryVariable);
+            $queryVariables[$name] = $value;
+        }
+
+        return $queryVariables;
+    }
 
     /**#@-*/
 
