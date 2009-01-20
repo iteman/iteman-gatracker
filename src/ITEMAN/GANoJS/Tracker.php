@@ -106,6 +106,10 @@ class ITEMAN_GANoJS_Tracker
 
         $this->_userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
+
+        if (preg_match('!([^/]+)-(\d+\.\d+(?:\.\d+)?)\.tgz$!', $_SERVER['REQUEST_URI'], $matches)) {
+            $this->_queryVariables['utmdt'] = "{$matches[1]} {$matches[2]}";
+        }
     }
 
     // }}}

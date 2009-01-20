@@ -205,6 +205,37 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($_SERVER['HTTP_REFERER'], $queryVariables['utmr']);
     }
 
+    /**
+     * @test
+     */
+    public function Pearパッケージの場合ファイル名からタイトルを生成する()
+    {
+        $_SERVER['REQUEST_URI'] = '/get/Stagehand_TestRunner-2.6.1.tgz';
+
+        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
+                                  array('createHTTPRequest',
+                                        'getHostByAddr')
+                                  );
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($this->_request));
+        $tracker->expects($this->any())
+                ->method('getHostByAddr')
+                ->will($this->returnValue('www.example.com'));
+
+        $tracker->trackPageView();
+
+        $headers = $this->_request->getHeaders();
+
+        $queryVariables = array();
+        foreach (explode('&', $this->_request->getUrl()->getQuery()) as $queryVariable) {
+            list($name, $value) = explode('=', $queryVariable);
+            $queryVariables[$name] = $value;
+        }
+
+        $this->assertEquals('Stagehand_TestRunner 2.6.1', $queryVariables['utmdt']);
+    }
+
     /**#@-*/
 
     /**#@+
