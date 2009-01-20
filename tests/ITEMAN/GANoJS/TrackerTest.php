@@ -196,11 +196,14 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $uri
+     * @param string $title
      * @test
+     * @dataProvider providePEARPackages
      */
-    public function Pearパッケージの場合ファイル名からタイトルを生成する()
+    public function Pearパッケージの場合ファイル名からタイトルを生成する($uri, $title)
     {
-        $_SERVER['REQUEST_URI'] = '/get/Stagehand_TestRunner-2.6.1.tgz';
+        $_SERVER['REQUEST_URI'] = $uri;
 
         $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
                                   array('createHTTPRequest',
@@ -217,7 +220,13 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
 
         $queryVariables = $this->_extractQueryVariables();
 
-        $this->assertEquals('Stagehand_TestRunner 2.6.1', $queryVariables['utmdt']);
+        $this->assertEquals($title, $queryVariables['utmdt']);
+    }
+
+    public function providePEARPackages()
+    {
+        return array(array('/get/Stagehand_TestRunner-2.6.1.tgz', 'Stagehand_TestRunner 2.6.1')
+                     );
     }
 
     /**#@-*/
