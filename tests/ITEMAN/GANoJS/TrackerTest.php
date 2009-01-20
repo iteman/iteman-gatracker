@@ -225,7 +225,8 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
 
     public function providePEARPackages()
     {
-        return array(array('/get/Stagehand_TestRunner-2.6.1.tgz', 'Stagehand_TestRunner 2.6.1')
+        return array(array('/get/Stagehand_TestRunner-2.6.1.tgz', 'Stagehand_TestRunner 2.6.1'),
+                     array('/get/Stagehand_TestRunner-2.6.1.tar', 'Stagehand_TestRunner 2.6.1')
                      );
     }
 
