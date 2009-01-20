@@ -108,7 +108,7 @@ class ITEMAN_GANoJS_Tracker
         $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
 
         if (preg_match('!([^/]+)-(.+?)\.(?:tgz|tar)$!', $_SERVER['REQUEST_URI'], $matches)) {
-            $this->_queryVariables['utmdt'] = "{$matches[1]} {$matches[2]}";
+            $this->_queryVariables['utmdt'] = rawurlencode("{$matches[1]} {$matches[2]}");
         }
     }
 

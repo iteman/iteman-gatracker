@@ -220,7 +220,7 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
 
         $queryVariables = $this->_extractQueryVariables();
 
-        $this->assertEquals($title, $queryVariables['utmdt']);
+        $this->assertEquals(rawurlencode($title), $queryVariables['utmdt']);
     }
 
     public function providePEARPackages()
