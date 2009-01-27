@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Project.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: Project.php 4561 2009-01-26 15:22:43Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -57,7 +57,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: 3.3.12
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
@@ -374,7 +374,6 @@ class PHPUnit_Util_Metrics_Project extends PHPUnit_Util_Metrics
         foreach ($this->files as $file) {
             $currentTokenPositions = array();
             $currentSignature      = '';
-            $lines                 = $file->getLines();
             $tokens                = $file->getTokens();
             $tokenNr               = 0;
             $line                  = 1;
