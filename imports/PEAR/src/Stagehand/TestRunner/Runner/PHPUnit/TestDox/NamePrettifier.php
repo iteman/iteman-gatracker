@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2009 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2009 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: PHPSpecPassSpec.php 157 2008-05-05 04:03:27Z iteman $
- * @since      File available since Release 2.0.0
+ * @version    SVN: $Id: NamePrettifier.php 208 2009-01-27 12:02:24Z iteman $
+ * @link       http://www.phpunit.de/
+ * @since      File available since Release 2.6.2
  */
 
-if (!@include_once 'PHPSpec/Context.php') {
-    return;
-}
+require_once 'PHPUnit/Util/TestDox/NamePrettifier.php';
 
-// {{{ DescribePhpSpecSpecPass
+// {{{ Stagehand_TestRunner_Runner_PHPUnit_TestDox_NamePrettifier
 
 /**
- * TestCase for the PHPSpec runner.
+ * Prettifies class and method names for use in TestDox documentation.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2009 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: 2.6.2
- * @since      Class available since Release 2.0.0
+ * @link       http://www.phpunit.de/
+ * @since      Class available since Release 2.6.2
  */
-class DescribePhpSpecSpecPass extends PHPSpec_Context
+class Stagehand_TestRunner_Runner_PHPUnit_TestDox_NamePrettifier extends PHPUnit_Util_TestDox_NamePrettifier
 {
 
     // {{{ properties
@@ -77,9 +77,56 @@ class DescribePhpSpecSpecPass extends PHPSpec_Context
      * @access public
      */
 
-    public function itShouldPass()
+    // }}}
+    // {{{ prettifyTestMethod()
+
+    /**
+     * Prettifies the name of a test method.
+     *
+     * @param  string  $testMethodName
+     * @return string
+     */
+    public function prettifyTestMethod($testMethodName)
     {
-        $this->spec(true)->should->beTrue();
+        $buffer = '';
+
+        if (!is_string($testMethodName) || strlen($testMethodName) == 0) {
+            return $buffer;
+        }
+
+        $max = strlen($testMethodName);
+
+        if (substr($testMethodName, 0, 4) == 'test') {
+            $offset = 4;
+        } else {
+            $offset = 0;
+            $testMethodName[0] = strtoupper($testMethodName[0]);
+        }
+
+        $wasNumeric = FALSE;
+
+        for ($i = $offset; $i < $max; $i++) {
+            if ($i > $offset &&
+                ord($testMethodName[$i]) >= 65 &&
+                ord($testMethodName[$i]) <= 90) {
+                $buffer .= ' ' . strtolower($testMethodName[$i]);
+            } else {
+                $isNumeric = is_numeric($testMethodName[$i]);
+
+                if (!$wasNumeric && $isNumeric) {
+                    $buffer .= ' ';
+                    $wasNumeric = TRUE;
+                }
+
+                if ($wasNumeric && !$isNumeric) {
+                    $wasNumeric = FALSE;
+                }
+
+                $buffer .= $testMethodName[$i];
+            }
+        }
+
+        return $buffer;
     }
 
     /**#@-*/

@@ -31,7 +31,7 @@
  * @package    Stagehand_TestRunner
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: PHPUnitPassTest.php 181 2008-09-18 03:40:16Z iteman $
+ * @version    SVN: $Id: PHPUnitPassTest.php 208 2009-01-27 12:02:24Z iteman $
  * @since      File available since Release 2.0.0
  */
 
@@ -47,7 +47,7 @@ if (!@include_once 'PHPUnit/Framework/TestCase.php') {
  * @package    Stagehand_TestRunner
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.1
+ * @version    Release: 2.6.2
  * @since      Class available since Release 2.0.0
  */
 class Stagehand_TestRunner_PHPUnitPassTest extends PHPUnit_Framework_TestCase
@@ -77,7 +77,12 @@ class Stagehand_TestRunner_PHPUnitPassTest extends PHPUnit_Framework_TestCase
      * @access public
      */
 
-    public function testTestShouldPass()
+    public function testTestShouldPass1()
+    {
+        $this->assertTrue(true);
+    }
+
+    public function testTestShouldPass2()
     {
         $this->assertTrue(true);
     }

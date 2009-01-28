@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008-2009 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,9 +29,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008-2009 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: Progress.php 195 2008-10-15 14:12:37Z iteman $
+ * @version    SVN: $Id: Progress.php 210 2009-01-27 12:42:15Z iteman $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 1.2.0
  */
@@ -41,17 +41,15 @@ require_once 'PHPUnit/Util/Filter.php';
 require_once 'PHPUnit/Framework/Test.php';
 require_once 'PHPUnit/Framework/AssertionFailedError.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
-
 // {{{ Stagehand_TestRunner_Runner_PHPUnit_Printer_Progress
 
 /**
  * A result printer for PHPUnit.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2008-2009 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.1
+ * @version    Release: 2.6.2
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 1.2.0
  */

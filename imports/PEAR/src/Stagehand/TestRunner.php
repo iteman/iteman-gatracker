@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2007-2009 KUBO Atsuhiro <iteman@users.sourceforge.net>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,9 +29,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2009 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: TestRunner.php 204 2008-12-22 16:44:30Z iteman $
+ * @version    SVN: $Id: TestRunner.php 210 2009-01-27 12:42:15Z iteman $
  * @since      File available since Release 0.5.0
  */
 
@@ -46,9 +46,9 @@ require_once 'PEAR.php';
  * A testrunner script to run tests automatically.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
+ * @copyright  2007-2009 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.1
+ * @version    Release: 2.6.2
  * @since      Class available since Release 0.5.0
  */
 class Stagehand_TestRunner
@@ -177,9 +177,9 @@ With no [directory or file], run all tests in the current directory.
      */
     private function _displayVersion()
     {
-        echo "Stagehand_TestRunner 2.6.1 ({$this->_testRunnerName})
+        echo "Stagehand_TestRunner 2.6.2 ({$this->_testRunnerName})
 
-Copyright (c) 2005-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+Copyright (c) 2005-2009 KUBO Atsuhiro <iteman@users.sourceforge.net>,
               2007 Masahiko Sakamoto <msakamoto-sf@users.sourceforge.net>,
 All rights reserved.
 ";

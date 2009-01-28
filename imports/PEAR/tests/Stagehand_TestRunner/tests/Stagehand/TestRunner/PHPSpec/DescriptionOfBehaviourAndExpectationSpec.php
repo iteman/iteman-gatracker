@@ -47,7 +47,7 @@ if (!@include_once 'PHPSpec/Context.php') {
  * @package    Stagehand_TestRunner
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.1
+ * @version    Release: 2.6.2
  * @since      Class available since Release 2.0.0
  */
 class Describe振舞やエクスペクテーションの説明 extends PHPSpec_Context
@@ -108,7 +108,7 @@ class Describe振舞やエクスペクテーションの説明 extends PHPSpec_C
  * @package    Stagehand_TestRunner
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.1
+ * @version    Release: 2.6.2
  * @since      Class available since Release 2.0.0
  */
 class 日本語Spec extends PHPSpec_Context
@@ -169,7 +169,7 @@ class 日本語Spec extends PHPSpec_Context
  * @package    Stagehand_TestRunner
  * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.1
+ * @version    Release: 2.6.2
  * @since      Class available since Release 2.0.0
  */
 class EnglishSpec extends PHPSpec_Context

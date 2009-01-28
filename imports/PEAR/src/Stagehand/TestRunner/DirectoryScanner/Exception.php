@@ -45,7 +45,7 @@ require_once 'Stagehand/TestRunner/Exception.php';
  * @package    Stagehand_TestRunner
  * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.1
+ * @version    Release: 2.6.2
  * @since      Class available since Release 2.2.0
  */
 class Stagehand_TestRunner_DirectoryScanner_Exception extends Stagehand_TestRunner_Exception {}
