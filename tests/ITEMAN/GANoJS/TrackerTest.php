@@ -195,45 +195,6 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($_SERVER['HTTP_REFERER'], $queryVariables['utmr']);
     }
 
-    /**
-     * @param string $uri
-     * @param string $title
-     * @test
-     * @dataProvider providePEARPackages
-     */
-    public function Pearパッケージの場合ファイル名からタイトルを生成する($uri, $title)
-    {
-        $_SERVER['REQUEST_URI'] = $uri;
-
-        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
-                                  array('createHTTPRequest',
-                                        'getHostByAddr')
-                                  );
-        $tracker->expects($this->any())
-                ->method('createHTTPRequest')
-                ->will($this->returnValue($this->_request));
-        $tracker->expects($this->any())
-                ->method('getHostByAddr')
-                ->will($this->returnValue('www.example.com'));
-
-        $tracker->trackPageView();
-
-        $queryVariables = $this->_extractQueryVariables();
-
-        $this->assertEquals(rawurlencode($title), $queryVariables['utmdt']);
-    }
-
-    public function providePEARPackages()
-    {
-        return array(array('/get/Stagehand_TestRunner-2.6.1.tgz', 'Stagehand_TestRunner 2.6.1'),
-                     array('/get/Stagehand_TestRunner-2.6.1.tar', 'Stagehand_TestRunner 2.6.1'),
-                     array('/package/Net_UserAgent_Mobile-1.0.0RC1.tgz', 'Net_UserAgent_Mobile 1.0.0RC1'),
-                     array('/Foo_Bar-0.1.0dev1.tgz', 'Foo_Bar 0.1.0dev1'),
-                     array('/Foo_Bar-0.9.0alpha1.tgz', 'Foo_Bar 0.9.0alpha1'),
-                     array('/Foo_Bar-0.9.0beta1.tgz', 'Foo_Bar 0.9.0beta1')
-                     );
-    }
-
     /**#@-*/
 
     /**#@+

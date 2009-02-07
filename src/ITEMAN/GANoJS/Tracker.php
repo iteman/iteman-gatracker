@@ -73,6 +73,7 @@ class ITEMAN_GANoJS_Tracker
     private $_cookieZ;
     private $_userAgent;
     private $_acceptLanguage;
+    private $_converters = array();
 
     /**#@-*/
 
@@ -106,10 +107,6 @@ class ITEMAN_GANoJS_Tracker
 
         $this->_userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
-
-        if (preg_match('!([^/]+)-(.+?)\.(?:tgz|tar)$!', $_SERVER['REQUEST_URI'], $matches)) {
-            $this->_queryVariables['utmdt'] = rawurlencode("{$matches[1]} {$matches[2]}");
-        }
     }
 
     // }}}
@@ -123,10 +120,10 @@ class ITEMAN_GANoJS_Tracker
         $cookieNumber = mt_rand(0, 2147483647);
         $currentTimestamp = time();
         return strtr(rawurlencode(sprintf('__utma=%d.%d.%d.%d.%d.2;+__utmb=%d;+__utmc=%d;+__utmz=%d.%d.2.2.utmccn=(direct)|utmcsr=(direct)|utmcmd=(none);',
-                       $cookieNumber, mt_rand(1000000000, 2147483647), $currentTimestamp, $currentTimestamp, $currentTimestamp, // __utma
-                       $cookieNumber, // __utmb
-                       $cookieNumber, // __utmc
-                       $cookieNumber, $currentTimestamp // __utmz
+                                          $cookieNumber, mt_rand(1000000000, 2147483647), $currentTimestamp, $currentTimestamp, $currentTimestamp, // __utma
+                                          $cookieNumber, // __utmb
+                                          $cookieNumber, // __utmc
+                                          $cookieNumber, $currentTimestamp // __utmz
                                           )),
                      array('%28' => '(', '%29' => ')')
                      );
@@ -140,6 +137,7 @@ class ITEMAN_GANoJS_Tracker
      */
     public function trackPageView()
     {
+        $this->_convert();
         $this->_validate();
         $this->_queryVariables['utmhn'] =
             $this->getHostByAddr($this->_queryVariables['utmhn']);
@@ -179,6 +177,28 @@ class ITEMAN_GANoJS_Tracker
     public function getHostByAddr($addr)
     {
         return gethostbyaddr($addr);
+    }
+
+    // }}}
+    // {{{ setPageTitle()
+
+    /**
+     * @param string $pageTitle
+     */
+    public function setPageTitle($pageTitle)
+    {
+        $this->_queryVariables['utmdt'] = $pageTitle;
+    }
+
+    // }}}
+    // {{{ addConverter()
+
+    /**
+     * @param ITEMAN_GANoJS_Converter_ConverterInterface $converter
+     */
+    public function addConverter(ITEMAN_GANoJS_Converter_ConverterInterface $converter)
+    {
+        $this->_converters[] = $converter;
     }
 
     /**#@-*/
@@ -234,6 +254,17 @@ class ITEMAN_GANoJS_Tracker
         return $url->getURL();
     }
 
+    // }}}
+    // {{{ _convert()
+
+    /**
+     */
+    private function _convert()
+    {
+        foreach ($this->_converters as $converter) {
+            $converter->convert($this);
+        }
+    }
 
     /**#@-*/
 
