@@ -91,7 +91,6 @@ class ITEMAN_GANoJS_Tracker
     {
         $this->_queryVariables = array('utmwv'  => '4.3',
                                        'utmn'   => mt_rand(1000000000, 9999999999),
-                                       'utmhn'  => $_SERVER['REMOTE_ADDR'],
                                        'utmcs'  => 'UTF-8',
                                        'utmsr'  => '-',
                                        'utmsc'  => '-',
@@ -105,6 +104,7 @@ class ITEMAN_GANoJS_Tracker
                                        );
         $this->setPageTitle('-');
         $this->setPage(null);
+        $this->setHostname(null);
 
         $this->_userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
@@ -140,8 +140,6 @@ class ITEMAN_GANoJS_Tracker
     {
         $this->_convert();
         $this->_validate();
-        $this->_queryVariables['utmhn'] =
-            $this->getHostByAddr($this->_queryVariables['utmhn']);
         $this->_request = $this->createHTTPRequest();
         $this->_request->setUrl($this->_generateTrackingURI());
         $this->_request->setMethod(HTTP_Request2::METHOD_GET);
@@ -166,18 +164,6 @@ class ITEMAN_GANoJS_Tracker
     public function createHTTPRequest()
     {
         return new HTTP_Request2();
-    }
-
-    // }}}
-    // {{{ getHostByAddr()
-
-    /**
-     * @param string $addr
-     * @return string
-     */
-    public function getHostByAddr($addr)
-    {
-        return gethostbyaddr($addr);
     }
 
     // }}}
@@ -245,6 +231,50 @@ class ITEMAN_GANoJS_Tracker
         return $this->_queryVariables['utmp'];
     }
 
+    // }}}
+    // {{{ setHostname()
+
+    /**
+     * @paran string $hostname
+     */
+    public function setHostname($hostname)
+    {
+        $this->_queryVariables['utmhn'] = $hostname;
+    }
+
+    // }}}
+    // {{{ getHostname()
+
+    /**
+     * @return string
+     */
+    public function getHostname()
+    {
+        return $this->_queryVariables['utmhn'];
+    }
+
+    // }}}
+    // {{{ getPageTitle()
+
+    /**
+     * @return string
+     */
+    public function getPageTitle()
+    {
+        return $this->_queryVariables['utmdt'];
+    }
+
+    // }}}
+    // {{{ getSource()
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->_queryVariables['utmr'];
+    }
+
     /**#@-*/
 
     /**#@+
@@ -264,7 +294,7 @@ class ITEMAN_GANoJS_Tracker
      */
     private function _validate()
     {
-        foreach (array('utmhn', 'utmac') as $requiredVariable) {
+        foreach (array('utmac') as $requiredVariable) {
             if (is_null($this->_queryVariables[$requiredVariable])) {
                 throw new ITEMAN_GANoJS_Exception("クエリ変数 [ $requiredVariable ] が設定されていません");
             }
@@ -272,6 +302,10 @@ class ITEMAN_GANoJS_Tracker
 
         if (is_null($this->getPage())) {
             throw new ITEMAN_GANoJS_Exception('ページが設定されていません');
+        }
+
+        if (is_null($this->getHostname())) {
+            throw new ITEMAN_GANoJS_Exception('ホスト名が設定されていません');
         }
 
         if (is_null($this->_userAgent)) {

@@ -34,10 +34,10 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Converter_PEARPackageToPageTitleTest
+// {{{ ITEMAN_GANoJS_Converter_RemoteAddrToHostnameTest
 
 /**
- * ITEMAN_GANoJS_Converter_PEARPackageToPageTitle のためのテスト。
+ * ITEMAN_GANoJS_Converter_RemoteAddrToHostname のためのテスト。
  *
  * @package    ITEMAN_GANoJS
  * @copyright  2009 ITEMAN, Inc.
@@ -45,7 +45,7 @@
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_Converter_PEARPackageToPageTitleTest extends PHPUnit_Framework_TestCase
+class ITEMAN_GANoJS_Converter_RemoteAddrToHostnameTest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -87,12 +87,9 @@ class ITEMAN_GANoJS_Converter_PEARPackageToPageTitleTest extends PHPUnit_Framewo
     }
 
     /**
-     * @param string $uri
-     * @param string $title
      * @test
-     * @dataProvider providePEARPackages
      */
-    public function Pearパッケージの場合ファイル名からタイトルを生成する($uri, $title)
+    public function Remoteaddr環境変数をホスト名に設定する()
     {
         $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
                                   array('createHTTPRequest')
@@ -101,25 +98,18 @@ class ITEMAN_GANoJS_Converter_PEARPackageToPageTitleTest extends PHPUnit_Framewo
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($this->_request));
 
-        $tracker->addConverter(new ITEMAN_GANoJS_Converter_PEARPackageToPageTitle());
-        $tracker->setPage($uri);
-        $tracker->setHostname('www.example.com');
+        $converter = $this->getMock('ITEMAN_GANoJS_Converter_RemoteAddrToHostname',
+                                    array('getHostByAddr')
+                                    );
+        $converter->expects($this->any())
+                  ->method('getHostByAddr')
+                  ->will($this->returnValue('www.example.com'));
+
+        $tracker->addConverter($converter);
+        $tracker->setPage('/blog/');
         $tracker->trackPageView();
 
-        $queryVariables = $tracker->extractQueryVariables();
-
-        $this->assertEquals(rawurlencode($title), $tracker->getPageTitle());
-    }
-
-    public function providePEARPackages()
-    {
-        return array(array('/get/Stagehand_TestRunner-2.6.1.tgz', 'Stagehand_TestRunner 2.6.1'),
-                     array('/get/Stagehand_TestRunner-2.6.1.tar', 'Stagehand_TestRunner 2.6.1'),
-                     array('/package/Net_UserAgent_Mobile-1.0.0RC1.tgz', 'Net_UserAgent_Mobile 1.0.0RC1'),
-                     array('/Foo_Bar-0.1.0dev1.tgz', 'Foo_Bar 0.1.0dev1'),
-                     array('/Foo_Bar-0.9.0alpha1.tgz', 'Foo_Bar 0.9.0alpha1'),
-                     array('/Foo_Bar-0.9.0beta1.tgz', 'Foo_Bar 0.9.0beta1')
-                     );
+        $this->assertEquals('www.example.com', $tracker->getHostname());
     }
 
     /**#@-*/

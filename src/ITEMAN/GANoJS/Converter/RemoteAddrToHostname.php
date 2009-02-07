@@ -34,18 +34,16 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Converter_PEARPackageToPageTitleTest
+// {{{ ITEMAN_GANoJS_Converter_RemoteAddrToHostname
 
 /**
- * ITEMAN_GANoJS_Converter_PEARPackageToPageTitle のためのテスト。
- *
  * @package    ITEMAN_GANoJS
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_Converter_PEARPackageToPageTitleTest extends PHPUnit_Framework_TestCase
+class ITEMAN_GANoJS_Converter_RemoteAddrToHostname implements ITEMAN_GANoJS_Converter_ConverterInterface
 {
 
     // {{{ properties
@@ -66,60 +64,33 @@ class ITEMAN_GANoJS_Converter_PEARPackageToPageTitleTest extends PHPUnit_Framewo
      * @access private
      */
 
-    private $_request;
-
     /**#@-*/
 
     /**#@+
      * @access public
      */
 
-    public function setUp()
-    {
-        $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
-        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
-        $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
-
-        $adapter = new HTTP_Request2_Adapter_Mock();
-        $adapter->addResponse('HTTP/1.1 200 OK');
-        $this->_request = new HTTP_Request2();
-        $this->_request->setAdapter($adapter);
-    }
+    // }}}
+    // {{{ convert()
 
     /**
-     * @param string $uri
-     * @param string $title
-     * @test
-     * @dataProvider providePEARPackages
+     * @param ITEMAN_GANoJS_Tracker $tracker
      */
-    public function Pearパッケージの場合ファイル名からタイトルを生成する($uri, $title)
+    public function convert(ITEMAN_GANoJS_Tracker $tracker)
     {
-        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
-                                  array('createHTTPRequest')
-                                  );
-        $tracker->expects($this->any())
-                ->method('createHTTPRequest')
-                ->will($this->returnValue($this->_request));
-
-        $tracker->addConverter(new ITEMAN_GANoJS_Converter_PEARPackageToPageTitle());
-        $tracker->setPage($uri);
-        $tracker->setHostname('www.example.com');
-        $tracker->trackPageView();
-
-        $queryVariables = $tracker->extractQueryVariables();
-
-        $this->assertEquals(rawurlencode($title), $tracker->getPageTitle());
+        $tracker->setHostname($this->getHostByAddr($_SERVER['REMOTE_ADDR']));
     }
 
-    public function providePEARPackages()
+    // }}}
+    // {{{ getHostByAddr()
+
+    /**
+     * @param string $addr
+     * @return string
+     */
+    public function getHostByAddr($addr)
     {
-        return array(array('/get/Stagehand_TestRunner-2.6.1.tgz', 'Stagehand_TestRunner 2.6.1'),
-                     array('/get/Stagehand_TestRunner-2.6.1.tar', 'Stagehand_TestRunner 2.6.1'),
-                     array('/package/Net_UserAgent_Mobile-1.0.0RC1.tgz', 'Net_UserAgent_Mobile 1.0.0RC1'),
-                     array('/Foo_Bar-0.1.0dev1.tgz', 'Foo_Bar 0.1.0dev1'),
-                     array('/Foo_Bar-0.9.0alpha1.tgz', 'Foo_Bar 0.9.0alpha1'),
-                     array('/Foo_Bar-0.9.0beta1.tgz', 'Foo_Bar 0.9.0beta1')
-                     );
+        return gethostbyaddr($addr);
     }
 
     /**#@-*/
