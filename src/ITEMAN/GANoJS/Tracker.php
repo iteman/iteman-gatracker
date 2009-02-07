@@ -107,8 +107,8 @@ class ITEMAN_GANoJS_Tracker
         $this->setSource('-');
 
         $this->addConverter(new ITEMAN_GANoJS_Converter_RefererToSource());
+        $this->addConverter(new ITEMAN_GANoJS_Converter_UserAgent());
 
-        $this->_userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
     }
 
@@ -286,6 +286,17 @@ class ITEMAN_GANoJS_Tracker
     public function setSource($source)
     {
         $this->_queryVariables['utmr'] = $source;
+    }
+
+    // }}}
+    // {{{ setUserAgent()
+
+    /**
+     * @param string $userAgent
+     */
+    public function setUserAgent($userAgent)
+    {
+        $this->_userAgent = $userAgent;
     }
 
     /**#@-*/
