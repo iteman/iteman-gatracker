@@ -204,8 +204,8 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
 
   ITEMAN_GANOJS_WEBPROPERTYID (utmac):
      トラッキングの対象となる Google Analytics プロファイルを識別するための
-    「ウェブ プロパティ ID」を指定します。
-    「ウェブ プロパティ ID」のフォーマットは UA-XXX-X であり、
+    「ウェブプロパティID」を指定します。
+    「ウェブプロパティID」のフォーマットは UA-XXX-X であり、
      https://www.google.com/analytics/settings/home で確認することができます。
   
   SERVER_NAME (utmhn):

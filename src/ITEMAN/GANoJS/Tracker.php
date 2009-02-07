@@ -98,18 +98,19 @@ class ITEMAN_GANoJS_Tracker
                                        'utmje'  => '0',
                                        'utmfl'  => '-',
                                        'utmhid' => mt_rand(0, 2147483647),
-                                       'utmac'  => @$_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'],
                                        'utmcc'  => array($this, 'generateCookieConfiguration')
                                        );
-        $this->setPageTitle('-');
-        $this->setPage(null);
+        $this->setWebPropertyID(null);
         $this->setHostname(null);
+        $this->setPage(null);
         $this->setSource('-');
+        $this->setPageTitle('-');
 
-        $this->addConverter(new ITEMAN_GANoJS_Converter_RefererToSource());
-        $this->addConverter(new ITEMAN_GANoJS_Converter_UserAgent());
-        $this->addConverter(new ITEMAN_GANoJS_Converter_RequestURIToPage());
+        $this->addConverter(new ITEMAN_GANoJS_Converter_WebPropertyID());
         $this->addConverter(new ITEMAN_GANoJS_Converter_ServerNameToHostname());
+        $this->addConverter(new ITEMAN_GANoJS_Converter_RequestURIToPage());
+        $this->addConverter(new ITEMAN_GANoJS_Converter_UserAgent());
+        $this->addConverter(new ITEMAN_GANoJS_Converter_RefererToSource());
 
         $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
     }
@@ -301,6 +302,28 @@ class ITEMAN_GANoJS_Tracker
         $this->_userAgent = $userAgent;
     }
 
+    // }}}
+    // {{{ setWebPropertyID()
+
+    /**
+     * @param string $webPropertyID
+     */
+    public function setWebPropertyID($webPropertyID)
+    {
+        $this->_queryVariables['utmac'] = $webPropertyID;
+    }
+
+    // }}}
+    // {{{ getWebPropertyID()
+
+    /**
+     * @return string
+     */
+    public function getWebPropertyID()
+    {
+        return $this->_queryVariables['utmac'];
+    }
+
     /**#@-*/
 
     /**#@+
@@ -320,10 +343,8 @@ class ITEMAN_GANoJS_Tracker
      */
     private function _validate()
     {
-        foreach (array('utmac') as $requiredVariable) {
-            if (is_null($this->_queryVariables[$requiredVariable])) {
-                throw new ITEMAN_GANoJS_Exception("クエリ変数 [ $requiredVariable ] が設定されていません");
-            }
+        if (is_null($this->getWebPropertyID())) {
+            throw new ITEMAN_GANoJS_Exception('ウェブプロパティIDが設定されていません');
         }
 
         if (is_null($this->getPage())) {

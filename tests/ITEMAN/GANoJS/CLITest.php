@@ -134,7 +134,7 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
         ob_end_clean();
 
         $this->assertEquals(1, $result);
-        $this->assertRegExp('/^ERROR: クエリ変数 \[ [a-z]+ \] が設定されていません/', $content);
+        $this->assertRegExp('/^ERROR: ウェブプロパティIDが設定されていません/', $content);
     }
 
     /**
