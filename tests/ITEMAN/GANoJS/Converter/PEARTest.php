@@ -94,8 +94,6 @@ class ITEMAN_GANoJS_Converter_PEARTest extends PHPUnit_Framework_TestCase
      */
     public function Pearパッケージの場合ファイル名からタイトルを生成する($uri, $title)
     {
-        $_SERVER['REQUEST_URI'] = $uri;
-
         $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
                                   array('createHTTPRequest',
                                         'getHostByAddr')
@@ -108,6 +106,7 @@ class ITEMAN_GANoJS_Converter_PEARTest extends PHPUnit_Framework_TestCase
                 ->will($this->returnValue('www.example.com'));
 
         $tracker->addConverter(new ITEMAN_GANoJS_Converter_PEAR());
+        $tracker->setPage($uri);
         $tracker->trackPageView();
 
         $queryVariables = $tracker->extractQueryVariables();

@@ -98,13 +98,13 @@ class ITEMAN_GANoJS_Tracker
                                        'utmul'  => '-',
                                        'utmje'  => '0',
                                        'utmfl'  => '-',
-                                       'utmdt'  => '-',
                                        'utmhid' => mt_rand(0, 2147483647),
                                        'utmr'   => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : '-',
-                                       'utmp'   => $_SERVER['REQUEST_URI'],
                                        'utmac'  => @$_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'],
                                        'utmcc'  => array($this, 'generateCookieConfiguration')
                                        );
+        $this->setPageTitle('-');
+        $this->setPage(null);
 
         $this->_userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
@@ -223,6 +223,28 @@ class ITEMAN_GANoJS_Tracker
         return $queryVariables;
     }
 
+    // }}}
+    // {{{ setPage()
+
+    /**
+     * @paran string $page
+     */
+    public function setPage($page)
+    {
+        $this->_queryVariables['utmp'] = $page;
+    }
+
+    // }}}
+    // {{{ getPage()
+
+    /**
+     * @return string
+     */
+    public function getPage()
+    {
+        return $this->_queryVariables['utmp'];
+    }
+
     /**#@-*/
 
     /**#@+
@@ -242,10 +264,14 @@ class ITEMAN_GANoJS_Tracker
      */
     private function _validate()
     {
-        foreach (array('utmhn', 'utmp', 'utmac') as $requiredVariable) {
+        foreach (array('utmhn', 'utmac') as $requiredVariable) {
             if (is_null($this->_queryVariables[$requiredVariable])) {
                 throw new ITEMAN_GANoJS_Exception("クエリ変数 [ $requiredVariable ] は必須です");
             }
+        }
+
+        if (is_null($this->getPage())) {
+            throw new ITEMAN_GANoJS_Exception('ページが設定されていません');
         }
 
         if (is_null($this->_userAgent)) {

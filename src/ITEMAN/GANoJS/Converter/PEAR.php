@@ -78,7 +78,7 @@ class ITEMAN_GANoJS_Converter_PEAR implements ITEMAN_GANoJS_Converter_ConverterI
      */
     public function convert(ITEMAN_GANoJS_Tracker $tracker)
     {
-        if (preg_match('!([^/]+)-(.+?)\.(?:tgz|tar)$!', $_SERVER['REQUEST_URI'], $matches)) {
+        if (preg_match('!([^/]+)-(.+?)\.(?:tgz|tar)$!', $tracker->getPage(), $matches)) {
             $tracker->setPageTitle(rawurlencode("{$matches[1]} {$matches[2]}"));
         }
     }
