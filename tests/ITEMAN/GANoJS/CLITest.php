@@ -79,6 +79,7 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REQUEST_URI'] = '/blog/';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
+        $_SERVER['SERVER_NAME'] = 'www.example.com';
     }
 
     /**
@@ -150,15 +151,11 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
         $request->setAdapter($adapter);
 
         $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
-                                  array('createHTTPRequest',
-                                        'getHostByAddr')
+                                  array('createHTTPRequest')
                                   );
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($request));
-        $tracker->expects($this->any())
-                ->method('getHostByAddr')
-                ->will($this->returnValue('www.example.com'));
 
         $cli = $this->getMock('ITEMAN_GANoJS_CLI', array('createTracker'));
         $cli->expects($this->any())
@@ -167,6 +164,8 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
         $result = $cli->run();
 
         $this->assertEquals(0, $result);
+        $this->assertEquals($_SERVER['REQUEST_URI'], $tracker->getPage());
+        $this->assertEquals($_SERVER['SERVER_NAME'], $tracker->getHostname());
     }
 
     /**#@-*/
