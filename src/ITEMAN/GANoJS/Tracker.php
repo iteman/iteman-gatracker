@@ -74,6 +74,7 @@ class ITEMAN_GANoJS_Tracker
     private $_userAgent;
     private $_acceptLanguage;
     private $_converters = array();
+    private $_request;
 
     /**#@-*/
 
@@ -141,16 +142,16 @@ class ITEMAN_GANoJS_Tracker
         $this->_validate();
         $this->_queryVariables['utmhn'] =
             $this->getHostByAddr($this->_queryVariables['utmhn']);
-        $request = $this->createHTTPRequest();
-        $request->setUrl($this->_generateTrackingURI());
-        $request->setMethod(HTTP_Request2::METHOD_GET);
-        $request->setConfig(array('connect_timeout' => 10, 'timeout' => 30));
-        $request->setHeader('User-Agent', $this->_userAgent);
+        $this->_request = $this->createHTTPRequest();
+        $this->_request->setUrl($this->_generateTrackingURI());
+        $this->_request->setMethod(HTTP_Request2::METHOD_GET);
+        $this->_request->setConfig(array('connect_timeout' => 10, 'timeout' => 30));
+        $this->_request->setHeader('User-Agent', $this->_userAgent);
         if (!is_null($this->_acceptLanguage)) {
-            $request->setHeader('Accept-Language', $this->_acceptLanguage);
+            $this->_request->setHeader('Accept-Language', $this->_acceptLanguage);
         }
 
-        $response = $request->send();
+        $response = $this->_request->send();
         if ($response->getStatus() != '200') {
             throw new ITEMAN_GANoJS_Exception('200 以外のステータスコードが返されました');
         }
@@ -199,6 +200,27 @@ class ITEMAN_GANoJS_Tracker
     public function addConverter(ITEMAN_GANoJS_Converter_ConverterInterface $converter)
     {
         $this->_converters[] = $converter;
+    }
+
+    // }}}
+    // {{{ extractQueryVariables()
+
+    /**
+     * @return array
+     */
+    public function extractQueryVariables()
+    {
+        if (is_null($this->_request)) {
+            return array();
+        }
+
+        $queryVariables = array();
+        foreach (explode('&', $this->_request->getUrl()->getQuery()) as $queryVariable) {
+            list($name, $value) = explode('=', $queryVariable);
+            $queryVariables[$name] = $value;
+        }
+
+        return $queryVariables;
     }
 
     /**#@-*/

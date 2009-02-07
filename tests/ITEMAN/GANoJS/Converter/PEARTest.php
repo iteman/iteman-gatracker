@@ -78,7 +78,6 @@ class ITEMAN_GANoJS_Converter_PEARTest extends PHPUnit_Framework_TestCase
     {
         $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
-        $_SERVER['REQUEST_URI'] = '/blog/';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
 
         $adapter = new HTTP_Request2_Adapter_Mock();
@@ -111,7 +110,7 @@ class ITEMAN_GANoJS_Converter_PEARTest extends PHPUnit_Framework_TestCase
         $tracker->addConverter(new ITEMAN_GANoJS_Converter_PEAR());
         $tracker->trackPageView();
 
-        $queryVariables = $this->_extractQueryVariables();
+        $queryVariables = $tracker->extractQueryVariables();
 
         $this->assertEquals(rawurlencode($title), $queryVariables['utmdt']);
     }
@@ -138,20 +137,6 @@ class ITEMAN_GANoJS_Converter_PEARTest extends PHPUnit_Framework_TestCase
     /**#@+
      * @access private
      */
-
-    /**
-     * @return string
-     */
-    private function _extractQueryVariables()
-    {
-        $queryVariables = array();
-        foreach (explode('&', $this->_request->getUrl()->getQuery()) as $queryVariable) {
-            list($name, $value) = explode('=', $queryVariable);
-            $queryVariables[$name] = $value;
-        }
-
-        return $queryVariables;
-    }
 
     /**#@-*/
 
