@@ -139,25 +139,13 @@ class ITEMAN_GANoJS_Tracker
     // {{{ trackPageView()
 
     /**
-     * @throws ITEMAN_GANoJS_Exception
      */
     public function trackPageView()
     {
         $this->_convert();
         $this->_validate();
-        $this->_request = $this->createHTTPRequest();
-        $this->_request->setUrl($this->_generateTrackingURI());
-        $this->_request->setMethod(HTTP_Request2::METHOD_GET);
-        $this->_request->setConfig(array('connect_timeout' => 10, 'timeout' => 30));
-        $this->_request->setHeader('User-Agent', $this->_userAgent);
-        if (!is_null($this->_acceptLanguage)) {
-            $this->_request->setHeader('Accept-Language', $this->_acceptLanguage);
-        }
-
-        $response = $this->_request->send();
-        if ($response->getStatus() != '200') {
-            throw new ITEMAN_GANoJS_Exception('200 以外のステータスコードが返されました');
-        }
+        $this->_buildRequest();
+        $this->_sendRequest();
     }
 
     // }}}
@@ -392,6 +380,37 @@ class ITEMAN_GANoJS_Tracker
     {
         foreach ($this->_converters as $converter) {
             $converter->convert($this);
+        }
+    }
+
+    // }}}
+    // {{{ _buildRequest()
+
+    /**
+     */
+    private function _buildRequest()
+    {
+        $this->_request = $this->createHTTPRequest();
+        $this->_request->setUrl($this->_generateTrackingURI());
+        $this->_request->setMethod(HTTP_Request2::METHOD_GET);
+        $this->_request->setConfig(array('connect_timeout' => 10, 'timeout' => 30));
+        $this->_request->setHeader('User-Agent', $this->_userAgent);
+        if (!is_null($this->_acceptLanguage)) {
+            $this->_request->setHeader('Accept-Language', $this->_acceptLanguage);
+        }
+    }
+
+    // }}}
+    // {{{ _sendRequest()
+
+    /**
+     * @throws ITEMAN_GANoJS_Exception
+     */
+    private function _sendRequest()
+    {
+        $response = $this->_request->send();
+        if ($response->getStatus() != '200') {
+            throw new ITEMAN_GANoJS_Exception('200 以外のステータスコードが返されました');
         }
     }
 
