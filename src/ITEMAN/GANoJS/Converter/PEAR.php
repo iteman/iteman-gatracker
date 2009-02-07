@@ -64,6 +64,9 @@ class ITEMAN_GANoJS_Converter_PEAR implements ITEMAN_GANoJS_Converter_ConverterI
      * @access private
      */
 
+    private $_packageName;
+    private $_packageVersion;
+
     /**#@-*/
 
     /**#@+
@@ -78,8 +81,8 @@ class ITEMAN_GANoJS_Converter_PEAR implements ITEMAN_GANoJS_Converter_ConverterI
      */
     public function convert(ITEMAN_GANoJS_Tracker $tracker)
     {
-        if (preg_match('!([^/]+)-(.+?)\.(?:tgz|tar)$!', $tracker->getPage(), $matches)) {
-            $tracker->setPageTitle(rawurlencode("{$matches[1]} {$matches[2]}"));
+        if ($this->_isPEARPackage($tracker->getPage())) {
+            $tracker->setPageTitle(rawurlencode("{$this->_packageName} {$this->_packageVersion}"));
         }
     }
 
@@ -94,6 +97,27 @@ class ITEMAN_GANoJS_Converter_PEAR implements ITEMAN_GANoJS_Converter_ConverterI
     /**#@+
      * @access private
      */
+
+    // }}}
+    // {{{ _isPEARPackage()
+
+    /**
+     * @param string $page
+     * @return boolean
+     */
+    private function _isPEARPackage($page)
+    {
+        $isPEARPackage =
+            (boolean)preg_match('!([^/]+)-(.+?)\.(?:tgz|tar)$!', $page, $matches);
+        if (!$isPEARPackage) {
+            return false;
+        }
+
+        $this->_packageName = $matches[1];
+        $this->_packageVersion = $matches[2];
+
+        return true;
+    }
 
     /**#@-*/
 
