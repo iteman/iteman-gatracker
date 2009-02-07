@@ -34,7 +34,7 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Converter_PEAR
+// {{{ ITEMAN_GANoJS_Converter_PEARPackageToPageTitle
 
 /**
  * @package    ITEMAN_GANoJS
@@ -43,7 +43,7 @@
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_Converter_PEAR implements ITEMAN_GANoJS_Converter_ConverterInterface
+class ITEMAN_GANoJS_Converter_PEARPackageToPageTitle implements ITEMAN_GANoJS_Converter_ConverterInterface
 {
 
     // {{{ properties
@@ -64,8 +64,8 @@ class ITEMAN_GANoJS_Converter_PEAR implements ITEMAN_GANoJS_Converter_ConverterI
      * @access private
      */
 
-    private $_packageName;
-    private $_packageVersion;
+    private $_package;
+    private $_version;
 
     /**#@-*/
 
@@ -82,7 +82,7 @@ class ITEMAN_GANoJS_Converter_PEAR implements ITEMAN_GANoJS_Converter_ConverterI
     public function convert(ITEMAN_GANoJS_Tracker $tracker)
     {
         if ($this->_isPEARPackage($tracker->getPage())) {
-            $tracker->setPageTitle(rawurlencode("{$this->_packageName} {$this->_packageVersion}"));
+            $tracker->setPageTitle(rawurlencode("{$this->_package} {$this->_version}"));
         }
     }
 
@@ -113,8 +113,8 @@ class ITEMAN_GANoJS_Converter_PEAR implements ITEMAN_GANoJS_Converter_ConverterI
             return false;
         }
 
-        $this->_packageName = $matches[1];
-        $this->_packageVersion = $matches[2];
+        $this->_package = $matches[1];
+        $this->_version = $matches[2];
 
         return true;
     }

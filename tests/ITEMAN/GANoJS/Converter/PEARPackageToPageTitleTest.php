@@ -34,10 +34,10 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Converter_PEARTest
+// {{{ ITEMAN_GANoJS_Converter_PEARPackageToPageTitleTest
 
 /**
- * ITEMAN_GANoJS_Converter_PEAR のためのテスト。
+ * ITEMAN_GANoJS_Converter_PEARPackageToPageTitle のためのテスト。
  *
  * @package    ITEMAN_GANoJS
  * @copyright  2009 ITEMAN, Inc.
@@ -45,7 +45,7 @@
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_Converter_PEARTest extends PHPUnit_Framework_TestCase
+class ITEMAN_GANoJS_Converter_PEARPackageToPageTitleTest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -105,7 +105,7 @@ class ITEMAN_GANoJS_Converter_PEARTest extends PHPUnit_Framework_TestCase
                 ->method('getHostByAddr')
                 ->will($this->returnValue('www.example.com'));
 
-        $tracker->addConverter(new ITEMAN_GANoJS_Converter_PEAR());
+        $tracker->addConverter(new ITEMAN_GANoJS_Converter_PEARPackageToPageTitle());
         $tracker->setPage($uri);
         $tracker->trackPageView();
 
