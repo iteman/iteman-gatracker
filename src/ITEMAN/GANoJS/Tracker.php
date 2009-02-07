@@ -98,13 +98,15 @@ class ITEMAN_GANoJS_Tracker
                                        'utmje'  => '0',
                                        'utmfl'  => '-',
                                        'utmhid' => mt_rand(0, 2147483647),
-                                       'utmr'   => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : '-',
                                        'utmac'  => @$_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'],
                                        'utmcc'  => array($this, 'generateCookieConfiguration')
                                        );
         $this->setPageTitle('-');
         $this->setPage(null);
         $this->setHostname(null);
+        $this->setSource('-');
+
+        $this->addConverter(new ITEMAN_GANoJS_Converter_RefererToSource());
 
         $this->_userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
@@ -273,6 +275,17 @@ class ITEMAN_GANoJS_Tracker
     public function getSource()
     {
         return $this->_queryVariables['utmr'];
+    }
+
+    // }}}
+    // {{{ setSource()
+
+    /**
+     * @param string $source
+     */
+    public function setSource($source)
+    {
+        $this->_queryVariables['utmr'] = $source;
     }
 
     /**#@-*/
