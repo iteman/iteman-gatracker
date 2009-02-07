@@ -155,6 +155,7 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
 
         $tracker = $this->createTracker();
         $tracker->setPage($_SERVER['REQUEST_URI']);
+        $tracker->setHostname($_SERVER['SERVER_NAME']);
         $tracker->trackPageView();
 
         if ($this->_config['runAsFilter']) {
@@ -203,28 +204,28 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
 
 環境変数:
 
-  ITEMAN_GANOJS_WEBPROPERTYID: WEB-PROPERTY-ID
-     トラッキングの対象となる Google Analytics プロファイルとして WEB-PROPERTY-ID
-     を指定します。
-     WEB-PROPERTY-ID のフォーマットは UA-XXX-X であり、
+  ITEMAN_GANOJS_WEBPROPERTYID (utmac):
+     トラッキングの対象となる Google Analytics プロファイルを識別するための
+    「ウェブ プロパティ ID」を指定します。
+    「ウェブ プロパティ ID」のフォーマットは UA-XXX-X であり、
      https://www.google.com/analytics/settings/home で確認することができます。
   
-  SERVER_NAME: HOST
-     トラッキングの対象となる URI のホスト部分を指定します。
+  SERVER_NAME (utmhn):
+     トラッキングの対象となるページの URI のホスト部分を指定します。
      例えば URI が http://www.example.com/foo/bar.tar.gz の場合、ホスト部分は
      www.example.com となります。
      この環境変数は Apache によって自動的に設定されるため、通常は指定する必要は
      ありません。
   
-  REQUEST_URI: DOCUMENT
-     トラッキングの対象となる URI のパス部分を指定します。
+  REQUEST_URI (utmp):
+     トラッキングの対象となるページの URI のパス部分を指定します。
      例えば URI が http://www.example.com/foo/bar.tar.gz の場合、パス部分は
      /foo/bar.tar.gz となります。
      この環境変数は Apache によって自動的に設定されるため、通常は指定する必要は
      ありません。
   
-  HTTP_USER_AGENT: USER-AGENT
-     トラッキングの対象となる URI にリクエストを行ったユーザエージェントを指定し
+  HTTP_USER_AGENT:
+     トラッキングの対象となるページにリクエストを行ったユーザエージェントを指定し
      ます。
      この環境変数は Apache によって自動的に設定されるため、通常は指定する必要は
      ありません。
