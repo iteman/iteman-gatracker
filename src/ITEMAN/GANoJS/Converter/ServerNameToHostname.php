@@ -34,7 +34,7 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Converter_UserAgent
+// {{{ ITEMAN_GANoJS_Converter_ServerNameToHostname
 
 /**
  * @package    ITEMAN_GANoJS
@@ -43,7 +43,7 @@
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_Converter_UserAgent implements ITEMAN_GANoJS_Converter_ConverterInterface
+class ITEMAN_GANoJS_Converter_ServerNameToHostname implements ITEMAN_GANoJS_Converter_ConverterInterface
 {
 
     // {{{ properties
@@ -78,8 +78,8 @@ class ITEMAN_GANoJS_Converter_UserAgent implements ITEMAN_GANoJS_Converter_Conve
      */
     public function convert(ITEMAN_GANoJS_Tracker $tracker)
     {
-        if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
-            $tracker->setUserAgent($_SERVER['HTTP_USER_AGENT']);
+        if (array_key_exists('SERVER_NAME', $_SERVER)) {
+            $tracker->setHostname($_SERVER['SERVER_NAME']);
         }
     }
 

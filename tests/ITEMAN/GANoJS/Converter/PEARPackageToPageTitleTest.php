@@ -94,6 +94,9 @@ class ITEMAN_GANoJS_Converter_PEARPackageToPageTitleTest extends PHPUnit_Framewo
      */
     public function Pearパッケージの場合ファイル名からタイトルを生成する($uri, $title)
     {
+        $_SERVER['REQUEST_URI'] = $uri;
+        $_SERVER['SERVER_NAME'] = 'www.example.com';
+
         $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
                                   array('createHTTPRequest')
                                   );
@@ -102,8 +105,6 @@ class ITEMAN_GANoJS_Converter_PEARPackageToPageTitleTest extends PHPUnit_Framewo
                 ->will($this->returnValue($this->_request));
 
         $tracker->addConverter(new ITEMAN_GANoJS_Converter_PEARPackageToPageTitle());
-        $tracker->setPage($uri);
-        $tracker->setHostname('www.example.com');
         $tracker->trackPageView();
 
         $queryVariables = $tracker->extractQueryVariables();

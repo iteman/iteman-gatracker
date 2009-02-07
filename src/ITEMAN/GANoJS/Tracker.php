@@ -108,6 +108,8 @@ class ITEMAN_GANoJS_Tracker
 
         $this->addConverter(new ITEMAN_GANoJS_Converter_RefererToSource());
         $this->addConverter(new ITEMAN_GANoJS_Converter_UserAgent());
+        $this->addConverter(new ITEMAN_GANoJS_Converter_RequestURIToPage());
+        $this->addConverter(new ITEMAN_GANoJS_Converter_ServerNameToHostname());
 
         $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
     }

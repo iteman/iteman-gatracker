@@ -78,7 +78,9 @@ class ITEMAN_GANoJS_Converter_RemoteAddrToHostname implements ITEMAN_GANoJS_Conv
      */
     public function convert(ITEMAN_GANoJS_Tracker $tracker)
     {
-        $tracker->setHostname($this->getHostByAddr($_SERVER['REMOTE_ADDR']));
+        if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
+            $tracker->setHostname($this->getHostByAddr($_SERVER['REMOTE_ADDR']));
+        }
     }
 
     // }}}

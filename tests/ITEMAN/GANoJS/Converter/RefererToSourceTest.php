@@ -79,6 +79,8 @@ class ITEMAN_GANoJS_Converter_RefererToSourceTest extends PHPUnit_Framework_Test
         $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
+        $_SERVER['REQUEST_URI'] = '/blog/';
+        $_SERVER['SERVER_NAME'] = 'www.example.com';
 
         $adapter = new HTTP_Request2_Adapter_Mock();
         $adapter->addResponse('HTTP/1.1 200 OK');
@@ -102,8 +104,6 @@ class ITEMAN_GANoJS_Converter_RefererToSourceTest extends PHPUnit_Framework_Test
 
         $converter = new ITEMAN_GANoJS_Converter_RefererToSource();
         $tracker->addConverter($converter);
-        $tracker->setPage('/blog/');
-        $tracker->setHostname('www.example.com');
         $tracker->trackPageView();
 
         $this->assertEquals($_SERVER['HTTP_REFERER'], $tracker->getSource());

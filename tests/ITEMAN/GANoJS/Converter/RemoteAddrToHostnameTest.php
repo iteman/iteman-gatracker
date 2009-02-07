@@ -79,6 +79,8 @@ class ITEMAN_GANoJS_Converter_RemoteAddrToHostnameTest extends PHPUnit_Framework
         $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
+        $_SERVER['REQUEST_URI'] = '/blog/';
+        $_SERVER['SERVER_NAME'] = 'www.example.com';
 
         $adapter = new HTTP_Request2_Adapter_Mock();
         $adapter->addResponse('HTTP/1.1 200 OK');
@@ -103,13 +105,12 @@ class ITEMAN_GANoJS_Converter_RemoteAddrToHostnameTest extends PHPUnit_Framework
                                     );
         $converter->expects($this->any())
                   ->method('getHostByAddr')
-                  ->will($this->returnValue('www.example.com'));
+                  ->will($this->returnValue('www.example.org'));
 
         $tracker->addConverter($converter);
-        $tracker->setPage('/blog/');
         $tracker->trackPageView();
 
-        $this->assertEquals('www.example.com', $tracker->getHostname());
+        $this->assertEquals('www.example.org', $tracker->getHostname());
     }
 
     /**#@-*/

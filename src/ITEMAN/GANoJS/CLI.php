@@ -154,8 +154,6 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
         }
 
         $tracker = $this->createTracker();
-        $tracker->setPage($_SERVER['REQUEST_URI']);
-        $tracker->setHostname($_SERVER['SERVER_NAME']);
         $tracker->trackPageView();
 
         if ($this->_config['runAsFilter']) {

@@ -79,6 +79,8 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
+        $_SERVER['REQUEST_URI'] = '/blog/';
+        $_SERVER['SERVER_NAME'] = 'www.example.com';
 
         $adapter = new HTTP_Request2_Adapter_Mock();
         $adapter->addResponse('HTTP/1.1 200 OK');
@@ -98,8 +100,6 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($this->_request));
 
-        $tracker->setPage('/blog/');
-        $tracker->setHostname('www.example.com');
         $tracker->trackPageView();
 
         $headers = $this->_request->getHeaders();
@@ -152,8 +152,6 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($this->_request));
 
-        $tracker->setPage('/blog/');
-        $tracker->setHostname('www.example.com');
         $tracker->trackPageView();
 
         $headers = $this->_request->getHeaders();
@@ -179,8 +177,6 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($this->_request));
 
-        $tracker->setPage('/blog/');
-        $tracker->setHostname('www.example.com');
         $tracker->trackPageView();
 
         $queryVariables = $tracker->extractQueryVariables();
@@ -194,6 +190,7 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
      */
     public function ページが与えられなかった場合例外を発生させる()
     {
+        unset($_SERVER['REQUEST_URI']);
         $tracker = new ITEMAN_GANoJS_Tracker();
         $tracker->trackPageView();
     }
