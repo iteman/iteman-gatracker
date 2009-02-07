@@ -133,7 +133,7 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
         ob_end_clean();
 
         $this->assertEquals(1, $result);
-        $this->assertRegExp('/^ERROR: クエリ変数 \[ [a-z]+ \] は必須です/', $content);
+        $this->assertRegExp('/^ERROR: クエリ変数 \[ [a-z]+ \] が設定されていません/', $content);
     }
 
     /**

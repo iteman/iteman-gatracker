@@ -266,7 +266,7 @@ class ITEMAN_GANoJS_Tracker
     {
         foreach (array('utmhn', 'utmac') as $requiredVariable) {
             if (is_null($this->_queryVariables[$requiredVariable])) {
-                throw new ITEMAN_GANoJS_Exception("クエリ変数 [ $requiredVariable ] は必須です");
+                throw new ITEMAN_GANoJS_Exception("クエリ変数 [ $requiredVariable ] が設定されていません");
             }
         }
 
@@ -275,7 +275,7 @@ class ITEMAN_GANoJS_Tracker
         }
 
         if (is_null($this->_userAgent)) {
-            throw new ITEMAN_GANoJS_Exception('ユーザエージェントは必須です');
+            throw new ITEMAN_GANoJS_Exception('ユーザエージェントが設定されていません');
         }
     }
 
