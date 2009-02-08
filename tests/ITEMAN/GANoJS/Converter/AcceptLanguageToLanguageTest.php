@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008 ITEMAN, Inc. All rights reserved.
+ * Copyright (c) 2009 ITEMAN, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,24 +28,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    ITEMAN_GANoJS
- * @copyright  2008 ITEMAN, Inc.
+ * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_TrackerTest
+// {{{ ITEMAN_GANoJS_Converter_AcceptLanguageToLanguageTest
 
 /**
- * ITEMAN_GANoJS_Tracker のためのテスト。
+ * ITEMAN_GANoJS_Converter_AcceptLanguageToLanguage のためのテスト。
  *
  * @package    ITEMAN_GANoJS
- * @copyright  2008 ITEMAN, Inc.
+ * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
+class ITEMAN_GANoJS_Converter_AcceptLanguageToLanguageTest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -91,8 +91,10 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function トラッキングUriを生成する()
+    public function acceptlanguage環境変数を言語に設定する()
     {
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja,en-us;q=0.7,en;q=0.3';
+
         $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
                                   array('createHTTPRequest')
                                   );
@@ -100,53 +102,10 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($this->_request));
 
+        $tracker->addConverter(new ITEMAN_GANoJS_Converter_PEARPackageToPageTitle());
         $tracker->trackPageView();
 
-        $headers = $this->_request->getHeaders();
-
-        $this->assertEquals(1, count($headers));
-        $this->assertEquals($_SERVER['HTTP_USER_AGENT'], $headers['user-agent']);
-
-        $url = $this->_request->getUrl();
-
-        $this->assertEquals('http', $url->getScheme());
-        $this->assertEquals('www.google-analytics.com', $url->getHost());
-        $this->assertEquals('/__utm.gif', $url->getPath());
-
-        $queryVariables = $tracker->extractQueryVariables();
-
-        $this->assertEquals('4.3', $queryVariables['utmwv']);
-        $this->assertGreaterThanOrEqual(0, $queryVariables['utmn']);
-        $this->assertLessThanOrEqual(2147483647, $queryVariables['utmn']);
-        $this->assertEquals('www.example.com', $queryVariables['utmhn']);
-        $this->assertEquals('UTF-8', $queryVariables['utmcs']);
-        $this->assertEquals('-', $queryVariables['utmsr']);
-        $this->assertEquals('-', $queryVariables['utmsc']);
-        $this->assertEquals('-', $queryVariables['utmul']);
-        $this->assertEquals('0', $queryVariables['utmje']);
-        $this->assertEquals('-', $queryVariables['utmfl']);
-        $this->assertEquals('-', $tracker->getPageTitle());
-        $this->assertGreaterThanOrEqual(0, $queryVariables['utmhid']);
-        $this->assertLessThanOrEqual(2147483647, $queryVariables['utmhid']);
-        $this->assertEquals('-', $queryVariables['utmr']);
-        $this->assertEquals('/blog/', $queryVariables['utmp']);
-        $this->assertEquals($_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'],
-                            $queryVariables['utmac']
-                            );
-        $this->assertRegExp('/^__utma%3D\d+\.\d+\.\d+\.\d+\.\d+.2%3B%2B__utmb%3D\d+%3B%2B__utmc%3D\d+%3B%2B__utmz%3D\d+\.\d+\.2\.2\.utmccn%3D\(direct\)%7Cutmcsr%3D\(direct\)%7Cutmcmd%3D\(none\)%3B$/',
-                            $queryVariables['utmcc']
-                            );
-    }
-
-    /**
-     * @test
-     * @expectedException ITEMAN_GANoJS_Exception
-     */
-    public function ページが与えられなかった場合例外を発生させる()
-    {
-        unset($_SERVER['REQUEST_URI']);
-        $tracker = new ITEMAN_GANoJS_Tracker();
-        $tracker->trackPageView();
+        $this->assertEquals('ja', $tracker->getLanguage());
     }
 
     /**#@-*/

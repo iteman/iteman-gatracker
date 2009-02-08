@@ -72,7 +72,6 @@ class ITEMAN_GANoJS_Tracker
     private $_cookieA;
     private $_cookieZ;
     private $_userAgent;
-    private $_acceptLanguage;
     private $_converters = array();
     private $_request;
 
@@ -94,7 +93,6 @@ class ITEMAN_GANoJS_Tracker
                                        'utmcs'  => 'UTF-8',
                                        'utmsr'  => '-',
                                        'utmsc'  => '-',
-                                       'utmul'  => '-',
                                        'utmje'  => '0',
                                        'utmfl'  => '-',
                                        'utmhid' => mt_rand(0, 2147483647),
@@ -105,14 +103,14 @@ class ITEMAN_GANoJS_Tracker
         $this->setPage(null);
         $this->setSource('-');
         $this->setPageTitle('-');
+        $this->setLanguage('-');
 
         $this->addConverter(new ITEMAN_GANoJS_Converter_WebPropertyID());
         $this->addConverter(new ITEMAN_GANoJS_Converter_ServerNameToHostname());
         $this->addConverter(new ITEMAN_GANoJS_Converter_RequestURIToPage());
         $this->addConverter(new ITEMAN_GANoJS_Converter_UserAgent());
         $this->addConverter(new ITEMAN_GANoJS_Converter_RefererToSource());
-
-        $this->_acceptLanguage = @$_SERVER['HTTP_ACCEPT_LANGUAGE'];
+        $this->addConverter(new ITEMAN_GANoJS_Converter_AcceptLanguageToLanguage());
     }
 
     // }}}
@@ -312,6 +310,28 @@ class ITEMAN_GANoJS_Tracker
         return $this->_queryVariables['utmac'];
     }
 
+    // }}}
+    // {{{ setLanguage()
+
+    /**
+     * @param string $language
+     */
+    public function setLanguage($language)
+    {
+        $this->_queryVariables['utmul'] = $language;
+    }
+
+    // }}}
+    // {{{ getLanguage()
+
+    /**
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->_queryVariables['utmul'];
+    }
+
     /**#@-*/
 
     /**#@+
@@ -395,9 +415,6 @@ class ITEMAN_GANoJS_Tracker
         $this->_request->setMethod(HTTP_Request2::METHOD_GET);
         $this->_request->setConfig(array('connect_timeout' => 10, 'timeout' => 30));
         $this->_request->setHeader('User-Agent', $this->_userAgent);
-        if (!is_null($this->_acceptLanguage)) {
-            $this->_request->setHeader('Accept-Language', $this->_acceptLanguage);
-        }
     }
 
     // }}}
