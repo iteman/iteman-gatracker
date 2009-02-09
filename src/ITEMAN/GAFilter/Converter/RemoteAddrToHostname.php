@@ -27,25 +27,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Converter_RefererToSourceTest
+// {{{ ITEMAN_GAFilter_Converter_RemoteAddrToHostname
 
 /**
- * ITEMAN_GANoJS_Converter_RefererToSource のためのテスト。
- *
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_Converter_RefererToSourceTest extends PHPUnit_Framework_TestCase
+class ITEMAN_GAFilter_Converter_RemoteAddrToHostname implements ITEMAN_GAFilter_Converter_ConverterInterface
 {
 
     // {{{ properties
@@ -66,47 +64,35 @@ class ITEMAN_GANoJS_Converter_RefererToSourceTest extends PHPUnit_Framework_Test
      * @access private
      */
 
-    private $_request;
-
     /**#@-*/
 
     /**#@+
      * @access public
      */
 
-    public function setUp()
-    {
-        $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
-        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
-        $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
-        $_SERVER['REQUEST_URI'] = '/blog/';
-        $_SERVER['SERVER_NAME'] = 'www.example.com';
-
-        $adapter = new HTTP_Request2_Adapter_Mock();
-        $adapter->addResponse('HTTP/1.1 200 OK');
-        $this->_request = new HTTP_Request2();
-        $this->_request->setAdapter($adapter);
-    }
+    // }}}
+    // {{{ convert()
 
     /**
-     * @test
+     * @param ITEMAN_GAFilter_Tracker $tracker
      */
-    public function Referer環境変数を参照元に設定する()
+    public function convert(ITEMAN_GAFilter_Tracker $tracker)
     {
-        $_SERVER['HTTP_REFERER'] = 'www.example.org';
+        if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
+            $tracker->setHostname($this->getHostByAddr($_SERVER['REMOTE_ADDR']));
+        }
+    }
 
-        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
-                                  array('createHTTPRequest')
-                                  );
-        $tracker->expects($this->any())
-                ->method('createHTTPRequest')
-                ->will($this->returnValue($this->_request));
+    // }}}
+    // {{{ getHostByAddr()
 
-        $converter = new ITEMAN_GANoJS_Converter_RefererToSource();
-        $tracker->addConverter($converter);
-        $tracker->trackPageView();
-
-        $this->assertEquals($_SERVER['HTTP_REFERER'], $tracker->getSource());
+    /**
+     * @param string $addr
+     * @return string
+     */
+    public function getHostByAddr($addr)
+    {
+        return gethostbyaddr($addr);
     }
 
     /**#@-*/

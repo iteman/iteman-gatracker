@@ -27,23 +27,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Converter_PEARPackageToPageTitle
+// {{{ ITEMAN_GAFilter_Converter_ServerNameToHostname
 
 /**
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_Converter_PEARPackageToPageTitle implements ITEMAN_GANoJS_Converter_ConverterInterface
+class ITEMAN_GAFilter_Converter_ServerNameToHostname implements ITEMAN_GAFilter_Converter_ConverterInterface
 {
 
     // {{{ properties
@@ -64,9 +64,6 @@ class ITEMAN_GANoJS_Converter_PEARPackageToPageTitle implements ITEMAN_GANoJS_Co
      * @access private
      */
 
-    private $_package;
-    private $_version;
-
     /**#@-*/
 
     /**#@+
@@ -77,12 +74,12 @@ class ITEMAN_GANoJS_Converter_PEARPackageToPageTitle implements ITEMAN_GANoJS_Co
     // {{{ convert()
 
     /**
-     * @param ITEMAN_GANoJS_Tracker $tracker
+     * @param ITEMAN_GAFilter_Tracker $tracker
      */
-    public function convert(ITEMAN_GANoJS_Tracker $tracker)
+    public function convert(ITEMAN_GAFilter_Tracker $tracker)
     {
-        if ($this->_isPEARPackage($tracker->getPage())) {
-            $tracker->setPageTitle(rawurlencode("{$this->_package} {$this->_version}"));
+        if (array_key_exists('SERVER_NAME', $_SERVER)) {
+            $tracker->setHostname($_SERVER['SERVER_NAME']);
         }
     }
 
@@ -97,27 +94,6 @@ class ITEMAN_GANoJS_Converter_PEARPackageToPageTitle implements ITEMAN_GANoJS_Co
     /**#@+
      * @access private
      */
-
-    // }}}
-    // {{{ _isPEARPackage()
-
-    /**
-     * @param string $page
-     * @return boolean
-     */
-    private function _isPEARPackage($page)
-    {
-        $isPEARPackage =
-            (boolean)preg_match('!([^/]+)-(.+?)\.(?:tgz|tar)$!', $page, $matches);
-        if (!$isPEARPackage) {
-            return false;
-        }
-
-        $this->_package = $matches[1];
-        $this->_version = $matches[2];
-
-        return true;
-    }
 
     /**#@-*/
 

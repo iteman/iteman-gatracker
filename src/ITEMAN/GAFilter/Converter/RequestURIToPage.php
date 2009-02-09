@@ -27,23 +27,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Converter_AcceptLanguageToLanguage
+// {{{ ITEMAN_GAFilter_Converter_RequestURIToPage
 
 /**
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_Converter_AcceptLanguageToLanguage implements ITEMAN_GANoJS_Converter_ConverterInterface
+class ITEMAN_GAFilter_Converter_RequestURIToPage implements ITEMAN_GAFilter_Converter_ConverterInterface
 {
 
     // {{{ properties
@@ -74,13 +74,12 @@ class ITEMAN_GANoJS_Converter_AcceptLanguageToLanguage implements ITEMAN_GANoJS_
     // {{{ convert()
 
     /**
-     * @param ITEMAN_GANoJS_Tracker $tracker
+     * @param ITEMAN_GAFilter_Tracker $tracker
      */
-    public function convert(ITEMAN_GANoJS_Tracker $tracker)
+    public function convert(ITEMAN_GAFilter_Tracker $tracker)
     {
-        $preferredLanguage = Stagehand_HTTP_AcceptLanguage::getPreferredLanguage();
-        if (!is_null($preferredLanguage)) {
-            $tracker->setLanguage($preferredLanguage);
+        if (array_key_exists('REQUEST_URI', $_SERVER)) {
+            $tracker->setPage($_SERVER['REQUEST_URI']);
         }
     }
 

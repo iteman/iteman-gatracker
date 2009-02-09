@@ -27,23 +27,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Converter_RefererToSource
+// {{{ ITEMAN_GAFilter_Converter_UserAgent
 
 /**
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_Converter_RefererToSource implements ITEMAN_GANoJS_Converter_ConverterInterface
+class ITEMAN_GAFilter_Converter_UserAgent implements ITEMAN_GAFilter_Converter_ConverterInterface
 {
 
     // {{{ properties
@@ -74,12 +74,12 @@ class ITEMAN_GANoJS_Converter_RefererToSource implements ITEMAN_GANoJS_Converter
     // {{{ convert()
 
     /**
-     * @param ITEMAN_GANoJS_Tracker $tracker
+     * @param ITEMAN_GAFilter_Tracker $tracker
      */
-    public function convert(ITEMAN_GANoJS_Tracker $tracker)
+    public function convert(ITEMAN_GAFilter_Tracker $tracker)
     {
-        if (array_key_exists('HTTP_REFERER', $_SERVER)) {
-            $tracker->setSource($_SERVER['HTTP_REFERER']);
+        if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
+            $tracker->setUserAgent($_SERVER['HTTP_USER_AGENT']);
         }
     }
 

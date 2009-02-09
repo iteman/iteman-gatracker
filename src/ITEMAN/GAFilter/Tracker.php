@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2008 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
@@ -36,10 +36,10 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Tracker
+// {{{ ITEMAN_GAFilter_Tracker
 
 /**
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2008 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
@@ -47,7 +47,7 @@
  * @link       http://www.ianlewis.org/jp/google-analytics
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_Tracker
+class ITEMAN_GAFilter_Tracker
 {
 
     // {{{ properties
@@ -105,12 +105,12 @@ class ITEMAN_GANoJS_Tracker
         $this->setPageTitle('-');
         $this->setLanguage('-');
 
-        $this->addConverter(new ITEMAN_GANoJS_Converter_WebPropertyID());
-        $this->addConverter(new ITEMAN_GANoJS_Converter_ServerNameToHostname());
-        $this->addConverter(new ITEMAN_GANoJS_Converter_RequestURIToPage());
-        $this->addConverter(new ITEMAN_GANoJS_Converter_UserAgent());
-        $this->addConverter(new ITEMAN_GANoJS_Converter_RefererToSource());
-        $this->addConverter(new ITEMAN_GANoJS_Converter_AcceptLanguageToLanguage());
+        $this->addConverter(new ITEMAN_GAFilter_Converter_WebPropertyID());
+        $this->addConverter(new ITEMAN_GAFilter_Converter_ServerNameToHostname());
+        $this->addConverter(new ITEMAN_GAFilter_Converter_RequestURIToPage());
+        $this->addConverter(new ITEMAN_GAFilter_Converter_UserAgent());
+        $this->addConverter(new ITEMAN_GAFilter_Converter_RefererToSource());
+        $this->addConverter(new ITEMAN_GAFilter_Converter_AcceptLanguageToLanguage());
     }
 
     // }}}
@@ -172,9 +172,9 @@ class ITEMAN_GANoJS_Tracker
     // {{{ addConverter()
 
     /**
-     * @param ITEMAN_GANoJS_Converter_ConverterInterface $converter
+     * @param ITEMAN_GAFilter_Converter_ConverterInterface $converter
      */
-    public function addConverter(ITEMAN_GANoJS_Converter_ConverterInterface $converter)
+    public function addConverter(ITEMAN_GAFilter_Converter_ConverterInterface $converter)
     {
         $this->_converters[] = $converter;
     }
@@ -352,19 +352,19 @@ class ITEMAN_GANoJS_Tracker
     private function _validate()
     {
         if (is_null($this->getWebPropertyID())) {
-            throw new ITEMAN_GANoJS_Exception('ウェブプロパティIDが設定されていません');
+            throw new ITEMAN_GAFilter_Exception('ウェブプロパティIDが設定されていません');
         }
 
         if (is_null($this->getPage())) {
-            throw new ITEMAN_GANoJS_Exception('ページが設定されていません');
+            throw new ITEMAN_GAFilter_Exception('ページが設定されていません');
         }
 
         if (is_null($this->getHostname())) {
-            throw new ITEMAN_GANoJS_Exception('ホスト名が設定されていません');
+            throw new ITEMAN_GAFilter_Exception('ホスト名が設定されていません');
         }
 
         if (is_null($this->_userAgent)) {
-            throw new ITEMAN_GANoJS_Exception('ユーザエージェントが設定されていません');
+            throw new ITEMAN_GAFilter_Exception('ユーザエージェントが設定されていません');
         }
     }
 
@@ -373,7 +373,7 @@ class ITEMAN_GANoJS_Tracker
 
     /**
      * @return string
-     * @throws ITEMAN_GANoJS_Exception
+     * @throws ITEMAN_GAFilter_Exception
      */
     private function _generateTrackingURI()
     {
@@ -421,13 +421,13 @@ class ITEMAN_GANoJS_Tracker
     // {{{ _sendRequest()
 
     /**
-     * @throws ITEMAN_GANoJS_Exception
+     * @throws ITEMAN_GAFilter_Exception
      */
     private function _sendRequest()
     {
         $response = $this->_request->send();
         if ($response->getStatus() != '200') {
-            throw new ITEMAN_GANoJS_Exception('200 以外のステータスコードが返されました');
+            throw new ITEMAN_GAFilter_Exception('200 以外のステータスコードが返されました');
         }
     }
 

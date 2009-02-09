@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008 ITEMAN, Inc. All rights reserved.
+ * Copyright (c) 2009 ITEMAN, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,25 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GANoJS
- * @copyright  2008 ITEMAN, Inc.
+ * @package    ITEMAN_GAFilter
+ * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_TrackerTest
+// {{{ ITEMAN_GAFilter_Converter_PEARPackageToPageTitleTest
 
 /**
- * ITEMAN_GANoJS_Tracker のためのテスト。
+ * ITEMAN_GAFilter_Converter_PEARPackageToPageTitle のためのテスト。
  *
- * @package    ITEMAN_GANoJS
- * @copyright  2008 ITEMAN, Inc.
+ * @package    ITEMAN_GAFilter
+ * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
+class ITEMAN_GAFilter_Converter_PEARPackageToPageTitleTest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -79,8 +79,6 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
         $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
-        $_SERVER['REQUEST_URI'] = '/blog/';
-        $_SERVER['SERVER_NAME'] = 'www.example.com';
 
         $adapter = new HTTP_Request2_Adapter_Mock();
         $adapter->addResponse('HTTP/1.1 200 OK');
@@ -89,64 +87,40 @@ class ITEMAN_GANoJS_TrackerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $uri
+     * @param string $title
      * @test
+     * @dataProvider providePEARPackages
      */
-    public function トラッキングUriを生成する()
+    public function Pearパッケージの場合ファイル名からタイトルを生成する($uri, $title)
     {
-        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
+        $_SERVER['REQUEST_URI'] = $uri;
+        $_SERVER['SERVER_NAME'] = 'www.example.com';
+
+        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
                                   array('createHTTPRequest')
                                   );
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($this->_request));
 
+        $tracker->addConverter(new ITEMAN_GAFilter_Converter_PEARPackageToPageTitle());
         $tracker->trackPageView();
-
-        $headers = $this->_request->getHeaders();
-
-        $this->assertEquals(1, count($headers));
-        $this->assertEquals($_SERVER['HTTP_USER_AGENT'], $headers['user-agent']);
-
-        $url = $this->_request->getUrl();
-
-        $this->assertEquals('http', $url->getScheme());
-        $this->assertEquals('www.google-analytics.com', $url->getHost());
-        $this->assertEquals('/__utm.gif', $url->getPath());
 
         $queryVariables = $tracker->extractQueryVariables();
 
-        $this->assertEquals('4.3', $queryVariables['utmwv']);
-        $this->assertGreaterThanOrEqual(0, $queryVariables['utmn']);
-        $this->assertLessThanOrEqual(2147483647, $queryVariables['utmn']);
-        $this->assertEquals('www.example.com', $queryVariables['utmhn']);
-        $this->assertEquals('UTF-8', $queryVariables['utmcs']);
-        $this->assertEquals('-', $queryVariables['utmsr']);
-        $this->assertEquals('-', $queryVariables['utmsc']);
-        $this->assertEquals('-', $queryVariables['utmul']);
-        $this->assertEquals('0', $queryVariables['utmje']);
-        $this->assertEquals('-', $queryVariables['utmfl']);
-        $this->assertEquals('-', $tracker->getPageTitle());
-        $this->assertGreaterThanOrEqual(0, $queryVariables['utmhid']);
-        $this->assertLessThanOrEqual(2147483647, $queryVariables['utmhid']);
-        $this->assertEquals('-', $queryVariables['utmr']);
-        $this->assertEquals('/blog/', $queryVariables['utmp']);
-        $this->assertEquals($_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'],
-                            $queryVariables['utmac']
-                            );
-        $this->assertRegExp('/^__utma%3D\d+\.\d+\.\d+\.\d+\.\d+.2%3B%2B__utmb%3D\d+%3B%2B__utmc%3D\d+%3B%2B__utmz%3D\d+\.\d+\.2\.2\.utmccn%3D\(direct\)%7Cutmcsr%3D\(direct\)%7Cutmcmd%3D\(none\)%3B$/',
-                            $queryVariables['utmcc']
-                            );
+        $this->assertEquals(rawurlencode($title), $tracker->getPageTitle());
     }
 
-    /**
-     * @test
-     * @expectedException ITEMAN_GANoJS_Exception
-     */
-    public function ページが与えられなかった場合例外を発生させる()
+    public function providePEARPackages()
     {
-        unset($_SERVER['REQUEST_URI']);
-        $tracker = new ITEMAN_GANoJS_Tracker();
-        $tracker->trackPageView();
+        return array(array('/get/Stagehand_TestRunner-2.6.1.tgz', 'Stagehand_TestRunner 2.6.1'),
+                     array('/get/Stagehand_TestRunner-2.6.1.tar', 'Stagehand_TestRunner 2.6.1'),
+                     array('/package/Net_UserAgent_Mobile-1.0.0RC1.tgz', 'Net_UserAgent_Mobile 1.0.0RC1'),
+                     array('/Foo_Bar-0.1.0dev1.tgz', 'Foo_Bar 0.1.0dev1'),
+                     array('/Foo_Bar-0.9.0alpha1.tgz', 'Foo_Bar 0.9.0alpha1'),
+                     array('/Foo_Bar-0.9.0beta1.tgz', 'Foo_Bar 0.9.0beta1')
+                     );
     }
 
     /**#@-*/

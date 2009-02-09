@@ -27,25 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2008 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_CLITest
+// {{{ ITEMAN_GAFilter_CLITest
 
 /**
- * ITEMAN_GANoJS_CLI のためのテスト。
+ * ITEMAN_GAFilter_CLI のためのテスト。
  *
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2008 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
+class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -90,7 +90,7 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
         $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'], '-h');
         $GLOBALS['argc'] = count($_SERVER['argv']);
 
-        $cli = new ITEMAN_GANoJS_CLI();
+        $cli = new ITEMAN_GAFilter_CLI();
         ob_start();
         $result = $cli->run();
         $content = ob_get_contents();
@@ -108,14 +108,14 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
         $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'], '-V');
         $GLOBALS['argc'] = count($_SERVER['argv']);
 
-        $cli = new ITEMAN_GANoJS_CLI();
+        $cli = new ITEMAN_GAFilter_CLI();
         ob_start();
         $result = $cli->run();
         $content = ob_get_contents();
         ob_end_clean();
 
         $this->assertEquals(0, $result);
-        $this->assertRegExp('/^ITEMAN_GANoJS @package_version@/', $content);
+        $this->assertRegExp('/^ITEMAN_GAFilter @package_version@/', $content);
     }
 
     /**
@@ -127,7 +127,7 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
         $GLOBALS['argc'] = count($_SERVER['argv']);
         unset($_SERVER['ITEMAN_GANOJS_WEBPROPERTYID']);
 
-        $cli = new ITEMAN_GANoJS_CLI();
+        $cli = new ITEMAN_GAFilter_CLI();
         ob_start();
         $result = $cli->run();
         $content = ob_get_contents();
@@ -150,14 +150,14 @@ class ITEMAN_GANoJS_CLITest extends PHPUnit_Framework_TestCase
         $request = new HTTP_Request2();
         $request->setAdapter($adapter);
 
-        $tracker = $this->getMock('ITEMAN_GANoJS_Tracker',
+        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
                                   array('createHTTPRequest')
                                   );
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($request));
 
-        $cli = $this->getMock('ITEMAN_GANoJS_CLI', array('createTracker'));
+        $cli = $this->getMock('ITEMAN_GAFilter_CLI', array('createTracker'));
         $cli->expects($this->any())
             ->method('createTracker')
             ->will($this->returnValue($tracker));

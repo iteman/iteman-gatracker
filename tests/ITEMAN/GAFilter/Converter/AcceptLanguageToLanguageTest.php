@@ -27,23 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Converter_ServerNameToHostname
+// {{{ ITEMAN_GAFilter_Converter_AcceptLanguageToLanguageTest
 
 /**
- * @package    ITEMAN_GANoJS
+ * ITEMAN_GAFilter_Converter_AcceptLanguageToLanguage のためのテスト。
+ *
+ * @package    ITEMAN_GAFilter
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_Converter_ServerNameToHostname implements ITEMAN_GANoJS_Converter_ConverterInterface
+class ITEMAN_GAFilter_Converter_AcceptLanguageToLanguageTest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -64,23 +66,46 @@ class ITEMAN_GANoJS_Converter_ServerNameToHostname implements ITEMAN_GANoJS_Conv
      * @access private
      */
 
+    private $_request;
+
     /**#@-*/
 
     /**#@+
      * @access public
      */
 
-    // }}}
-    // {{{ convert()
+    public function setUp()
+    {
+        $_SERVER['ITEMAN_GANOJS_WEBPROPERTYID'] = 'UA-6415151-2';
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
+        $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
+        $_SERVER['REQUEST_URI'] = '/blog/';
+        $_SERVER['SERVER_NAME'] = 'www.example.com';
+
+        $adapter = new HTTP_Request2_Adapter_Mock();
+        $adapter->addResponse('HTTP/1.1 200 OK');
+        $this->_request = new HTTP_Request2();
+        $this->_request->setAdapter($adapter);
+    }
 
     /**
-     * @param ITEMAN_GANoJS_Tracker $tracker
+     * @test
      */
-    public function convert(ITEMAN_GANoJS_Tracker $tracker)
+    public function acceptlanguage環境変数を言語に設定する()
     {
-        if (array_key_exists('SERVER_NAME', $_SERVER)) {
-            $tracker->setHostname($_SERVER['SERVER_NAME']);
-        }
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja,en-us;q=0.7,en;q=0.3';
+
+        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+                                  array('createHTTPRequest')
+                                  );
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($this->_request));
+
+        $tracker->addConverter(new ITEMAN_GAFilter_Converter_PEARPackageToPageTitle());
+        $tracker->trackPageView();
+
+        $this->assertEquals('ja', $tracker->getLanguage());
     }
 
     /**#@-*/

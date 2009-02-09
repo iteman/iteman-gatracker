@@ -27,25 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2008 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_CLI
+// {{{ ITEMAN_GAFilter_CLI
 
 /**
  * コマンドラインから Google Analytics のトラッキングを行うためのインターフェイス。
  *
- * @package    ITEMAN_GANoJS
+ * @package    ITEMAN_GAFilter
  * @copyright  2008 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
+class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
 {
 
     // {{{ properties
@@ -60,7 +60,7 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
      * @access protected
      */
 
-    protected $exceptionClass = 'ITEMAN_GANoJS_Exception';
+    protected $exceptionClass = 'ITEMAN_GAFilter_Exception';
     protected $shortOptions = 'hV';
     protected $longOptions = array('run-as-filter==');
 
@@ -85,11 +85,11 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
     // {{{ createTracker()
 
     /**
-     * @return ITEMAN_GANoJS_Tracker
+     * @return ITEMAN_GAFilter_Tracker
      */
     public function createTracker()
     {
-        return new ITEMAN_GANoJS_Tracker();
+        return new ITEMAN_GAFilter_Tracker();
     }
 
     /**#@-*/
@@ -238,7 +238,7 @@ class ITEMAN_GANoJS_CLI extends Stagehand_CLIController
      */
     private function _displayVersion()
     {
-        echo 'ITEMAN_GANoJS @package_version@
+        echo 'ITEMAN_GAFilter @package_version@
 
 Copyright (c) 2008 ITEMAN, Inc. All rights reserved.
 ';

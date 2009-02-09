@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2009 ITEMAN, Inc. All rights reserved.
+ * Copyright (c) 2008 ITEMAN, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,53 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GANoJS
- * @copyright  2009 ITEMAN, Inc.
+ * @package    ITEMAN_GAFilter
+ * @copyright  2008 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GANoJS_Converter_ConverterInterface
+// {{{ ITEMAN_GAFilter_Exception
 
 /**
- * @package    ITEMAN_GANoJS
- * @copyright  2009 ITEMAN, Inc.
+ * ITEMAN_GAFilter パッケージのための例外クラス。
+ *
+ * @package    ITEMAN_GAFilter
+ * @copyright  2008 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-interface ITEMAN_GANoJS_Converter_ConverterInterface
-{
-
-    /**#@+
-     * @access public
-     */
-
-    // }}}
-    // {{{ convert()
-
-    /**
-     * @param ITEMAN_GANoJS_Tracker $tracker
-     */
-    public function convert(ITEMAN_GANoJS_Tracker $tracker);
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
-}
+class ITEMAN_GAFilter_Exception extends Exception {}
 
 // }}}
 
