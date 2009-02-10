@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008 ITEMAN, Inc. All rights reserved.
+ * Copyright (c) 2008-2009 ITEMAN, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    ITEMAN_GAFilter
- * @copyright  2008 ITEMAN, Inc.
+ * @copyright  2008-2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    SVN: $Id$
  * @link       http://www.vdgraaf.info/google-analytics-without-javascript.html
@@ -40,7 +40,7 @@
 
 /**
  * @package    ITEMAN_GAFilter
- * @copyright  2008 ITEMAN, Inc.
+ * @copyright  2008-2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @link       http://www.vdgraaf.info/google-analytics-without-javascript.html
