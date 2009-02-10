@@ -75,7 +75,6 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $_SERVER['SCRIPT_NAME'] = 'bin/iteman-ganojs';
-        $_SERVER['ITEMAN_GAFILTER_WEBPROPERTYID'] = 'UA-6415151-2';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REQUEST_URI'] = '/blog/';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
@@ -125,7 +124,6 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
     {
         $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME']);
         $GLOBALS['argc'] = count($_SERVER['argv']);
-        unset($_SERVER['ITEMAN_GAFILTER_WEBPROPERTYID']);
 
         $cli = new ITEMAN_GAFilter_CLI();
         ob_start();
@@ -142,7 +140,7 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
      */
     public function トラッキングを実行する()
     {
-        $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME']);
+        $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'], '--web-property-id=UA-6415151-2');
         $GLOBALS['argc'] = count($_SERVER['argv']);
 
         $adapter = new HTTP_Request2_Adapter_Mock();

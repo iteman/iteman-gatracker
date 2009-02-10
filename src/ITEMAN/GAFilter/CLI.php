@@ -62,7 +62,9 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
 
     protected $exceptionClass = 'ITEMAN_GAFilter_Exception';
     protected $shortOptions = 'hV';
-    protected $longOptions = array('run-as-filter==');
+    protected $longOptions = array('run-as-filter==',
+                                   'web-property-id='
+                                   );
 
     /**#@-*/
 
@@ -72,7 +74,8 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
 
     private $_config = array('displayUsage' => false,
                              'displayVersion' => false,
-                             'runAsFilter' => false
+                             'runAsFilter' => false,
+                             'webPropertyID' => null
                              );
 
     /**#@-*/
@@ -118,6 +121,9 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
         case '--run-as-filter':
             $this->_config['runAsFilter'] = true;
             break;
+        case '--web-property-id':
+            $this->_config['webPropertyID'] = $value;
+            break;
         }
 
         return true;
@@ -154,6 +160,7 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
         }
 
         $tracker = $this->createTracker();
+        $tracker->setWebPropertyID($this->_config['webPropertyID']);
         $tracker->trackPageView();
 
         if ($this->_config['runAsFilter']) {
@@ -194,6 +201,12 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
   -V
     バージョンを表示します。
 
+  --web-property-id=WEB-PROPERTY-ID
+     トラッキングの対象となる Google Analytics プロファイルを識別するための
+    「ウェブプロパティID」を指定します。
+    「ウェブプロパティID」のフォーマットは UA-XXX-X であり、
+     https://www.google.com/analytics/settings/home で確認することができます。
+
   --run-as-filter (任意)
     フィルタとして実行します。このコマンドを Apache のフィルタとして動作させる場
     合、このオプションを指定する必要があります。
@@ -202,12 +215,6 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
 
 環境変数:
 
-  ITEMAN_GAFILTER_WEBPROPERTYID (utmac):
-     トラッキングの対象となる Google Analytics プロファイルを識別するための
-    「ウェブプロパティID」を指定します。
-    「ウェブプロパティID」のフォーマットは UA-XXX-X であり、
-     https://www.google.com/analytics/settings/home で確認することができます。
-  
   SERVER_NAME (utmhn):
      トラッキングの対象となるページの URI のホスト部分を指定します。
      例えば URI が http://www.example.com/foo/bar.tar.gz の場合、ホスト部分は
