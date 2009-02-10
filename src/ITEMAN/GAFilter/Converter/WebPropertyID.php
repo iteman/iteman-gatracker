@@ -78,8 +78,8 @@ class ITEMAN_GAFilter_Converter_WebPropertyID implements ITEMAN_GAFilter_Convert
      */
     public function convert(ITEMAN_GAFilter_Tracker $tracker)
     {
-        if (array_key_exists('ITEMAN_GANOJS_WEBPROPERTYID', $_SERVER)) {
-            $tracker->setWebPropertyID($_SERVER['ITEMAN_GANOJS_WEBPROPERTYID']);
+        if (array_key_exists('ITEMAN_GAFILTER_WEBPROPERTYID', $_SERVER)) {
+            $tracker->setWebPropertyID($_SERVER['ITEMAN_GAFILTER_WEBPROPERTYID']);
         }
     }
 

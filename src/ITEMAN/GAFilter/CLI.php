@@ -202,7 +202,7 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
 
 環境変数:
 
-  ITEMAN_GANOJS_WEBPROPERTYID (utmac):
+  ITEMAN_GAFILTER_WEBPROPERTYID (utmac):
      トラッキングの対象となる Google Analytics プロファイルを識別するための
     「ウェブプロパティID」を指定します。
     「ウェブプロパティID」のフォーマットは UA-XXX-X であり、
