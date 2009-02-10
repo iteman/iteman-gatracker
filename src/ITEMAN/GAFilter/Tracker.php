@@ -30,7 +30,7 @@
  * @package    ITEMAN_GAFilter
  * @copyright  2008-2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id$
+ * @version    GIT: $Id$
  * @link       http://www.vdgraaf.info/google-analytics-without-javascript.html
  * @link       http://www.ianlewis.org/jp/google-analytics
  * @since      File available since Release 0.1.0
