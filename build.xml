@@ -1,50 +1,50 @@
 <?xml version="1.0"?>
 <project name="ITEMAN GAFilter" default="dist" basedir=".">
-  <property name="packageName" value="iteman-gafilter" />
-  <property name="packageVersion" value="0.1.0" />
-  <property name="buildBaseDir" value="build" />
-  <property name="buildDir" value="${buildBaseDir}/${packageName}-${packageVersion}" />
-  <property name="distDir" value="dist" />
-  <property name="binDir" value="bin" />
-  <property name="importsDir" value="imports" />
-  <property name="srcDir" value="src" />
-  <property name="testsDir" value="tests" />
+  <property name="packageName" value="iteman-gafilter"/>
+  <property name="packageVersion" value="0.1.0"/>
+  <property name="buildBaseDir" value="build"/>
+  <property name="buildDir" value="${buildBaseDir}/${packageName}-${packageVersion}"/>
+  <property name="distDir" value="dist"/>
+  <property name="binDir" value="bin"/>
+  <property name="importsDir" value="imports"/>
+  <property name="srcDir" value="src"/>
+  <property name="testsDir" value="tests"/>
 
   <target name="prepare">
-    <mkdir dir="${buildDir}" />
-    <mkdir dir="${distDir}" />
+    <mkdir dir="${buildDir}"/>
+    <mkdir dir="${distDir}"/>
   </target>
 
   <target name="build" depends="prepare">
-    <copy file="${binDir}/gafilter" todir="${buildDir}/bin" />
-    <copy file="${binDir}/testrunner" todir="${buildDir}/bin" />
+    <copy file="${binDir}/gafilter" todir="${buildDir}/bin"/>
+    <copy file="${binDir}/testrunner" todir="${buildDir}/bin"/>
     <copy todir="${buildDir}/${importsDir}">
-      <fileset dir="${importsDir}" />
+      <fileset dir="${importsDir}"/>
     </copy>
     <copy todir="${buildDir}/${srcDir}">
-      <fileset dir="${srcDir}" />
+      <fileset dir="${srcDir}"/>
       <filterchain>
         <replacetokens begintoken="@" endtoken="@">
-          <token key="package_version" value="${packageVersion}" />
+          <token key="package_version" value="${packageVersion}"/>
         </replacetokens>
       </filterchain>
     </copy>
     <copy todir="${buildDir}/${testsDir}">
-      <fileset dir="${testsDir}" />
+      <fileset dir="${testsDir}"/>
       <filterchain>
         <replacetokens begintoken="@" endtoken="@">
-          <token key="package_version" value="${packageVersion}" />
+          <token key="package_version" value="${packageVersion}"/>
         </replacetokens>
       </filterchain>
     </copy>
   </target>
 
   <target name="dist" depends="build">
-    <zip destfile="${distDir}/${packageName}-${packageVersion}.zip" basedir="${buildBaseDir}" />
+    <zip destfile="${distDir}/${packageName}-${packageVersion}.zip" basedir="${buildBaseDir}"/>
   </target>
 
   <target name="clean">
-    <delete dir="${buildBaseDir}" />
-    <delete dir="${distDir}" />
+    <delete dir="${buildBaseDir}"/>
+    <delete dir="${distDir}"/>
   </target>
 </project>
