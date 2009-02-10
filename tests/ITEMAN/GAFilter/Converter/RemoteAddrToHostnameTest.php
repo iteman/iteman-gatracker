@@ -67,6 +67,7 @@ class ITEMAN_GAFilter_Converter_RemoteAddrToHostnameTest extends PHPUnit_Framewo
      */
 
     private $_request;
+    private static $_webPropertyID = 'UA-6415151-2';
 
     /**#@-*/
 
@@ -76,7 +77,6 @@ class ITEMAN_GAFilter_Converter_RemoteAddrToHostnameTest extends PHPUnit_Framewo
 
     public function setUp()
     {
-        $_SERVER['ITEMAN_GAFILTER_WEBPROPERTYID'] = 'UA-6415151-2';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
         $_SERVER['REQUEST_URI'] = '/blog/';
@@ -108,6 +108,7 @@ class ITEMAN_GAFilter_Converter_RemoteAddrToHostnameTest extends PHPUnit_Framewo
                   ->will($this->returnValue('www.example.org'));
 
         $tracker->addConverter($converter);
+        $tracker->setWebPropertyID(self::$_webPropertyID);
         $tracker->trackPageView();
 
         $this->assertEquals('www.example.org', $tracker->getHostname());

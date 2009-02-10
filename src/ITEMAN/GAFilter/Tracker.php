@@ -105,7 +105,6 @@ class ITEMAN_GAFilter_Tracker
         $this->setPageTitle('-');
         $this->setLanguage('-');
 
-        $this->addConverter(new ITEMAN_GAFilter_Converter_WebPropertyID());
         $this->addConverter(new ITEMAN_GAFilter_Converter_ServerNameToHostname());
         $this->addConverter(new ITEMAN_GAFilter_Converter_RequestURIToPage());
         $this->addConverter(new ITEMAN_GAFilter_Converter_UserAgent());

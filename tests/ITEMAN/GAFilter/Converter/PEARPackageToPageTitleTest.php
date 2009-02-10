@@ -67,6 +67,7 @@ class ITEMAN_GAFilter_Converter_PEARPackageToPageTitleTest extends PHPUnit_Frame
      */
 
     private $_request;
+    private static $_webPropertyID = 'UA-6415151-2';
 
     /**#@-*/
 
@@ -76,9 +77,9 @@ class ITEMAN_GAFilter_Converter_PEARPackageToPageTitleTest extends PHPUnit_Frame
 
     public function setUp()
     {
-        $_SERVER['ITEMAN_GAFILTER_WEBPROPERTYID'] = 'UA-6415151-2';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
+        $_SERVER['SERVER_NAME'] = 'www.example.com';
 
         $adapter = new HTTP_Request2_Adapter_Mock();
         $adapter->addResponse('HTTP/1.1 200 OK');
@@ -95,7 +96,6 @@ class ITEMAN_GAFilter_Converter_PEARPackageToPageTitleTest extends PHPUnit_Frame
     public function Pearパッケージの場合ファイル名からタイトルを生成する($uri, $title)
     {
         $_SERVER['REQUEST_URI'] = $uri;
-        $_SERVER['SERVER_NAME'] = 'www.example.com';
 
         $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
                                   array('createHTTPRequest')
@@ -105,6 +105,7 @@ class ITEMAN_GAFilter_Converter_PEARPackageToPageTitleTest extends PHPUnit_Frame
                 ->will($this->returnValue($this->_request));
 
         $tracker->addConverter(new ITEMAN_GAFilter_Converter_PEARPackageToPageTitle());
+        $tracker->setWebPropertyID(self::$_webPropertyID);
         $tracker->trackPageView();
 
         $queryVariables = $tracker->extractQueryVariables();

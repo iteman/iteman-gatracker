@@ -67,6 +67,7 @@ class ITEMAN_GAFilter_TrackerTest extends PHPUnit_Framework_TestCase
      */
 
     private $_request;
+    private static $_webPropertyID = 'UA-6415151-2';
 
     /**#@-*/
 
@@ -76,7 +77,6 @@ class ITEMAN_GAFilter_TrackerTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $_SERVER['ITEMAN_GAFILTER_WEBPROPERTYID'] = 'UA-6415151-2';
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
         $_SERVER['REQUEST_URI'] = '/blog/';
@@ -100,6 +100,7 @@ class ITEMAN_GAFilter_TrackerTest extends PHPUnit_Framework_TestCase
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($this->_request));
 
+        $tracker->setWebPropertyID(self::$_webPropertyID);
         $tracker->trackPageView();
 
         $headers = $this->_request->getHeaders();
@@ -130,9 +131,7 @@ class ITEMAN_GAFilter_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertLessThanOrEqual(2147483647, $queryVariables['utmhid']);
         $this->assertEquals('-', $queryVariables['utmr']);
         $this->assertEquals('/blog/', $queryVariables['utmp']);
-        $this->assertEquals($_SERVER['ITEMAN_GAFILTER_WEBPROPERTYID'],
-                            $queryVariables['utmac']
-                            );
+        $this->assertEquals(self::$_webPropertyID, $queryVariables['utmac']);
         $this->assertRegExp('/^__utma%3D\d+\.\d+\.\d+\.\d+\.\d+.2%3B%2B__utmb%3D\d+%3B%2B__utmc%3D\d+%3B%2B__utmz%3D\d+\.\d+\.2\.2\.utmccn%3D\(direct\)%7Cutmcsr%3D\(direct\)%7Cutmcmd%3D\(none\)%3B$/',
                             $queryVariables['utmcc']
                             );
@@ -146,6 +145,7 @@ class ITEMAN_GAFilter_TrackerTest extends PHPUnit_Framework_TestCase
     {
         unset($_SERVER['REQUEST_URI']);
         $tracker = new ITEMAN_GAFilter_Tracker();
+        $tracker->setWebPropertyID(self::$_webPropertyID);
         $tracker->trackPageView();
     }
 
