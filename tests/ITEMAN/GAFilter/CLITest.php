@@ -166,6 +166,132 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
         $this->assertEquals($_SERVER['SERVER_NAME'], $tracker->getHostname());
     }
 
+    /**
+     * @test
+     */
+    public function コンバータを指定する()
+    {
+        $_SERVER['REQUEST_URI'] = '/get/Stagehand_TestRunner-2.6.1.tgz';
+        $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'],
+                                 '--web-property-id=UA-6415151-2',
+                                 '--converters=ITEMAN_GAFilter_Converter_PEARPackageToPageTitle'
+                                 );
+        $GLOBALS['argc'] = count($_SERVER['argv']);
+
+        $adapter = new HTTP_Request2_Adapter_Mock();
+        $adapter->addResponse('HTTP/1.1 200 OK');
+        $request = new HTTP_Request2();
+        $request->setAdapter($adapter);
+
+        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+                                  array('createHTTPRequest')
+                                  );
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($request));
+
+        $cli = $this->getMock('ITEMAN_GAFilter_CLI', array('createTracker'));
+        $cli->expects($this->any())
+            ->method('createTracker')
+            ->will($this->returnValue($tracker));
+        $result = $cli->run();
+
+        $this->assertEquals(0, $result);
+        $this->assertEquals(rawurlencode('Stagehand_TestRunner 2.6.1'),
+                            $tracker->getPageTitle()
+                            );
+    }
+
+    /**
+     * @param string $convertersOption
+     * @test
+     * @dataProvider provideConvertersOption
+     */
+    public function 複数のコンバータを指定する($convertersOption)
+    {
+        $_SERVER['REQUEST_URI'] = '/get/Stagehand_TestRunner-2.6.1.tgz';
+        $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'],
+                                 '--web-property-id=UA-6415151-2',
+                                 "--converters=$convertersOption"
+                                 );
+        $GLOBALS['argc'] = count($_SERVER['argv']);
+
+        $adapter = new HTTP_Request2_Adapter_Mock();
+        $adapter->addResponse('HTTP/1.1 200 OK');
+        $request = new HTTP_Request2();
+        $request->setAdapter($adapter);
+
+        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+                                  array('createHTTPRequest')
+                                  );
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($request));
+
+        $cli = $this->getMock('ITEMAN_GAFilter_CLI',
+                              array('createTracker', 'createConverter')
+                              );
+        $cli->expects($this->any())
+            ->method('createTracker')
+            ->will($this->returnValue($tracker));
+        $cli->expects($this->any())
+            ->method('createConverter')
+            ->will($this->returnCallback(array($this, 'createConverter')));
+        $result = $cli->run();
+
+        $this->assertEquals(0, $result);
+        $this->assertEquals(rawurlencode('Stagehand_TestRunner 2.6.1'),
+                            $tracker->getPageTitle()
+                            );
+        $this->assertEquals('www.example.org', $tracker->getHostname());
+    }
+
+    public function createConverter($converterClass)
+    {
+        if ($converterClass != 'ITEMAN_GAFilter_Converter_ServerNameToHostname') {
+            return new $converterClass();
+        }
+
+        $converter = $this->getMock('ITEMAN_GAFilter_Converter_RemoteAddrToHostname',
+                                    array('getHostByAddr')
+                                    );
+        $converter->expects($this->any())
+                  ->method('getHostByAddr')
+                  ->will($this->returnValue('www.example.org'));
+
+        return $converter;
+    }
+
+    public function provideConvertersOption()
+    {
+        return array(array('ITEMAN_GAFilter_Converter_PEARPackageToPageTitle,ITEMAN_GAFilter_Converter_ServerNameToHostname'),
+                     array('ITEMAN_GAFilter_Converter_PEARPackageToPageTitle,ITEMAN_GAFilter_Converter_ServerNameToHostname,')
+                     );
+    }
+
+    /**
+     * @test
+     */
+    public function 存在しないコンバータを指定された場合メッセージを表示しエラーにする()
+    {
+        $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'],
+                                 '--web-property-id=UA-6415151-2',
+                                 '--converters=Foo'
+                                 );
+        $GLOBALS['argc'] = count($_SERVER['argv']);
+
+        $cli = new ITEMAN_GAFilter_CLI();
+        ob_start();
+        $result = $cli->run();
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertEquals(1, $result);
+        $this->assertRegExp('/^ERROR: 指定されたコンバータ \[ Foo \] が見つかりません/',
+                            $content
+                            );
+    }
+
     /**#@-*/
 
     /**#@+

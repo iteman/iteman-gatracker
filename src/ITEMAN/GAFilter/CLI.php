@@ -63,7 +63,8 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
     protected $exceptionClass = 'ITEMAN_GAFilter_Exception';
     protected $shortOptions = 'hV';
     protected $longOptions = array('run-as-filter==',
-                                   'web-property-id='
+                                   'web-property-id=',
+                                   'converters='
                                    );
 
     /**#@-*/
@@ -75,7 +76,8 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
     private $_config = array('displayUsage' => false,
                              'displayVersion' => false,
                              'runAsFilter' => false,
-                             'webPropertyID' => null
+                             'webPropertyID' => null,
+                             'converters' => array()
                              );
 
     /**#@-*/
@@ -93,6 +95,18 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
     public function createTracker()
     {
         return new ITEMAN_GAFilter_Tracker();
+    }
+
+    // }}}
+    // {{{ createConverter()
+
+    /**
+     * @param string $converterClass
+     * @return ITEMAN_GAFilter_Converter_ConverterInterface
+     */
+    public function createConverter($converterClass)
+    {
+        return new $converterClass();
     }
 
     /**#@-*/
@@ -124,6 +138,10 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
         case '--web-property-id':
             $this->_config['webPropertyID'] = $value;
             break;
+        case '--converters':
+            $this->_config['converters'] =
+                explode(',', preg_replace('/,$/', '', $value));
+            break;
         }
 
         return true;
@@ -146,6 +164,7 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
     // {{{ doRun()
 
     /**
+     * @throws ITEMAN_GAFilter_Exception
      */
     protected function doRun()
     {
@@ -161,6 +180,15 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
 
         $tracker = $this->createTracker();
         $tracker->setWebPropertyID($this->_config['webPropertyID']);
+
+        foreach ($this->_config['converters'] as $converterClass) {
+            if (!class_exists($converterClass)) {
+                throw new ITEMAN_GAFilter_Exception("指定されたコンバータ [ $converterClass ] が見つかりません");
+            }
+
+            $tracker->addConverter($this->createConverter($converterClass));
+        }
+
         $tracker->trackPageView();
 
         if ($this->_config['runAsFilter']) {
@@ -206,6 +234,9 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
     「ウェブプロパティID」を指定します。
     「ウェブプロパティID」のフォーマットは UA-XXX-X であり、
      https://www.google.com/analytics/settings/home で確認することができます。
+
+  --converters=CONVERTER1,CONVERTER2,...
+     デフォルトコンバータのあとに実行するコンバータをひとつ以上指定します。
 
   --run-as-filter (任意)
     フィルタとして実行します。このコマンドを Apache のフィルタとして動作させる場
