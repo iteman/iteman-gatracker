@@ -248,7 +248,7 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
 
     public function createConverter($converterClass)
     {
-        if ($converterClass != 'ITEMAN_GAFilter_Converter_ServerNameToHostname') {
+        if ($converterClass != 'ITEMAN_GAFilter_Converter_RemoteAddrToHostname') {
             return new $converterClass();
         }
 
@@ -264,8 +264,8 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
 
     public function provideConvertersOption()
     {
-        return array(array('ITEMAN_GAFilter_Converter_PEARPackageToPageTitle,ITEMAN_GAFilter_Converter_ServerNameToHostname'),
-                     array('ITEMAN_GAFilter_Converter_PEARPackageToPageTitle,ITEMAN_GAFilter_Converter_ServerNameToHostname,')
+        return array(array('ITEMAN_GAFilter_Converter_PEARPackageToPageTitle,ITEMAN_GAFilter_Converter_RemoteAddrToHostname'),
+                     array('ITEMAN_GAFilter_Converter_PEARPackageToPageTitle,ITEMAN_GAFilter_Converter_RemoteAddrToHostname,')
                      );
     }
 
