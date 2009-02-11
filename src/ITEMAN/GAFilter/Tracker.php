@@ -164,7 +164,7 @@ class ITEMAN_GAFilter_Tracker
      */
     public function setPageTitle($pageTitle)
     {
-        $this->_queryVariables['utmdt'] = $pageTitle;
+        $this->_queryVariables['utmdt'] = rawurlencode($pageTitle);
     }
 
     // }}}
@@ -229,7 +229,7 @@ class ITEMAN_GAFilter_Tracker
      */
     public function setHostname($hostname)
     {
-        $this->_queryVariables['utmhn'] = $hostname;
+        $this->_queryVariables['utmhn'] = rawurlencode($hostname);
     }
 
     // }}}

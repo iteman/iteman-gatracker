@@ -82,7 +82,7 @@ class ITEMAN_GAFilter_Converter_PEARPackageToPageTitle implements ITEMAN_GAFilte
     public function convert(ITEMAN_GAFilter_Tracker $tracker)
     {
         if ($this->_isPEARPackage($tracker->getPage())) {
-            $tracker->setPageTitle(rawurlencode("{$this->_package} {$this->_version}"));
+            $tracker->setPageTitle("{$this->_package} {$this->_version}");
         }
     }
 
