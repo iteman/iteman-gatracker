@@ -135,6 +135,24 @@ class ITEMAN_GAFilter_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp('/^__utma%3D\d+\.\d+\.\d+\.\d+\.\d+.2%3B%2B__utmb%3D\d+%3B%2B__utmc%3D\d+%3B%2B__utmz%3D\d+\.\d+\.2\.2\.utmccn%3D\(direct\)%7Cutmcsr%3D\(direct\)%7Cutmcmd%3D\(none\)%3B$/',
                             $queryVariables['utmcc']
                             );
+
+        $queryVariableKeys = array_keys($queryVariables);
+
+        $this->assertEquals('utmwv', $queryVariableKeys[0]);
+        $this->assertEquals('utmn', $queryVariableKeys[1]);
+        $this->assertEquals('utmhn', $queryVariableKeys[2]);
+        $this->assertEquals('utmcs', $queryVariableKeys[3]);
+        $this->assertEquals('utmsr', $queryVariableKeys[4]);
+        $this->assertEquals('utmsc', $queryVariableKeys[5]);
+        $this->assertEquals('utmul', $queryVariableKeys[6]);
+        $this->assertEquals('utmje', $queryVariableKeys[7]);
+        $this->assertEquals('utmfl', $queryVariableKeys[8]);
+        $this->assertEquals('utmdt', $queryVariableKeys[9]);
+        $this->assertEquals('utmhid', $queryVariableKeys[10]);
+        $this->assertEquals('utmr', $queryVariableKeys[11]);
+        $this->assertEquals('utmp', $queryVariableKeys[12]);
+        $this->assertEquals('utmac', $queryVariableKeys[13]);
+        $this->assertEquals('utmcc', $queryVariableKeys[14]);
     }
 
     /**

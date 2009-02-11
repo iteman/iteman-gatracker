@@ -88,22 +88,21 @@ class ITEMAN_GAFilter_Tracker
      */
     public function __construct()
     {
-        $this->_queryVariables = array('utmwv'  => '4.3',
-                                       'utmn'   => mt_rand(1000000000, 9999999999),
-                                       'utmcs'  => 'UTF-8',
-                                       'utmsr'  => '-',
-                                       'utmsc'  => '-',
-                                       'utmje'  => '0',
-                                       'utmfl'  => '-',
-                                       'utmhid' => mt_rand(0, 2147483647),
-                                       'utmcc'  => array($this, 'generateCookieConfiguration')
-                                       );
-        $this->setWebPropertyID(null);
+        $this->_queryVariables['utmwv'] = '4.3';
+        $this->_queryVariables['utmn'] = mt_rand(1000000000, 9999999999);
         $this->setHostname(null);
-        $this->setPage(null);
-        $this->setSource('-');
-        $this->setPageTitle('-');
+        $this->_queryVariables['utmcs'] = 'UTF-8';
+        $this->_queryVariables['utmsr'] = '-';
+        $this->_queryVariables['utmsc'] = '-';
         $this->setLanguage('-');
+        $this->_queryVariables['utmje'] = '0';
+        $this->_queryVariables['utmfl'] = '-';
+        $this->setPageTitle('-');
+        $this->_queryVariables['utmhid'] = mt_rand(0, 2147483647);
+        $this->setSource('-');
+        $this->setPage(null);
+        $this->setWebPropertyID(null);
+        $this->_queryVariables['utmcc'] = array($this, 'generateCookieConfiguration');
 
         $this->addConverter(new ITEMAN_GAFilter_Converter_ServerNameToHostname());
         $this->addConverter(new ITEMAN_GAFilter_Converter_RequestURIToPage());
