@@ -178,30 +178,10 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
             return;
         }
 
-        $tracker = $this->createTracker();
-        $tracker->setWebPropertyID($this->_config['webPropertyID']);
-
-        foreach ($this->_config['converters'] as $converterClass) {
-            if (!class_exists($converterClass)) {
-                throw new ITEMAN_GAFilter_Exception("指定されたコンバータ [ $converterClass ] が見つかりません");
-            }
-
-            $tracker->addConverter($this->createConverter($converterClass));
-        }
-
-        $tracker->trackPageView();
+        $this->_trackPageView();
 
         if ($this->_config['runAsFilter']) {
-            $stdin = @fopen('php://stdin', 'r');
-            if ($stdin === false) {
-                return;
-            }
-
-            while (!feof($stdin)) {
-                echo fgets($stdin);
-            }
-
-            fclose($stdin);
+            $this->_passOriginalResponse();
         }
     }
 
@@ -280,6 +260,46 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
 
 Copyright (c) 2008-2009 ITEMAN, Inc. All rights reserved.
 ';
+    }
+
+    // }}}
+    // {{{ _trackPageView()
+
+    /**
+     */
+    private function _trackPageView()
+    {
+        $tracker = $this->createTracker();
+        $tracker->setWebPropertyID($this->_config['webPropertyID']);
+
+        foreach ($this->_config['converters'] as $converterClass) {
+            if (!class_exists($converterClass)) {
+                throw new ITEMAN_GAFilter_Exception("指定されたコンバータ [ $converterClass ] が見つかりません");
+            }
+
+            $tracker->addConverter($this->createConverter($converterClass));
+        }
+
+        $tracker->trackPageView();
+    }
+
+    // }}}
+    // {{{ _passOriginalResponse()
+
+    /**
+     */
+    private function _passOriginalResponse()
+    {
+        $stdin = @fopen('php://stdin', 'r');
+        if ($stdin === false) {
+            return;
+        }
+
+        while (!feof($stdin)) {
+            echo fgets($stdin);
+        }
+
+        fclose($stdin);
     }
 
     /**#@-*/

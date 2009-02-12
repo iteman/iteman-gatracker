@@ -88,27 +88,8 @@ class ITEMAN_GAFilter_Tracker
      */
     public function __construct()
     {
-        $this->_queryVariables['utmwv'] = '4.3';
-        $this->_queryVariables['utmn'] = mt_rand(1000000000, 9999999999);
-        $this->setHostname(null);
-        $this->_queryVariables['utmcs'] = 'UTF-8';
-        $this->_queryVariables['utmsr'] = '-';
-        $this->_queryVariables['utmsc'] = '-';
-        $this->setLanguage('-');
-        $this->_queryVariables['utmje'] = '0';
-        $this->_queryVariables['utmfl'] = '-';
-        $this->setPageTitle('-');
-        $this->_queryVariables['utmhid'] = mt_rand(0, 2147483647);
-        $this->setSource('-');
-        $this->setPage(null);
-        $this->setWebPropertyID(null);
-        $this->_queryVariables['utmcc'] = array($this, 'generateCookieConfiguration');
-
-        $this->addConverter(new ITEMAN_GAFilter_Converter_ServerNameToHostname());
-        $this->addConverter(new ITEMAN_GAFilter_Converter_RequestURIToPage());
-        $this->addConverter(new ITEMAN_GAFilter_Converter_UserAgent());
-        $this->addConverter(new ITEMAN_GAFilter_Converter_RefererToSource());
-        $this->addConverter(new ITEMAN_GAFilter_Converter_AcceptLanguageToLanguage());
+        $this->_initializeQueryVariables();
+        $this->_addDefaultConverters();
     }
 
     // }}}
@@ -427,6 +408,44 @@ class ITEMAN_GAFilter_Tracker
         if ($response->getStatus() != '200') {
             throw new ITEMAN_GAFilter_Exception('200 以外のステータスコードが返されました');
         }
+    }
+
+    // }}}
+    // {{{ _initializeQueryVariables()
+
+    /**
+     */
+    private function _initializeQueryVariables()
+    {
+        $this->_queryVariables['utmwv'] = '4.3';
+        $this->_queryVariables['utmn'] = mt_rand(1000000000, 9999999999);
+        $this->setHostname(null);
+        $this->_queryVariables['utmcs'] = 'UTF-8';
+        $this->_queryVariables['utmsr'] = '-';
+        $this->_queryVariables['utmsc'] = '-';
+        $this->setLanguage('-');
+        $this->_queryVariables['utmje'] = '0';
+        $this->_queryVariables['utmfl'] = '-';
+        $this->setPageTitle('-');
+        $this->_queryVariables['utmhid'] = mt_rand(0, 2147483647);
+        $this->setSource('-');
+        $this->setPage(null);
+        $this->setWebPropertyID(null);
+        $this->_queryVariables['utmcc'] = array($this, 'generateCookieConfiguration');
+    }
+
+    // }}}
+    // {{{ _addDefaultConverters()
+
+    /**
+     */
+    private function _addDefaultConverters()
+    {
+        $this->addConverter(new ITEMAN_GAFilter_Converter_ServerNameToHostname());
+        $this->addConverter(new ITEMAN_GAFilter_Converter_RequestURIToPage());
+        $this->addConverter(new ITEMAN_GAFilter_Converter_UserAgent());
+        $this->addConverter(new ITEMAN_GAFilter_Converter_RefererToSource());
+        $this->addConverter(new ITEMAN_GAFilter_Converter_AcceptLanguageToLanguage());
     }
 
     /**#@-*/
