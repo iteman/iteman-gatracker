@@ -89,7 +89,7 @@ class ITEMAN_GAFilter_Tracker
     public function __construct()
     {
         $this->_initializeQueryVariables();
-        $this->_addDefaultConverters();
+        $this->_configureConverters();
     }
 
     // }}}
@@ -435,11 +435,11 @@ class ITEMAN_GAFilter_Tracker
     }
 
     // }}}
-    // {{{ _addDefaultConverters()
+    // {{{ _configureConverters()
 
     /**
      */
-    private function _addDefaultConverters()
+    private function _configureConverters()
     {
         $this->addConverter(new ITEMAN_GAFilter_Converter_ServerNameToHostname());
         $this->addConverter(new ITEMAN_GAFilter_Converter_RequestURIToPage());
