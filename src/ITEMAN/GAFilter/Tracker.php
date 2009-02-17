@@ -311,6 +311,39 @@ class ITEMAN_GAFilter_Tracker
         return $this->_queryVariables['utmul'];
     }
 
+    // }}}
+    // {{{ getUserAgent()
+
+    /**
+     * @return string
+     */
+    public function getUserAgent()
+    {
+        return $this->_userAgent;
+    }
+
+    // }}}
+    // {{{ setScreenColors()
+
+    /**
+     * @param string $screenColors
+     */
+    public function setScreenColors($screenColors)
+    {
+        $this->_queryVariables['utmsc'] = $screenColors;
+    }
+
+    // }}}
+    // {{{ getScreenColors()
+
+    /**
+     * @return string
+     */
+    public function getScreenColors()
+    {
+        return $this->_queryVariables['utmsc'];
+    }
+
     /**#@-*/
 
     /**#@+
@@ -422,7 +455,7 @@ class ITEMAN_GAFilter_Tracker
         $this->setHostname(null);
         $this->_queryVariables['utmcs'] = 'UTF-8';
         $this->_queryVariables['utmsr'] = '-';
-        $this->_queryVariables['utmsc'] = '-';
+        $this->setScreenColors('-');
         $this->setLanguage('-');
         $this->_queryVariables['utmje'] = '0';
         $this->_queryVariables['utmfl'] = '-';
