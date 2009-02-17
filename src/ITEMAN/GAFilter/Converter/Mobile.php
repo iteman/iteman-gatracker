@@ -87,7 +87,6 @@ class ITEMAN_GAFilter_Converter_Mobile implements ITEMAN_GAFilter_Converter_Conv
         $GLOBALS['NET_USERAGENT_MOBILE_FallbackOnNomatch'] = false;
 
         if (!Net_UserAgent_Mobile::isMobile($tracker->getUserAgent())) {
-            PEAR::staticPopErrorHandling();
             $GLOBALS['NET_USERAGENT_MOBILE_FallbackOnNomatch'] = $oldFallbackOnNomatch;
             error_reporting($oldErrorReportingLevel);
             return;
@@ -121,6 +120,12 @@ class ITEMAN_GAFilter_Converter_Mobile implements ITEMAN_GAFilter_Converter_Conv
             } elseif ($depth == 2) {
                 $tracker->setScreenColors('1-bit');
             }
+        }
+
+        $width = $display->getWidth();
+        $height = $display->getHeight();
+        if ($width && $height) {
+            $tracker->setScreenResolution("{$width}x{$height}");
         }
 
         PEAR::staticPopErrorHandling();

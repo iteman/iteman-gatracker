@@ -77,7 +77,6 @@ class ITEMAN_GAFilter_Converter_MobileTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        /* $_SERVER['HTTP_USER_AGENT'] = 'DoCoMo/2.0 F884i(c100;TJ)'; */
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
         $_SERVER['REQUEST_URI'] = '/blog/';
         $_SERVER['SERVER_NAME'] = 'www.example.com';
@@ -121,6 +120,26 @@ class ITEMAN_GAFilter_Converter_MobileTest extends PHPUnit_Framework_TestCase
                      array('DoCoMo/1.0/N502i', '2-bit'),
                      array('DoCoMo/1.0/D501i', '1-bit')
                      );
+    }
+
+    /**
+     * @test
+     */
+    public function 画面の解像度を設定する()
+    {
+        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+                                  array('createHTTPRequest')
+                                  );
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($this->_request));
+
+        $tracker->addConverter(new ITEMAN_GAFilter_Converter_Mobile());
+        $tracker->setWebPropertyID(self::$_webPropertyID);
+        $tracker->setUserAgent('DoCoMo/2.0 F884i(c100;TJ)');
+        $tracker->trackPageView();
+
+        $this->assertEquals('240x364', $tracker->getScreenResolution());
     }
 
     /**#@-*/
