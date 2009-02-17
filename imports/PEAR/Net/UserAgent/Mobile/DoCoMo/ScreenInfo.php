@@ -1707,7 +1707,7 @@ class Net_UserAgent_Mobile_DoCoMo_ScreenInfo
      */
     function &singleton()
     {
-        if (is_null($GLOBALS['NET_USERAGENT_MOBILE_DoCoMo_ScreenInfo_Instance'])) {
+        if (@is_null($GLOBALS['NET_USERAGENT_MOBILE_DoCoMo_ScreenInfo_Instance'])) {
             $GLOBALS['NET_USERAGENT_MOBILE_DoCoMo_ScreenInfo_Instance'] = &new Net_UserAgent_Mobile_DoCoMo_ScreenInfo();
         }
 
