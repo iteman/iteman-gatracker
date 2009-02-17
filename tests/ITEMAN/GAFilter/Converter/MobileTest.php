@@ -142,6 +142,120 @@ class ITEMAN_GAFilter_Converter_MobileTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('240x364', $tracker->getScreenResolution());
     }
 
+    /**
+     * @test
+     */
+    public function 携帯端末でない場合何もしない()
+    {
+        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+                                  array('createHTTPRequest')
+                                  );
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($this->_request));
+
+        $tracker->addConverter(new ITEMAN_GAFilter_Converter_Mobile());
+        $tracker->setWebPropertyID(self::$_webPropertyID);
+        $tracker->setUserAgent('Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.6) Gecko/2009020911 Ubuntu/8.10 (intrepid) Firefox/3.0.6');
+        $tracker->trackPageView();
+
+        $this->assertEquals('-', $tracker->getScreenColors());
+        $this->assertEquals('-', $tracker->getScreenResolution());
+    }
+
+    /**
+     * @test
+     */
+    public function 端末情報が取得できなかった場合何もしない()
+    {
+        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+                                  array('createHTTPRequest')
+                                  );
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($this->_request));
+
+        $tracker->addConverter(new ITEMAN_GAFilter_Converter_Mobile());
+        $tracker->setWebPropertyID(self::$_webPropertyID);
+        $tracker->setUserAgent('DoCoMo/1.0/SO504i/abc/TB');
+        $tracker->trackPageView();
+
+        $this->assertEquals('-', $tracker->getScreenColors());
+        $this->assertEquals('-', $tracker->getScreenResolution());
+    }
+
+    /**
+     * @test
+     */
+    public function 画面の色が取得できなかった場合設定しない()
+    {
+        $screenInfo = @Net_UserAgent_Mobile_DoCoMo_ScreenInfo::singleton();
+        unset($screenInfo->_data['SO905ICS']['depth']);
+
+        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+                                  array('createHTTPRequest')
+                                  );
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($this->_request));
+
+        $tracker->addConverter(new ITEMAN_GAFilter_Converter_Mobile());
+        $tracker->setWebPropertyID(self::$_webPropertyID);
+        $tracker->setUserAgent('DoCoMo/2.0 SO905iCS(c100;TB;W24H18)');
+        $tracker->trackPageView();
+
+        $this->assertEquals('-', $tracker->getScreenColors());
+        $this->assertEquals('240x368', $tracker->getScreenResolution());
+    }
+
+    /**
+     * @test
+     */
+    public function 画面の解像度が取得できなかった場合設定しない1()
+    {
+        $screenInfo = @Net_UserAgent_Mobile_DoCoMo_ScreenInfo::singleton();
+        unset($screenInfo->_data['SO905ICS']['width']);
+
+        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+                                  array('createHTTPRequest')
+                                  );
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($this->_request));
+
+        $tracker->addConverter(new ITEMAN_GAFilter_Converter_Mobile());
+        $tracker->setWebPropertyID(self::$_webPropertyID);
+        $tracker->setUserAgent('DoCoMo/2.0 SO905iCS(c100;TB;W24H18)');
+        $tracker->trackPageView();
+
+        $this->assertEquals('24-bit', $tracker->getScreenColors());
+        $this->assertEquals('-', $tracker->getScreenResolution());
+    }
+
+    /**
+     * @test
+     */
+    public function 画面の解像度が取得できなかった場合設定しない2()
+    {
+        $screenInfo = @Net_UserAgent_Mobile_DoCoMo_ScreenInfo::singleton();
+        unset($screenInfo->_data['SO905ICS']['height']);
+
+        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+                                  array('createHTTPRequest')
+                                  );
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($this->_request));
+
+        $tracker->addConverter(new ITEMAN_GAFilter_Converter_Mobile());
+        $tracker->setWebPropertyID(self::$_webPropertyID);
+        $tracker->setUserAgent('DoCoMo/2.0 SO905iCS(c100;TB;W24H18)');
+        $tracker->trackPageView();
+
+        $this->assertEquals('24-bit', $tracker->getScreenColors());
+        $this->assertEquals('-', $tracker->getScreenResolution());
+    }
+
     /**#@-*/
 
     /**#@+
