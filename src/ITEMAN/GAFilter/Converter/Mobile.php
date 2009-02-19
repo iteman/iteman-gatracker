@@ -93,24 +93,11 @@ class ITEMAN_GAFilter_Converter_Mobile implements ITEMAN_GAFilter_Converter_Conv
             }
 
             $mobile = Net_UserAgent_Mobile::factory($tracker->getUserAgent());
+
             $display = $mobile->getDisplay();
-            $depth = $display->getDepth();
-            if ($depth) {
-                if ($depth == 16777216) {
-                    $tracker->setScreenColors('24-bit');
-                } elseif ($depth == 262144) {
-                    $tracker->setScreenColors('18-bit');
-                } elseif ($depth == 65536) {
-                    $tracker->setScreenColors('16-bit');
-                } elseif ($depth == 4096) {
-                    $tracker->setScreenColors('12-bit');
-                } elseif ($depth == 256) {
-                    $tracker->setScreenColors('8-bit');
-                } elseif ($depth == 4) {
-                    $tracker->setScreenColors('2-bit');
-                } elseif ($depth == 2) {
-                    $tracker->setScreenColors('1-bit');
-                }
+            $screenColors = $this->_getColorDepthByColors($display->getDepth());
+            if (!is_null($screenColors)) {
+                $tracker->setScreenColors($screenColors);
             }
 
             $width = $display->getWidth();
@@ -138,6 +125,32 @@ class ITEMAN_GAFilter_Converter_Mobile implements ITEMAN_GAFilter_Converter_Conv
     /**#@+
      * @access private
      */
+
+    // }}}
+    // {{{ _getColorDepthByColors()
+
+    /**
+     * @param integer $colors
+     * @return string
+     */
+    private function _getColorDepthByColors($colors)
+    {
+        if ($colors == 16777216) {
+            return '24-bit';
+        } elseif ($colors == 262144) {
+            return '18-bit';
+        } elseif ($colors == 65536) {
+            return '16-bit';
+        } elseif ($colors == 4096) {
+            return '12-bit';
+        } elseif ($colors == 256) {
+            return '8-bit';
+        } elseif ($colors == 4) {
+            return '2-bit';
+        } elseif ($colors == 2) {
+            return '1-bit';
+        }
+    }
 
     /**#@-*/
 
