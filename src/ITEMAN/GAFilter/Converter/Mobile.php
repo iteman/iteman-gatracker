@@ -86,49 +86,43 @@ class ITEMAN_GAFilter_Converter_Mobile implements ITEMAN_GAFilter_Converter_Conv
                                                                                  : false;
         $GLOBALS['NET_USERAGENT_MOBILE_FallbackOnNomatch'] = false;
 
-        if (!Net_UserAgent_Mobile::isMobile($tracker->getUserAgent())) {
-            $GLOBALS['NET_USERAGENT_MOBILE_FallbackOnNomatch'] = $oldFallbackOnNomatch;
-            error_reporting($oldErrorReportingLevel);
-            return;
-        }
-
-
-        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $mobile = Net_UserAgent_Mobile::factory($tracker->getUserAgent());
-        if (Net_UserAgent_Mobile::isError($mobile)) {
-            PEAR::staticPopErrorHandling();
-            $GLOBALS['NET_USERAGENT_MOBILE_FallbackOnNomatch'] = $oldFallbackOnNomatch;
-            error_reporting($oldErrorReportingLevel);
-            return;
-        }
-
-        $display = $mobile->getDisplay();
-        $depth = $display->getDepth();
-        if ($depth) {
-            if ($depth == 16777216) {
-                $tracker->setScreenColors('24-bit');
-            } elseif ($depth == 262144) {
-                $tracker->setScreenColors('18-bit');
-            } elseif ($depth == 65536) {
-                $tracker->setScreenColors('16-bit');
-            } elseif ($depth == 4096) {
-                $tracker->setScreenColors('12-bit');
-            } elseif ($depth == 256) {
-                $tracker->setScreenColors('8-bit');
-            } elseif ($depth == 4) {
-                $tracker->setScreenColors('2-bit');
-            } elseif ($depth == 2) {
-                $tracker->setScreenColors('1-bit');
+        Stagehand_LegacyError_PEARError::enableConversion();
+        try {
+            if (!Net_UserAgent_Mobile::isMobile($tracker->getUserAgent())) {
+                throw new ITEMAN_GAFilter_Exception();
             }
-        }
 
-        $width = $display->getWidth();
-        $height = $display->getHeight();
-        if ($width && $height) {
-            $tracker->setScreenResolution("{$width}x{$height}");
-        }
+            $mobile = Net_UserAgent_Mobile::factory($tracker->getUserAgent());
+            $display = $mobile->getDisplay();
+            $depth = $display->getDepth();
+            if ($depth) {
+                if ($depth == 16777216) {
+                    $tracker->setScreenColors('24-bit');
+                } elseif ($depth == 262144) {
+                    $tracker->setScreenColors('18-bit');
+                } elseif ($depth == 65536) {
+                    $tracker->setScreenColors('16-bit');
+                } elseif ($depth == 4096) {
+                    $tracker->setScreenColors('12-bit');
+                } elseif ($depth == 256) {
+                    $tracker->setScreenColors('8-bit');
+                } elseif ($depth == 4) {
+                    $tracker->setScreenColors('2-bit');
+                } elseif ($depth == 2) {
+                    $tracker->setScreenColors('1-bit');
+                }
+            }
 
-        PEAR::staticPopErrorHandling();
+            $width = $display->getWidth();
+            $height = $display->getHeight();
+            if ($width && $height) {
+                $tracker->setScreenResolution("{$width}x{$height}");
+            }
+        } catch (Stagehand_LegacyError_PEARError_Exception $e) {
+        } catch (ITEMAN_GAFilter_Exception $e) {
+        }
+        Stagehand_LegacyError_PEARError::disableConversion();
+
         $GLOBALS['NET_USERAGENT_MOBILE_FallbackOnNomatch'] = $oldFallbackOnNomatch;
         error_reporting($oldErrorReportingLevel);
     }

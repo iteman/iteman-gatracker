@@ -211,7 +211,7 @@ class ITEMAN_GAFilter_Converter_MobileTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function 画面の解像度が取得できなかった場合設定しない1()
+    public function 画面の幅解像度が取得できなかった場合設定しない1()
     {
         $screenInfo = @Net_UserAgent_Mobile_DoCoMo_ScreenInfo::singleton();
         unset($screenInfo->_data['SO905ICS']['width']);
@@ -235,7 +235,7 @@ class ITEMAN_GAFilter_Converter_MobileTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function 画面の解像度が取得できなかった場合設定しない2()
+    public function 画面の高さ解像度が取得できなかった場合設定しない2()
     {
         $screenInfo = @Net_UserAgent_Mobile_DoCoMo_ScreenInfo::singleton();
         unset($screenInfo->_data['SO905ICS']['height']);
