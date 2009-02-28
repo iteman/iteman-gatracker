@@ -199,30 +199,35 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
      */
     private function _displayUsage()
     {
-        echo "使い方: {$_SERVER['SCRIPT_NAME']} オプション...
+        $scriptBaseName = basename($_SERVER['SCRIPT_NAME']);
+        $scriptPath = realpath($_SERVER['SCRIPT_NAME']);
+
+        echo "使い方: $scriptBaseName オプション...
 
 オプション:
 
   -h
-    このヘルプを表示します。
+     このヘルプを表示します。
 
   -V
-    バージョンを表示します。
+     バージョンを表示します。
 
   --web-property-id=WEB-PROPERTY-ID
      トラッキングの対象となる Google Analytics プロファイルを識別するための
     「ウェブプロパティID」を指定します。
     「ウェブプロパティID」のフォーマットは UA-XXX-X であり、
-     https://www.google.com/analytics/settings/home で確認することができます。
+     https://www.google.com/analytics/settings/home
+     で確認することができます。
 
   --converters=CONVERTER1,CONVERTER2,...
      デフォルトコンバータのあとに実行するコンバータをひとつ以上指定します。
 
   --run-as-filter (任意)
-    フィルタとして実行します。このコマンドを Apache のフィルタとして動作させる場
-    合、このオプションを指定する必要があります。
-    Apache のフィルタについては、
-    http://httpd.apache.org/docs/2.2/mod/mod_ext_filter.html を参照してください。
+     フィルタとして実行します。このコマンドを Apache のフィルタとして動作させる場
+     合、このオプションを指定する必要があります。
+     Apache のフィルタについては、
+     http://httpd.apache.org/docs/2.2/mod/mod_ext_filter.html
+     を参照してください。
 
 環境変数:
 
@@ -245,6 +250,17 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
      ます。
      この環境変数は Apache によって自動的に設定されるため、通常は指定する必要は
      ありません。
+
+SSI による実行:
+
+  このコマンドを Apache の SSI を使って動作させる場合、下記の exec コマンドをペー
+  ジに含める必要があります。
+
+  <!--#exec cmd=\"$scriptPath --web-property-id=WEB-PROPERTY-ID --converters=CONVERTER1,CONVERTER2,...\" -->
+
+  詳細は、
+  http://httpd.apache.org/docs/2.2/mod/mod_include.html#element.exec
+  を参照してください。
 ";
     }
 
