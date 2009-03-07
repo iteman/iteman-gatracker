@@ -96,7 +96,9 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
         ob_end_clean();
 
         $this->assertEquals(0, $result);
-        $this->assertRegExp("!^使い方: {$_SERVER['SCRIPT_NAME']}!", $content);
+        $this->assertRegExp('!^使い方: ' . basename($_SERVER['SCRIPT_NAME']) . '!',
+                            $content
+                            );
     }
 
     /**
