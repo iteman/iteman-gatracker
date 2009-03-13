@@ -74,6 +74,7 @@ class ITEMAN_GATracker_Tracker
     private $_userAgent;
     private $_converters = array();
     private $_request;
+    private $_domainHash;
     private $_sessionID;
     private $_firstVisitTime;
     private $_lastVisitTime;
@@ -104,38 +105,10 @@ class ITEMAN_GATracker_Tracker
      */
     public function generateCookieConfiguration()
     {
-        $domainHash = $this->_generateHash(@$_SERVER['SERVER_NAME']);
-
-        $sessionID = $this->getSessionID();
-        if (is_null($sessionID)) {
-            $this->setSessionID(uniqid(mt_rand(), true));
-            $sessionID = $this->getSessionID();
-        }
-
-        $firstVisitTime = $this->getFirstVisitTime();
-        $lastVisitTime = $this->getLastVisitTime();
-        $currentTime = time();
-
-        if (!(!is_null($firstVisitTime) && !is_null($lastVisitTime)
-              && $firstVisitTime <= $lastVisitTime
-              && $lastVisitTime <= $currentTime)
-            ) {
-            $this->setFirstVisitTime($currentTime);
-            $this->setLastVisitTime($currentTime);
-            $firstVisitTime = $this->getFirstVisitTime();
-            $lastVisitTime = $this->getLastVisitTime();
-        }
-
-        $sessionCount = $this->getSessionCount();
-        $sessionCount += 1;
-
-        $cookieNumber = mt_rand(0, 2147483647);
-        return strtr(rawurlencode(sprintf('__utma=%d.%d.%d.%d.%d.%d;+__utmb=%d;+__utmc=%d;+__utmz=%d.%d.2.2.utmccn=(direct)|utmcsr=(direct)|utmcmd=(none);',
-                                          $domainHash, $sessionID, $firstVisitTime, $lastVisitTime, $currentTime, $sessionCount, // __utma
-                                          $cookieNumber, // __utmb
-                                          $cookieNumber, // __utmc
-                                          $cookieNumber, $currentTime // __utmz
-                                          )),
+        $this->_domainHash = $this->_generateHash(@$_SERVER['SERVER_NAME']);
+        $this->_generateVisitorTrackingCookie();
+        return strtr(rawurlencode(implode('+', array('__utma=' . $this->_generateVisitorTrackingCookie() . ';',
+                                                     '__utmz=' . $this->_generateCampaignTrackingCookie() . ';'))),
                      array('%28' => '(', '%29' => ')')
                      );
     }
@@ -659,6 +632,62 @@ class ITEMAN_GATracker_Tracker
         }
 
         return $hash;
+    }
+
+    // }}}
+    // {{{ _generateVisitorTrackingCookie()
+
+    /**
+     * ユーザトラッキング Cookie (utma) を生成する。
+     *
+     * @return string
+     */
+    private function _generateVisitorTrackingCookie()
+    {
+        $sessionID = $this->getSessionID();
+        if (is_null($sessionID)) {
+            $this->setSessionID(uniqid(mt_rand(), true));
+            $sessionID = $this->getSessionID();
+        }
+
+        $firstVisitTime = $this->getFirstVisitTime();
+        $lastVisitTime = $this->getLastVisitTime();
+        $currentTime = time();
+
+        if (!(!is_null($firstVisitTime) && !is_null($lastVisitTime)
+              && $firstVisitTime <= $lastVisitTime
+              && $lastVisitTime <= $currentTime)
+            ) {
+            $this->setFirstVisitTime($currentTime);
+            $this->setLastVisitTime($currentTime);
+            $firstVisitTime = $this->getFirstVisitTime();
+            $lastVisitTime = $this->getLastVisitTime();
+        }
+
+        $sessionCount = $this->getSessionCount();
+        $sessionCount += 1;
+
+        return "{$this->_domainHash}.$sessionID.$firstVisitTime.$lastVisitTime.$currentTime.$sessionCount";
+    }
+
+    // }}}
+    // {{{ _generateCampaignTrackingCookie()
+
+    /**
+     * キャンペーントラッキング Cookie (utmz) を生成する。
+     *
+     * @return string
+     */
+    private function _generateCampaignTrackingCookie()
+    {
+        $creation = time();
+        $sessions = 1;
+        $responseCount = 1;
+        $name = '(direct)';
+        $clickSource = '(direct)';
+        $deliveryMethod = '(none)';
+
+        return "{$this->_domainHash}.$creation.$sessions.$responseCount.utmccn=$name|utmcsr=$clickSource|utmcmd=$deliveryMethod";
     }
 
     /**#@-*/

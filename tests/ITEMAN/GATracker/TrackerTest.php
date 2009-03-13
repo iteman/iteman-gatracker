@@ -132,7 +132,7 @@ class ITEMAN_GATracker_TrackerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('-', $queryVariables['utmr']);
         $this->assertEquals('/blog/', $queryVariables['utmp']);
         $this->assertEquals(self::$_webPropertyID, $queryVariables['utmac']);
-        $this->assertRegExp('/^__utma%3D\d+\.\d+\.\d+\.\d+\.\d+\.\d+%3B%2B__utmb%3D\d+%3B%2B__utmc%3D\d+%3B%2B__utmz%3D\d+\.\d+\.2\.2\.utmccn%3D\(direct\)%7Cutmcsr%3D\(direct\)%7Cutmcmd%3D\(none\)%3B$/',
+        $this->assertRegExp('/^__utma%3D\d+\.\d+\.\d+\.\d+\.\d+\.\d+%3B%2B__utmz%3D\d+\.\d+\.\d+\.\d+\.utmccn%3D\(direct\)%7Cutmcsr%3D\(direct\)%7Cutmcmd%3D\(none\)%3B$/',
                             $queryVariables['utmcc']
                             );
 
