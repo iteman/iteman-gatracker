@@ -475,7 +475,7 @@ class ITEMAN_GATracker_Tracker
     private function _initializeQueryVariables()
     {
         $this->_queryVariables['utmwv'] = '4.3';
-        $this->_queryVariables['utmn'] = mt_rand(0, 2147483647);
+        $this->_queryVariables['utmn'] = $this->_generateRandomInteger();
         $this->setHostname(null);
         $this->_queryVariables['utmcs'] = 'UTF-8';
         $this->setScreenResolution('-');
@@ -484,7 +484,7 @@ class ITEMAN_GATracker_Tracker
         $this->_queryVariables['utmje'] = '0';
         $this->_queryVariables['utmfl'] = '-';
         $this->setPageTitle('-');
-        $this->_queryVariables['utmhid'] = mt_rand(0, 2147483647);
+        $this->_queryVariables['utmhid'] = $this->_generateRandomInteger();
         $this->setSource('-');
         $this->setPage(null);
         $this->setWebPropertyID(null);
@@ -503,6 +503,19 @@ class ITEMAN_GATracker_Tracker
         $this->addConverter(new ITEMAN_GATracker_Converter_UserAgent());
         $this->addConverter(new ITEMAN_GATracker_Converter_RefererToSource());
         $this->addConverter(new ITEMAN_GATracker_Converter_AcceptLanguageToLanguage());
+    }
+
+    // }}}
+    // {{{ _generateRandomInteger()
+
+    /**
+     * ランダムな正の整数 (32 ビット) を生成する
+     *
+     * @return integer
+     */
+    private function _generateRandomInteger()
+    {
+        return mt_rand(0, 2147483647);
     }
 
     /**#@-*/
