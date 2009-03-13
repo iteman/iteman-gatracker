@@ -93,7 +93,7 @@ class ITEMAN_GATracker_Converter_MobileTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider provideUserAgents
      */
-    public function 画面の色を設定する($userAgent, $screenColors)
+    public function 画面の色数を設定する($userAgent, $screenColors)
     {
         $tracker = $this->getMock('ITEMAN_GATracker_Tracker',
                                   array('createHTTPRequest')
@@ -187,7 +187,7 @@ class ITEMAN_GATracker_Converter_MobileTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function 画面の色が取得できなかった場合設定しない()
+    public function 画面の色数が取得できなかった場合設定しない()
     {
         $screenInfo = @Net_UserAgent_Mobile_DoCoMo_ScreenInfo::singleton();
         unset($screenInfo->_data['SO905ICS']['depth']);
