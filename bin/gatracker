@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
@@ -27,85 +28,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    GIT: $Id$
+ * @version    SVN: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_Converter_RequestURIToPage
+error_reporting(E_ALL | E_STRICT);
 
-/**
- * @package    ITEMAN_GAFilter
- * @copyright  2009 ITEMAN, Inc.
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: @package_version@
- * @since      Class available since Release 0.1.0
- */
-class ITEMAN_GAFilter_Converter_RequestURIToPage implements ITEMAN_GAFilter_Converter_ConverterInterface
-{
+set_include_path(realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR .
+                 realpath(dirname(__FILE__) . '/../imports/PEAR/src') . PATH_SEPARATOR .
+                 realpath(dirname(__FILE__) . '/../imports/PEAR')
+                 );
 
-    // {{{ properties
+require_once 'Stagehand/Autoload/PEAR.php';
 
-    /**#@+
-     * @access public
-     */
+$cli = new ITEMAN_GATracker_CLI();
+$result = $cli->run();
 
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    // }}}
-    // {{{ convert()
-
-    /**
-     * @param ITEMAN_GAFilter_Tracker $tracker
-     */
-    public function convert(ITEMAN_GAFilter_Tracker $tracker)
-    {
-        if (array_key_exists('REQUEST_URI', $_SERVER)) {
-            $tracker->setPage($_SERVER['REQUEST_URI']);
-        }
-    }
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
-}
-
-// }}}
+exit($result);
 
 /*
  * Local Variables:
  * mode: php
- * coding: utf-8
+ * coding: iso-8859-1
  * tab-width: 4
  * c-basic-offset: 4
  * c-hanging-comment-ender-p: nil

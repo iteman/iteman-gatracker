@@ -27,23 +27,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_Converter_UserAgent
+// {{{ ITEMAN_GATracker_Converter_UserAgent
 
 /**
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_Converter_UserAgent implements ITEMAN_GAFilter_Converter_ConverterInterface
+class ITEMAN_GATracker_Converter_UserAgent implements ITEMAN_GATracker_Converter_ConverterInterface
 {
 
     // {{{ properties
@@ -74,9 +74,9 @@ class ITEMAN_GAFilter_Converter_UserAgent implements ITEMAN_GAFilter_Converter_C
     // {{{ convert()
 
     /**
-     * @param ITEMAN_GAFilter_Tracker $tracker
+     * @param ITEMAN_GATracker_Tracker $tracker
      */
-    public function convert(ITEMAN_GAFilter_Tracker $tracker)
+    public function convert(ITEMAN_GATracker_Tracker $tracker)
     {
         if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
             $tracker->setUserAgent($_SERVER['HTTP_USER_AGENT']);

@@ -27,25 +27,78 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_Exception
+// {{{ ITEMAN_GATracker_Converter_RequestURIToPage
 
 /**
- * ITEMAN_GAFilter パッケージのための例外クラス。
- *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_Exception extends Exception {}
+class ITEMAN_GATracker_Converter_RequestURIToPage implements ITEMAN_GATracker_Converter_ConverterInterface
+{
+
+    // {{{ properties
+
+    /**#@+
+     * @access public
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access public
+     */
+
+    // }}}
+    // {{{ convert()
+
+    /**
+     * @param ITEMAN_GATracker_Tracker $tracker
+     */
+    public function convert(ITEMAN_GATracker_Tracker $tracker)
+    {
+        if (array_key_exists('REQUEST_URI', $_SERVER)) {
+            $tracker->setPage($_SERVER['REQUEST_URI']);
+        }
+    }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    /**#@-*/
+
+    // }}}
+}
 
 // }}}
 

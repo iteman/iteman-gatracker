@@ -27,23 +27,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_Converter_ConverterInterface
+// {{{ ITEMAN_GATracker_Converter_ConverterInterface
 
 /**
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-interface ITEMAN_GAFilter_Converter_ConverterInterface
+interface ITEMAN_GATracker_Converter_ConverterInterface
 {
 
     /**#@+
@@ -54,9 +54,9 @@ interface ITEMAN_GAFilter_Converter_ConverterInterface
     // {{{ convert()
 
     /**
-     * @param ITEMAN_GAFilter_Tracker $tracker
+     * @param ITEMAN_GATracker_Tracker $tracker
      */
-    public function convert(ITEMAN_GAFilter_Tracker $tracker);
+    public function convert(ITEMAN_GATracker_Tracker $tracker);
 
     /**#@-*/
 

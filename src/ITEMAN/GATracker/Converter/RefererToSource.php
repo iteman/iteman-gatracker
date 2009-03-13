@@ -27,25 +27,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_Converter_RemoteAddrToHostnameTest
+// {{{ ITEMAN_GATracker_Converter_RefererToSource
 
 /**
- * ITEMAN_GAFilter_Converter_RemoteAddrToHostname のためのテスト。
- *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_Converter_RemoteAddrToHostnameTest extends PHPUnit_Framework_TestCase
+class ITEMAN_GATracker_Converter_RefererToSource implements ITEMAN_GATracker_Converter_ConverterInterface
 {
 
     // {{{ properties
@@ -66,52 +64,23 @@ class ITEMAN_GAFilter_Converter_RemoteAddrToHostnameTest extends PHPUnit_Framewo
      * @access private
      */
 
-    private $_request;
-    private static $_webPropertyID = 'UA-6415151-2';
-
     /**#@-*/
 
     /**#@+
      * @access public
      */
 
-    public function setUp()
-    {
-        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
-        $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
-        $_SERVER['REQUEST_URI'] = '/blog/';
-        $_SERVER['SERVER_NAME'] = 'www.example.com';
-
-        $adapter = new HTTP_Request2_Adapter_Mock();
-        $adapter->addResponse('HTTP/1.1 200 OK');
-        $this->_request = new HTTP_Request2();
-        $this->_request->setAdapter($adapter);
-    }
+    // }}}
+    // {{{ convert()
 
     /**
-     * @test
+     * @param ITEMAN_GATracker_Tracker $tracker
      */
-    public function Remoteaddr環境変数をホスト名に設定する()
+    public function convert(ITEMAN_GATracker_Tracker $tracker)
     {
-        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
-                                  array('createHTTPRequest')
-                                  );
-        $tracker->expects($this->any())
-                ->method('createHTTPRequest')
-                ->will($this->returnValue($this->_request));
-
-        $converter = $this->getMock('ITEMAN_GAFilter_Converter_RemoteAddrToHostname',
-                                    array('getHostByAddr')
-                                    );
-        $converter->expects($this->any())
-                  ->method('getHostByAddr')
-                  ->will($this->returnValue('www.example.org'));
-
-        $tracker->addConverter($converter);
-        $tracker->setWebPropertyID(self::$_webPropertyID);
-        $tracker->trackPageView();
-
-        $this->assertEquals('www.example.org', $tracker->getHostname());
+        if (array_key_exists('HTTP_REFERER', $_SERVER)) {
+            $tracker->setSource($_SERVER['HTTP_REFERER']);
+        }
     }
 
     /**#@-*/

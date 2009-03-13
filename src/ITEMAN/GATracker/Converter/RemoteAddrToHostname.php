@@ -27,23 +27,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_Converter_AcceptLanguageToLanguage
+// {{{ ITEMAN_GATracker_Converter_RemoteAddrToHostname
 
 /**
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_Converter_AcceptLanguageToLanguage implements ITEMAN_GAFilter_Converter_ConverterInterface
+class ITEMAN_GATracker_Converter_RemoteAddrToHostname implements ITEMAN_GATracker_Converter_ConverterInterface
 {
 
     // {{{ properties
@@ -74,14 +74,25 @@ class ITEMAN_GAFilter_Converter_AcceptLanguageToLanguage implements ITEMAN_GAFil
     // {{{ convert()
 
     /**
-     * @param ITEMAN_GAFilter_Tracker $tracker
+     * @param ITEMAN_GATracker_Tracker $tracker
      */
-    public function convert(ITEMAN_GAFilter_Tracker $tracker)
+    public function convert(ITEMAN_GATracker_Tracker $tracker)
     {
-        $preferredLanguage = Stagehand_HTTP_AcceptLanguage::getPreferredLanguage();
-        if (!is_null($preferredLanguage)) {
-            $tracker->setLanguage($preferredLanguage);
+        if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
+            $tracker->setHostname($this->getHostByAddr($_SERVER['REMOTE_ADDR']));
         }
+    }
+
+    // }}}
+    // {{{ getHostByAddr()
+
+    /**
+     * @param string $addr
+     * @return string
+     */
+    public function getHostByAddr($addr)
+    {
+        return gethostbyaddr($addr);
     }
 
     /**#@-*/

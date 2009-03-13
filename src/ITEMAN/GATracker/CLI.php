@@ -27,25 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_CLI
+// {{{ ITEMAN_GATracker_CLI
 
 /**
  * コマンドラインから Google Analytics のトラッキングを行うためのインターフェイス。
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
+class ITEMAN_GATracker_CLI extends Stagehand_CLIController
 {
 
     // {{{ properties
@@ -60,7 +60,7 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
      * @access protected
      */
 
-    protected $exceptionClass = 'ITEMAN_GAFilter_Exception';
+    protected $exceptionClass = 'ITEMAN_GATracker_Exception';
     protected $shortOptions = 'hV';
     protected $longOptions = array('run-as-filter==',
                                    'web-property-id=',
@@ -90,11 +90,11 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
     // {{{ createTracker()
 
     /**
-     * @return ITEMAN_GAFilter_Tracker
+     * @return ITEMAN_GATracker_Tracker
      */
     public function createTracker()
     {
-        return new ITEMAN_GAFilter_Tracker();
+        return new ITEMAN_GATracker_Tracker();
     }
 
     // }}}
@@ -102,7 +102,7 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
 
     /**
      * @param string $converterClass
-     * @return ITEMAN_GAFilter_Converter_ConverterInterface
+     * @return ITEMAN_GATracker_Converter_ConverterInterface
      */
     public function createConverter($converterClass)
     {
@@ -164,7 +164,7 @@ class ITEMAN_GAFilter_CLI extends Stagehand_CLIController
     // {{{ doRun()
 
     /**
-     * @throws ITEMAN_GAFilter_Exception
+     * @throws ITEMAN_GATracker_Exception
      */
     protected function doRun()
     {
@@ -272,7 +272,7 @@ SSI による実行:
      */
     private function _displayVersion()
     {
-        echo 'ITEMAN_GAFilter @package_version@
+        echo 'ITEMAN_GATracker @package_version@
 
 Copyright (c) 2008-2009 ITEMAN, Inc. All rights reserved.
 ';
@@ -290,7 +290,7 @@ Copyright (c) 2008-2009 ITEMAN, Inc. All rights reserved.
 
         foreach ($this->_config['converters'] as $converterClass) {
             if (!class_exists($converterClass)) {
-                throw new ITEMAN_GAFilter_Exception("指定されたコンバータ [ $converterClass ] が見つかりません");
+                throw new ITEMAN_GATracker_Exception("指定されたコンバータ [ $converterClass ] が見つかりません");
             }
 
             $tracker->addConverter($this->createConverter($converterClass));

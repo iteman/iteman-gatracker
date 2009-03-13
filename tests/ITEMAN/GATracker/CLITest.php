@@ -27,25 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_CLITest
+// {{{ ITEMAN_GATracker_CLITest
 
 /**
- * ITEMAN_GAFilter_CLI のためのテスト。
+ * ITEMAN_GATracker_CLI のためのテスト。
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
+class ITEMAN_GATracker_CLITest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -89,7 +89,7 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
         $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'], '-h');
         $GLOBALS['argc'] = count($_SERVER['argv']);
 
-        $cli = new ITEMAN_GAFilter_CLI();
+        $cli = new ITEMAN_GATracker_CLI();
         ob_start();
         $result = $cli->run();
         $content = ob_get_contents();
@@ -109,14 +109,14 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
         $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'], '-V');
         $GLOBALS['argc'] = count($_SERVER['argv']);
 
-        $cli = new ITEMAN_GAFilter_CLI();
+        $cli = new ITEMAN_GATracker_CLI();
         ob_start();
         $result = $cli->run();
         $content = ob_get_contents();
         ob_end_clean();
 
         $this->assertEquals(0, $result);
-        $this->assertRegExp('/^ITEMAN_GAFilter @package_version@/', $content);
+        $this->assertRegExp('/^ITEMAN_GATracker @package_version@/', $content);
     }
 
     /**
@@ -127,7 +127,7 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
         $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME']);
         $GLOBALS['argc'] = count($_SERVER['argv']);
 
-        $cli = new ITEMAN_GAFilter_CLI();
+        $cli = new ITEMAN_GATracker_CLI();
         ob_start();
         $result = $cli->run();
         $content = ob_get_contents();
@@ -150,14 +150,14 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
         $request = new HTTP_Request2();
         $request->setAdapter($adapter);
 
-        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+        $tracker = $this->getMock('ITEMAN_GATracker_Tracker',
                                   array('createHTTPRequest')
                                   );
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($request));
 
-        $cli = $this->getMock('ITEMAN_GAFilter_CLI', array('createTracker'));
+        $cli = $this->getMock('ITEMAN_GATracker_CLI', array('createTracker'));
         $cli->expects($this->any())
             ->method('createTracker')
             ->will($this->returnValue($tracker));
@@ -176,7 +176,7 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
         $_SERVER['REQUEST_URI'] = '/get/Stagehand_TestRunner-2.6.1.tgz';
         $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'],
                                  '--web-property-id=UA-6415151-2',
-                                 '--converters=ITEMAN_GAFilter_Converter_PEARPackageToPageTitle'
+                                 '--converters=ITEMAN_GATracker_Converter_PEARPackageToPageTitle'
                                  );
         $GLOBALS['argc'] = count($_SERVER['argv']);
 
@@ -185,14 +185,14 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
         $request = new HTTP_Request2();
         $request->setAdapter($adapter);
 
-        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+        $tracker = $this->getMock('ITEMAN_GATracker_Tracker',
                                   array('createHTTPRequest')
                                   );
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($request));
 
-        $cli = $this->getMock('ITEMAN_GAFilter_CLI', array('createTracker'));
+        $cli = $this->getMock('ITEMAN_GATracker_CLI', array('createTracker'));
         $cli->expects($this->any())
             ->method('createTracker')
             ->will($this->returnValue($tracker));
@@ -223,14 +223,14 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
         $request = new HTTP_Request2();
         $request->setAdapter($adapter);
 
-        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+        $tracker = $this->getMock('ITEMAN_GATracker_Tracker',
                                   array('createHTTPRequest')
                                   );
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($request));
 
-        $cli = $this->getMock('ITEMAN_GAFilter_CLI',
+        $cli = $this->getMock('ITEMAN_GATracker_CLI',
                               array('createTracker', 'createConverter')
                               );
         $cli->expects($this->any())
@@ -250,11 +250,11 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
 
     public function createConverter($converterClass)
     {
-        if ($converterClass != 'ITEMAN_GAFilter_Converter_RemoteAddrToHostname') {
+        if ($converterClass != 'ITEMAN_GATracker_Converter_RemoteAddrToHostname') {
             return new $converterClass();
         }
 
-        $converter = $this->getMock('ITEMAN_GAFilter_Converter_RemoteAddrToHostname',
+        $converter = $this->getMock('ITEMAN_GATracker_Converter_RemoteAddrToHostname',
                                     array('getHostByAddr')
                                     );
         $converter->expects($this->any())
@@ -266,8 +266,8 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
 
     public function provideConvertersOption()
     {
-        return array(array('ITEMAN_GAFilter_Converter_PEARPackageToPageTitle,ITEMAN_GAFilter_Converter_RemoteAddrToHostname'),
-                     array('ITEMAN_GAFilter_Converter_PEARPackageToPageTitle,ITEMAN_GAFilter_Converter_RemoteAddrToHostname,')
+        return array(array('ITEMAN_GATracker_Converter_PEARPackageToPageTitle,ITEMAN_GATracker_Converter_RemoteAddrToHostname'),
+                     array('ITEMAN_GATracker_Converter_PEARPackageToPageTitle,ITEMAN_GATracker_Converter_RemoteAddrToHostname,')
                      );
     }
 
@@ -282,7 +282,7 @@ class ITEMAN_GAFilter_CLITest extends PHPUnit_Framework_TestCase
                                  );
         $GLOBALS['argc'] = count($_SERVER['argv']);
 
-        $cli = new ITEMAN_GAFilter_CLI();
+        $cli = new ITEMAN_GATracker_CLI();
         ob_start();
         $result = $cli->run();
         $content = ob_get_contents();

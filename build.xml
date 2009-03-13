@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<project name="ITEMAN GAFilter" default="dist" basedir=".">
-  <property name="packageName" value="iteman-gafilter"/>
+<project name="ITEMAN GATracker" default="dist" basedir=".">
+  <property name="packageName" value="iteman-gatracker"/>
   <property name="packageVersion" value="0.1.0"/>
   <property name="buildBaseDir" value="build"/>
   <property name="buildDir" value="${buildBaseDir}/${packageName}-${packageVersion}"/>

@@ -27,23 +27,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_Converter_RefererToSource
+// {{{ ITEMAN_GATracker_Converter_PEARPackageToPageTitle
 
 /**
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_Converter_RefererToSource implements ITEMAN_GAFilter_Converter_ConverterInterface
+class ITEMAN_GATracker_Converter_PEARPackageToPageTitle implements ITEMAN_GATracker_Converter_ConverterInterface
 {
 
     // {{{ properties
@@ -64,6 +64,9 @@ class ITEMAN_GAFilter_Converter_RefererToSource implements ITEMAN_GAFilter_Conve
      * @access private
      */
 
+    private $_package;
+    private $_version;
+
     /**#@-*/
 
     /**#@+
@@ -74,12 +77,12 @@ class ITEMAN_GAFilter_Converter_RefererToSource implements ITEMAN_GAFilter_Conve
     // {{{ convert()
 
     /**
-     * @param ITEMAN_GAFilter_Tracker $tracker
+     * @param ITEMAN_GATracker_Tracker $tracker
      */
-    public function convert(ITEMAN_GAFilter_Tracker $tracker)
+    public function convert(ITEMAN_GATracker_Tracker $tracker)
     {
-        if (array_key_exists('HTTP_REFERER', $_SERVER)) {
-            $tracker->setSource($_SERVER['HTTP_REFERER']);
+        if ($this->_isPEARPackage($tracker->getPage())) {
+            $tracker->setPageTitle("{$this->_package} {$this->_version}");
         }
     }
 
@@ -94,6 +97,27 @@ class ITEMAN_GAFilter_Converter_RefererToSource implements ITEMAN_GAFilter_Conve
     /**#@+
      * @access private
      */
+
+    // }}}
+    // {{{ _isPEARPackage()
+
+    /**
+     * @param string $page
+     * @return boolean
+     */
+    private function _isPEARPackage($page)
+    {
+        $isPEARPackage =
+            (boolean)preg_match('!([^/]+)-(.+?)\.(?:tgz|tar)$!', $page, $matches);
+        if (!$isPEARPackage) {
+            return false;
+        }
+
+        $this->_package = $matches[1];
+        $this->_version = $matches[2];
+
+        return true;
+    }
 
     /**#@-*/
 

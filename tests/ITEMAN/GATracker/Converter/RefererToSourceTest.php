@@ -27,25 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_Converter_PEARPackageToPageTitleTest
+// {{{ ITEMAN_GATracker_Converter_RefererToSourceTest
 
 /**
- * ITEMAN_GAFilter_Converter_PEARPackageToPageTitle のためのテスト。
+ * ITEMAN_GATracker_Converter_RefererToSource のためのテスト。
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_Converter_PEARPackageToPageTitleTest extends PHPUnit_Framework_TestCase
+class ITEMAN_GATracker_Converter_RefererToSourceTest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -79,6 +79,7 @@ class ITEMAN_GAFilter_Converter_PEARPackageToPageTitleTest extends PHPUnit_Frame
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
+        $_SERVER['REQUEST_URI'] = '/blog/';
         $_SERVER['SERVER_NAME'] = 'www.example.com';
 
         $adapter = new HTTP_Request2_Adapter_Mock();
@@ -88,40 +89,25 @@ class ITEMAN_GAFilter_Converter_PEARPackageToPageTitleTest extends PHPUnit_Frame
     }
 
     /**
-     * @param string $uri
-     * @param string $title
      * @test
-     * @dataProvider providePEARPackages
      */
-    public function Pearパッケージの場合ファイル名からタイトルを生成する($uri, $title)
+    public function Referer環境変数を参照元に設定する()
     {
-        $_SERVER['REQUEST_URI'] = $uri;
+        $_SERVER['HTTP_REFERER'] = 'www.example.org';
 
-        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+        $tracker = $this->getMock('ITEMAN_GATracker_Tracker',
                                   array('createHTTPRequest')
                                   );
         $tracker->expects($this->any())
                 ->method('createHTTPRequest')
                 ->will($this->returnValue($this->_request));
 
-        $tracker->addConverter(new ITEMAN_GAFilter_Converter_PEARPackageToPageTitle());
+        $converter = new ITEMAN_GATracker_Converter_RefererToSource();
+        $tracker->addConverter($converter);
         $tracker->setWebPropertyID(self::$_webPropertyID);
         $tracker->trackPageView();
 
-        $queryVariables = $tracker->extractQueryVariables();
-
-        $this->assertEquals(rawurlencode($title), $tracker->getPageTitle());
-    }
-
-    public function providePEARPackages()
-    {
-        return array(array('/get/Stagehand_TestRunner-2.6.1.tgz', 'Stagehand_TestRunner 2.6.1'),
-                     array('/get/Stagehand_TestRunner-2.6.1.tar', 'Stagehand_TestRunner 2.6.1'),
-                     array('/package/Net_UserAgent_Mobile-1.0.0RC1.tgz', 'Net_UserAgent_Mobile 1.0.0RC1'),
-                     array('/Foo_Bar-0.1.0dev1.tgz', 'Foo_Bar 0.1.0dev1'),
-                     array('/Foo_Bar-0.9.0alpha1.tgz', 'Foo_Bar 0.9.0alpha1'),
-                     array('/Foo_Bar-0.9.0beta1.tgz', 'Foo_Bar 0.9.0beta1')
-                     );
+        $this->assertEquals($_SERVER['HTTP_REFERER'], $tracker->getSource());
     }
 
     /**#@-*/

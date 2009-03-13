@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
@@ -28,31 +27,86 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id$
+ * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-error_reporting(E_ALL | E_STRICT);
+// {{{ ITEMAN_GATracker_Converter_AcceptLanguageToLanguage
 
-set_include_path(realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR .
-                 realpath(dirname(__FILE__) . '/../imports/PEAR/src') . PATH_SEPARATOR .
-                 realpath(dirname(__FILE__) . '/../imports/PEAR')
-                 );
+/**
+ * @package    ITEMAN_GATracker
+ * @copyright  2009 ITEMAN, Inc.
+ * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
+ * @version    Release: @package_version@
+ * @since      Class available since Release 0.1.0
+ */
+class ITEMAN_GATracker_Converter_AcceptLanguageToLanguage implements ITEMAN_GATracker_Converter_ConverterInterface
+{
 
-require_once 'Stagehand/Autoload/PEAR.php';
+    // {{{ properties
 
-$cli = new ITEMAN_GAFilter_CLI();
-$result = $cli->run();
+    /**#@+
+     * @access public
+     */
 
-exit($result);
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access public
+     */
+
+    // }}}
+    // {{{ convert()
+
+    /**
+     * @param ITEMAN_GATracker_Tracker $tracker
+     */
+    public function convert(ITEMAN_GATracker_Tracker $tracker)
+    {
+        $preferredLanguage = Stagehand_HTTP_AcceptLanguage::getPreferredLanguage();
+        if (!is_null($preferredLanguage)) {
+            $tracker->setLanguage($preferredLanguage);
+        }
+    }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    /**#@-*/
+
+    // }}}
+}
+
+// }}}
 
 /*
  * Local Variables:
  * mode: php
- * coding: iso-8859-1
+ * coding: utf-8
  * tab-width: 4
  * c-basic-offset: 4
  * c-hanging-comment-ender-p: nil

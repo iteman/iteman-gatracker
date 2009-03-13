@@ -27,78 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_Converter_ServerNameToHostname
+// {{{ ITEMAN_GATracker_Exception
 
 /**
- * @package    ITEMAN_GAFilter
+ * ITEMAN_GATracker パッケージのための例外クラス。
+ *
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_Converter_ServerNameToHostname implements ITEMAN_GAFilter_Converter_ConverterInterface
-{
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    // }}}
-    // {{{ convert()
-
-    /**
-     * @param ITEMAN_GAFilter_Tracker $tracker
-     */
-    public function convert(ITEMAN_GAFilter_Tracker $tracker)
-    {
-        if (array_key_exists('SERVER_NAME', $_SERVER)) {
-            $tracker->setHostname($_SERVER['SERVER_NAME']);
-        }
-    }
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
-}
+class ITEMAN_GATracker_Exception extends Exception {}
 
 // }}}
 

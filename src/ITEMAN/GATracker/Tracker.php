@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2008-2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
@@ -36,10 +36,10 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_Tracker
+// {{{ ITEMAN_GATracker_Tracker
 
 /**
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2008-2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
@@ -47,7 +47,7 @@
  * @link       http://www.ianlewis.org/jp/google-analytics
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_Tracker
+class ITEMAN_GATracker_Tracker
 {
 
     // {{{ properties
@@ -151,9 +151,9 @@ class ITEMAN_GAFilter_Tracker
     // {{{ addConverter()
 
     /**
-     * @param ITEMAN_GAFilter_Converter_ConverterInterface $converter
+     * @param ITEMAN_GATracker_Converter_ConverterInterface $converter
      */
-    public function addConverter(ITEMAN_GAFilter_Converter_ConverterInterface $converter)
+    public function addConverter(ITEMAN_GATracker_Converter_ConverterInterface $converter)
     {
         $this->_converters[] = $converter;
     }
@@ -386,19 +386,19 @@ class ITEMAN_GAFilter_Tracker
     private function _validate()
     {
         if (is_null($this->getWebPropertyID())) {
-            throw new ITEMAN_GAFilter_Exception('ウェブプロパティIDが設定されていません');
+            throw new ITEMAN_GATracker_Exception('ウェブプロパティIDが設定されていません');
         }
 
         if (is_null($this->getPage())) {
-            throw new ITEMAN_GAFilter_Exception('ページが設定されていません');
+            throw new ITEMAN_GATracker_Exception('ページが設定されていません');
         }
 
         if (is_null($this->getHostname())) {
-            throw new ITEMAN_GAFilter_Exception('ホスト名が設定されていません');
+            throw new ITEMAN_GATracker_Exception('ホスト名が設定されていません');
         }
 
         if (is_null($this->_userAgent)) {
-            throw new ITEMAN_GAFilter_Exception('ユーザエージェントが設定されていません');
+            throw new ITEMAN_GATracker_Exception('ユーザエージェントが設定されていません');
         }
     }
 
@@ -407,7 +407,7 @@ class ITEMAN_GAFilter_Tracker
 
     /**
      * @return string
-     * @throws ITEMAN_GAFilter_Exception
+     * @throws ITEMAN_GATracker_Exception
      */
     private function _generateTrackingURI()
     {
@@ -455,13 +455,13 @@ class ITEMAN_GAFilter_Tracker
     // {{{ _sendRequest()
 
     /**
-     * @throws ITEMAN_GAFilter_Exception
+     * @throws ITEMAN_GATracker_Exception
      */
     private function _sendRequest()
     {
         $response = $this->_request->send();
         if ($response->getStatus() != '200') {
-            throw new ITEMAN_GAFilter_Exception('200 以外のステータスコードが返されました');
+            throw new ITEMAN_GATracker_Exception('200 以外のステータスコードが返されました');
         }
     }
 
@@ -496,11 +496,11 @@ class ITEMAN_GAFilter_Tracker
      */
     private function _configureConverters()
     {
-        $this->addConverter(new ITEMAN_GAFilter_Converter_ServerNameToHostname());
-        $this->addConverter(new ITEMAN_GAFilter_Converter_RequestURIToPage());
-        $this->addConverter(new ITEMAN_GAFilter_Converter_UserAgent());
-        $this->addConverter(new ITEMAN_GAFilter_Converter_RefererToSource());
-        $this->addConverter(new ITEMAN_GAFilter_Converter_AcceptLanguageToLanguage());
+        $this->addConverter(new ITEMAN_GATracker_Converter_ServerNameToHostname());
+        $this->addConverter(new ITEMAN_GATracker_Converter_RequestURIToPage());
+        $this->addConverter(new ITEMAN_GATracker_Converter_UserAgent());
+        $this->addConverter(new ITEMAN_GATracker_Converter_RefererToSource());
+        $this->addConverter(new ITEMAN_GATracker_Converter_AcceptLanguageToLanguage());
     }
 
     /**#@-*/

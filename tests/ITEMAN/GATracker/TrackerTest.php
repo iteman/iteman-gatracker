@@ -27,25 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2008-2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_TrackerTest
+// {{{ ITEMAN_GATracker_TrackerTest
 
 /**
- * ITEMAN_GAFilter_Tracker のためのテスト。
+ * ITEMAN_GATracker_Tracker のためのテスト。
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2008-2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_TrackerTest extends PHPUnit_Framework_TestCase
+class ITEMAN_GATracker_TrackerTest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -93,7 +93,7 @@ class ITEMAN_GAFilter_TrackerTest extends PHPUnit_Framework_TestCase
      */
     public function トラッキングUriを生成する()
     {
-        $tracker = $this->getMock('ITEMAN_GAFilter_Tracker',
+        $tracker = $this->getMock('ITEMAN_GATracker_Tracker',
                                   array('createHTTPRequest')
                                   );
         $tracker->expects($this->any())
@@ -157,12 +157,12 @@ class ITEMAN_GAFilter_TrackerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException ITEMAN_GAFilter_Exception
+     * @expectedException ITEMAN_GATracker_Exception
      */
     public function ページが与えられなかった場合例外を発生させる()
     {
         unset($_SERVER['REQUEST_URI']);
-        $tracker = new ITEMAN_GAFilter_Tracker();
+        $tracker = new ITEMAN_GATracker_Tracker();
         $tracker->setWebPropertyID(self::$_webPropertyID);
         $tracker->trackPageView();
     }

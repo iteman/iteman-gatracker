@@ -27,23 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    ITEMAN_GAFilter
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    GIT: $Id$
  * @since      File available since Release 0.1.0
  */
 
-// {{{ ITEMAN_GAFilter_Converter_PEARPackageToPageTitle
+// {{{ ITEMAN_GATracker_Converter_RemoteAddrToHostnameTest
 
 /**
- * @package    ITEMAN_GAFilter
+ * ITEMAN_GATracker_Converter_RemoteAddrToHostname のためのテスト。
+ *
+ * @package    ITEMAN_GATracker
  * @copyright  2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class ITEMAN_GAFilter_Converter_PEARPackageToPageTitle implements ITEMAN_GAFilter_Converter_ConverterInterface
+class ITEMAN_GATracker_Converter_RemoteAddrToHostnameTest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -64,8 +66,8 @@ class ITEMAN_GAFilter_Converter_PEARPackageToPageTitle implements ITEMAN_GAFilte
      * @access private
      */
 
-    private $_package;
-    private $_version;
+    private $_request;
+    private static $_webPropertyID = 'UA-6415151-2';
 
     /**#@-*/
 
@@ -73,17 +75,43 @@ class ITEMAN_GAFilter_Converter_PEARPackageToPageTitle implements ITEMAN_GAFilte
      * @access public
      */
 
-    // }}}
-    // {{{ convert()
+    public function setUp()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.9.0.5) Gecko/2008121622 Ubuntu/8.10 (intrepid) Firefox/3.0.5';
+        $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
+        $_SERVER['REQUEST_URI'] = '/blog/';
+        $_SERVER['SERVER_NAME'] = 'www.example.com';
+
+        $adapter = new HTTP_Request2_Adapter_Mock();
+        $adapter->addResponse('HTTP/1.1 200 OK');
+        $this->_request = new HTTP_Request2();
+        $this->_request->setAdapter($adapter);
+    }
 
     /**
-     * @param ITEMAN_GAFilter_Tracker $tracker
+     * @test
      */
-    public function convert(ITEMAN_GAFilter_Tracker $tracker)
+    public function Remoteaddr環境変数をホスト名に設定する()
     {
-        if ($this->_isPEARPackage($tracker->getPage())) {
-            $tracker->setPageTitle("{$this->_package} {$this->_version}");
-        }
+        $tracker = $this->getMock('ITEMAN_GATracker_Tracker',
+                                  array('createHTTPRequest')
+                                  );
+        $tracker->expects($this->any())
+                ->method('createHTTPRequest')
+                ->will($this->returnValue($this->_request));
+
+        $converter = $this->getMock('ITEMAN_GATracker_Converter_RemoteAddrToHostname',
+                                    array('getHostByAddr')
+                                    );
+        $converter->expects($this->any())
+                  ->method('getHostByAddr')
+                  ->will($this->returnValue('www.example.org'));
+
+        $tracker->addConverter($converter);
+        $tracker->setWebPropertyID(self::$_webPropertyID);
+        $tracker->trackPageView();
+
+        $this->assertEquals('www.example.org', $tracker->getHostname());
     }
 
     /**#@-*/
@@ -97,27 +125,6 @@ class ITEMAN_GAFilter_Converter_PEARPackageToPageTitle implements ITEMAN_GAFilte
     /**#@+
      * @access private
      */
-
-    // }}}
-    // {{{ _isPEARPackage()
-
-    /**
-     * @param string $page
-     * @return boolean
-     */
-    private function _isPEARPackage($page)
-    {
-        $isPEARPackage =
-            (boolean)preg_match('!([^/]+)-(.+?)\.(?:tgz|tar)$!', $page, $matches);
-        if (!$isPEARPackage) {
-            return false;
-        }
-
-        $this->_package = $matches[1];
-        $this->_version = $matches[2];
-
-        return true;
-    }
 
     /**#@-*/
 
