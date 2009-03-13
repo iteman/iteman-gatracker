@@ -71,11 +71,13 @@ class ITEMAN_GATracker_Tracker
      */
 
     private $_queryVariables = array();
-    private $_cookieA;
-    private $_cookieZ;
     private $_userAgent;
     private $_converters = array();
     private $_request;
+    private $_sessionID;
+    private $_firstVisitTime;
+    private $_lastVisitTime;
+    private $_sessionCount = 0;
 
     /**#@-*/
 
@@ -102,13 +104,37 @@ class ITEMAN_GATracker_Tracker
      */
     public function generateCookieConfiguration()
     {
+        $domainHash = $this->_generateHash(@$_SERVER['SERVER_NAME']);
+
+        $sessionID = $this->getSessionID();
+        if (is_null($sessionID)) {
+            $this->setSessionID(uniqid(mt_rand(), true));
+            $sessionID = $this->getSessionID();
+        }
+
+        $firstVisitTime = $this->getFirstVisitTime();
+        $lastVisitTime = $this->getLastVisitTime();
+        $currentTime = time();
+
+        if (!(!is_null($firstVisitTime) && !is_null($lastVisitTime)
+              && $firstVisitTime <= $lastVisitTime
+              && $lastVisitTime <= $currentTime)
+            ) {
+            $this->setFirstVisitTime($currentTime);
+            $this->setLastVisitTime($currentTime);
+            $firstVisitTime = $this->getFirstVisitTime();
+            $lastVisitTime = $this->getLastVisitTime();
+        }
+
+        $sessionCount = $this->getSessionCount();
+        $sessionCount += 1;
+
         $cookieNumber = mt_rand(0, 2147483647);
-        $currentTimestamp = time();
-        return strtr(rawurlencode(sprintf('__utma=%d.%d.%d.%d.%d.2;+__utmb=%d;+__utmc=%d;+__utmz=%d.%d.2.2.utmccn=(direct)|utmcsr=(direct)|utmcmd=(none);',
-                                          $cookieNumber, mt_rand(1000000000, 2147483647), $currentTimestamp, $currentTimestamp, $currentTimestamp, // __utma
+        return strtr(rawurlencode(sprintf('__utma=%d.%d.%d.%d.%d.%d;+__utmb=%d;+__utmc=%d;+__utmz=%d.%d.2.2.utmccn=(direct)|utmcsr=(direct)|utmcmd=(none);',
+                                          $domainHash, $sessionID, $firstVisitTime, $lastVisitTime, $currentTime, $sessionCount, // __utma
                                           $cookieNumber, // __utmb
                                           $cookieNumber, // __utmc
-                                          $cookieNumber, $currentTimestamp // __utmz
+                                          $cookieNumber, $currentTime // __utmz
                                           )),
                      array('%28' => '(', '%29' => ')')
                      );
@@ -368,6 +394,94 @@ class ITEMAN_GATracker_Tracker
         return $this->_queryVariables['utmsr'];
     }
 
+    // }}}
+    // {{{ setSessionID()
+
+    /**
+     * @param string $sessionID
+     */
+    public function setSessionID($sessionID)
+    {
+        $this->_sessionID = $this->_generateHash($sessionID);
+    }
+
+    // }}}
+    // {{{ getSessionID()
+
+    /**
+     * @return string
+     */
+    public function getSessionID()
+    {
+        return $this->_sessionID;
+    }
+
+    // }}}
+    // {{{ setFirstVisitTime()
+
+    /**
+     * @param integer $firstVisitTime
+     */
+    public function setFirstVisitTime($firstVisitTime)
+    {
+        $this->_firstVisitTime = $firstVisitTime;
+    }
+
+    // }}}
+    // {{{ getFirstVisitTime()
+
+    /**
+     * @return integer
+     */
+    public function getFirstVisitTime()
+    {
+        return $this->_firstVisitTime;
+    }
+
+    // }}}
+    // {{{ setLastVisitTime()
+
+    /**
+     * @param integer $lastVisitTime
+     */
+    public function setLastVisitTime($lastVisitTime)
+    {
+        $this->_lastVisitTime = $lastVisitTime;
+    }
+
+    // }}}
+    // {{{ getLastVisitTime()
+
+    /**
+     * @return integer
+     */
+    public function getLastVisitTime()
+    {
+        return $this->_lastVisitTime;
+    }
+
+    // }}}
+    // {{{ setSessionCount()
+
+    /**
+     * @param integer $sessionCount
+     */
+    public function setSessionCount($sessionCount)
+    {
+        $this->_sessionCount = $sessionCount;
+    }
+
+    // }}}
+    // {{{ getSessionCount()
+
+    /**
+     * @return integer
+     */
+    public function getSessionCount()
+    {
+        return $this->_sessionCount;
+    }
+
     /**#@-*/
 
     /**#@+
@@ -509,13 +623,42 @@ class ITEMAN_GATracker_Tracker
     // {{{ _generateRandomInteger()
 
     /**
-     * ランダムな正の整数 (32 ビット) を生成する
+     * ランダムな正の整数 (32 ビット) を生成する。
      *
      * @return integer
      */
     private function _generateRandomInteger()
     {
         return mt_rand(0, 2147483647);
+    }
+
+    // }}}
+    // {{{ _generateHash()
+
+    /**
+     * 与えられた文字列に対応するハッシュを生成する。
+     * このメソッドは com.google.analytics.core.Utils.generateHash() の移植である。
+     *
+     * @param string $input
+     * @return integer
+     * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/core/Utils.as
+     */
+    private function _generateHash($input)
+    {
+        $hash = 1;
+        $leftMost7 = 0;
+
+        for ($position = strlen($input) - 1; $position >= 0; --$position) {
+            $current = ord(substr($input, $position, 1));
+            $hash = (($hash << 6) & 0xfffffff) + $current + ($current << 14);
+            $leftMost7 = $hash & 0xfe00000;
+
+            if ($leftMost7 != 0) {
+                $hash ^= $leftMost7 >> 21;
+            }
+        }
+
+        return $hash;
     }
 
     /**#@-*/
