@@ -33,6 +33,7 @@
  * @version    GIT: $Id$
  * @link       http://www.vdgraaf.info/google-analytics-without-javascript.html
  * @link       http://www.ianlewis.org/jp/google-analytics
+ * @link       http://code.google.com/p/gaforflash/
  * @since      File available since Release 0.1.0
  */
 
@@ -45,6 +46,7 @@
  * @version    Release: @package_version@
  * @link       http://www.vdgraaf.info/google-analytics-without-javascript.html
  * @link       http://www.ianlewis.org/jp/google-analytics
+ * @link       http://code.google.com/p/gaforflash/
  * @since      Class available since Release 0.1.0
  */
 class ITEMAN_GATracker_Tracker
@@ -473,7 +475,7 @@ class ITEMAN_GATracker_Tracker
     private function _initializeQueryVariables()
     {
         $this->_queryVariables['utmwv'] = '4.3';
-        $this->_queryVariables['utmn'] = mt_rand(1000000000, 9999999999);
+        $this->_queryVariables['utmn'] = mt_rand(0, 2147483647);
         $this->setHostname(null);
         $this->_queryVariables['utmcs'] = 'UTF-8';
         $this->setScreenResolution('-');
