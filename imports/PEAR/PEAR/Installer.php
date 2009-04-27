@@ -187,7 +187,29 @@ class PEAR_Installer extends PEAR_Downloader
                 continue;
             }
 
-            $path = $props['installed_as'];
+            $path = str_replace('\\', DIRECTORY_SEPARATOR, $props['installed_as']);
+            $name = !array_key_exists('install-as', $props) ? str_replace('\\', DIRECTORY_SEPARATOR, $props['name'])
+                                                            : str_replace('\\', DIRECTORY_SEPARATOR, $props['install-as']);
+            switch ($props['role']) {
+            case 'src':
+            case 'extsrc':
+                break;
+            case 'doc':
+            case 'data':
+            case 'test':
+                $path = $this->config->get($props['role'] . '_dir', null, $channel) . DIRECTORY_SEPARATOR . $this->pkginfo->getPackage() . DIRECTORY_SEPARATOR . $name;
+                break;
+            case 'ext':
+            case 'php':
+                $path = $this->config->get($props['role'] . '_dir', null, $channel) . DIRECTORY_SEPARATOR . $name;
+                break;
+            case 'script':
+                $path = $this->config->get('bin_dir', null, $channel) . DIRECTORY_SEPARATOR . $name;
+                break;
+            default:
+                return $this->raiseError("Invalid role `$props[role]' for file $file");
+            }
+
             if ($backup) {
                 $this->addFileOperation('backup', array($path));
                 $ret[] = $path;
@@ -1306,6 +1328,9 @@ class PEAR_Installer extends PEAR_Downloader
         }
         // }}}
 
+        // info from the package it self we want to access from _installFile
+        $this->pkginfo = &$pkg;
+
         $this->startFileTransaction();
 
         if (empty($options['upgrade']) && empty($options['soft'])) {
@@ -1362,8 +1387,6 @@ class PEAR_Installer extends PEAR_Downloader
 
         // {{{ Copy files to dest dir ---------------------------------------
 
-        // info from the package it self we want to access from _installFile
-        $this->pkginfo = &$pkg;
         // used to determine whether we should build any C code
         $this->source_files = 0;
 
