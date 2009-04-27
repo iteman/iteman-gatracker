@@ -4,10 +4,10 @@
 if test "x$PHP_PEAR_PHP_BIN" != "x"; then
   PHP="$PHP_PEAR_PHP_BIN"
 else
-  if test "/usr/bin/php5" = '@'php_bin'@'; then
+  if test "/usr/bin/php" = '@'php_bin'@'; then
     PHP=php 
   else
-    PHP="/usr/bin/php5"
+    PHP="/usr/bin/php"
   fi
 fi
 
@@ -16,12 +16,12 @@ if test "x$PHP_PEAR_INSTALL_DIR" != "x"; then
   INCDIR=$PHP_PEAR_INSTALL_DIR
   INCARG="-d include_path=$PHP_PEAR_INSTALL_DIR"
 else
-  if test "/home/iteman/SVNWORK/iteman-ganojs/imports/PEAR" = '@'php_dir'@'; then
+  if test "/home/iteman/GITREPOS/iteman-gatracker/imports/PEAR" = '@'php_dir'@'; then
     INCDIR=`dirname $0`
     INCARG=""  
   else
-    INCDIR="/home/iteman/SVNWORK/iteman-ganojs/imports/PEAR"
-    INCARG="-d include_path=/home/iteman/SVNWORK/iteman-ganojs/imports/PEAR"
+    INCDIR="/home/iteman/GITREPOS/iteman-gatracker/imports/PEAR"
+    INCARG="-d include_path=/home/iteman/GITREPOS/iteman-gatracker/imports/PEAR"
   fi
 fi
 
