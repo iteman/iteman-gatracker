@@ -40,7 +40,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: ComparisonFailure.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: ComparisonFailure.php 4748 2009-04-02 06:34:34Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -62,7 +62,7 @@ if (!class_exists('PHPUnit_Framework_ComparisonFailure', FALSE)) {
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.12
+ * @version    Release: 3.3.16
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -197,10 +197,22 @@ abstract class PHPUnit_Framework_ComparisonFailure extends PHPUnit_Framework_Ass
 
     protected function diff($expected, $actual)
     {
-        $expectedFile = tempnam('/tmp', 'expected');
-        file_put_contents($expectedFile, $expected);
+        if (defined('PHPUNIT_TMPDIR')) {
+            $tmpDir = PHPUNIT_TMPDIR;
+        }
 
-        $actualFile = tempnam('/tmp', 'actual');
+        else if (function_exists('sys_get_temp_dir')) {
+            $tmpDir = sys_get_temp_dir();
+        }
+
+        else {
+            $tmpDir = '/tmp';
+        }
+
+        $expectedFile = tempnam($tmpDir, 'expected');
+        $actualFile   = tempnam($tmpDir, 'actual');
+
+        file_put_contents($expectedFile, $expected);
         file_put_contents($actualFile, $actual);
 
         $buffer = shell_exec(

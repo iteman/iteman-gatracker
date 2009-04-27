@@ -34,7 +34,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * $Id: phpunit.php 4522 2009-01-21 11:55:16Z sb $
+ * $Id: phpunit.php 4572 2009-01-28 07:37:41Z sb $
  */
 
 if (strpos('/usr/bin/php', '@php_bin') === 0) {
@@ -46,6 +46,8 @@ require_once 'PHPUnit/Util/Filter.php';
 PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
 
 require 'PHPUnit/TextUI/Command.php';
+
+define('PHPUnit_MAIN_METHOD', 'PHPUnit_TextUI_Command::main');
 
 PHPUnit_TextUI_Command::main();
 ?>

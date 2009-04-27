@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Test.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: Test.php 4652 2009-02-18 19:00:34Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -56,7 +56,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.12
+ * @version    Release: 3.3.16
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -303,8 +303,11 @@ class PHPUnit_Util_Test
                 $classes = array($className);
 
                 if ($extended) {
-                    $classes += class_implements($className);
-                    $classes += class_parents($className);
+                    $classes = array_merge(
+                      $classes,
+                      class_implements($className),
+                      class_parents($className)
+                    );
                 }
 
                 foreach ($classes as $className)
@@ -339,7 +342,7 @@ class PHPUnit_Util_Test
                 $classes = array($className);
 
                 if ($extended) {
-                    $classes += class_parents($className);
+                    $classes = array_merge($classes, class_parents($className));
                 }
 
                 foreach ($classes as $className) {
@@ -350,8 +353,11 @@ class PHPUnit_Util_Test
             $classes = array($method);
 
             if ($extended) {
-                $classes += class_implements($method);
-                $classes += class_parents($method);
+                $classes = array_merge(
+                  $classes,
+                  class_implements($method),
+                  class_parents($method)
+                );
             }
 
             foreach ($classes as $className) {

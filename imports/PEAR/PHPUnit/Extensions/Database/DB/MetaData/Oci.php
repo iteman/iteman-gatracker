@@ -39,7 +39,7 @@
  * @author     Trond Hansen <trond@xait.no>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Oci.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: Oci.php 4784 2009-04-10 09:56:39Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.3
  */
@@ -58,12 +58,17 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Trond Hansen <trond@xait.no>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.12
+ * @version    Release: 3.3.16
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.3
  */
 class PHPUnit_Extensions_Database_DB_MetaData_Oci extends PHPUnit_Extensions_Database_DB_MetaData
 {
+    /**
+     * No character used to quote schema objects.
+     */
+    protected $schemaObjectQuoteChar = '';
+
     protected $columns = array();
     protected $keys = array();
 
@@ -144,7 +149,7 @@ class PHPUnit_Extensions_Database_DB_MetaData_Oci extends PHPUnit_Extensions_Dat
         }
 
         $keyQuery = "SELECT b.column_name
-                       FROM all_constraints a, all_cons_columns b
+                       FROM user_constraints a, user_cons_columns b
                       WHERE a.constraint_type='P'
                         AND a.constraint_name=b.constraint_name
                         AND a.table_name = '".$tableName."' ";
