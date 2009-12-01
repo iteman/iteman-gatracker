@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: ConfigurationTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: ConfigurationTest.php 5288 2009-10-22 17:54:06Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.3.0
  */
@@ -56,7 +56,7 @@ require_once 'PHPUnit/Util/Configuration.php';
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.16
+ * @version    Release: 3.4.3
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.3.0
  */
@@ -66,7 +66,7 @@ class Util_ConfigurationTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configuration = new PHPUnit_Util_Configuration(
+        $this->configuration = PHPUnit_Util_Configuration::getInstance(
           dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'configuration.xml'
         );
     }
@@ -84,7 +84,9 @@ class Util_ConfigurationTest extends PHPUnit_Framework_TestCase
                   0 =>
                   array (
                     'path' => '/path/to/files',
+                    'prefix' => '',
                     'suffix' => '.php',
+                    'group' => 'DEFAULT'
                   ),
                 ),
                 'file' =>
@@ -99,7 +101,9 @@ class Util_ConfigurationTest extends PHPUnit_Framework_TestCase
                   0 =>
                   array (
                     'path' => '/path/to/files',
+                    'prefix' => '',
                     'suffix' => '.php',
+                    'group' => 'DEFAULT'
                   ),
                 ),
                 'file' =>
@@ -118,7 +122,9 @@ class Util_ConfigurationTest extends PHPUnit_Framework_TestCase
                   0 =>
                   array (
                     'path' => '/path/to/files',
+                    'prefix' => '',
                     'suffix' => '.php',
+                    'group' => 'DEFAULT'
                   ),
                 ),
                 'file' =>
@@ -133,7 +139,9 @@ class Util_ConfigurationTest extends PHPUnit_Framework_TestCase
                   0 =>
                   array (
                     'path' => '/path/to/files',
+                    'prefix' => '',
                     'suffix' => '.php',
+                    'group' => 'DEFAULT'
                   ),
                 ),
                 'file' =>
@@ -164,10 +172,37 @@ class Util_ConfigurationTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetListenerConfiguration()
+    {
+        $this->assertEquals(
+          array (
+            0 =>
+            array (
+              'class' => 'MyListener',
+              'file' => '/optional/path/to/MyListener.php',
+              'arguments' =>
+              array (
+                0 =>
+                array (
+                  0 => 'Sebastian',
+                ),
+                1 => 22,
+                2 => 'April',
+                3 => 19.78,
+                4 => NULL,
+                5 => new stdClass,
+              ),
+            ),
+          ),
+          $this->configuration->getListenerConfiguration()
+        );
+    }
+
     public function testGetLoggingConfiguration()
     {
         $this->assertEquals(
           array (
+            'title' => 'My Project',
             'charset' => 'UTF-8',
             'lowUpperBound' => '35',
             'highLowerBound' => '70',
@@ -185,7 +220,7 @@ class Util_ConfigurationTest extends PHPUnit_Framework_TestCase
             'pmd-xml' => '/tmp/pmd.xml',
             'tap' => '/tmp/logfile.tap',
             'logIncompleteSkipped' => FALSE,
-            'test-xml' => '/tmp/logfile.xml',
+            'junit' => '/tmp/logfile.xml',
             'story-html' => '/tmp/story.html',
             'story-text' => '/tmp/story.txt',
             'testdox-html' => '/tmp/testdox.html',
@@ -203,6 +238,10 @@ class Util_ConfigurationTest extends PHPUnit_Framework_TestCase
             array (
               'foo' => 'bar',
             ),
+            'const' =>
+            array (
+              'foo' => 'bar',
+            ),
             'var' =>
             array (
               'foo' => 'bar',
@@ -216,12 +255,16 @@ class Util_ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
           array (
+            'backupGlobals' => TRUE,
+            'backupStaticAttributes' => FALSE,
             'bootstrap' => '/path/to/bootstrap.php',
             'colors' => FALSE,
             'convertErrorsToExceptions' => TRUE,
             'convertNoticesToExceptions' => TRUE,
             'convertWarningsToExceptions' => TRUE,
             'stopOnFailure' => FALSE,
+            'syntaxCheck' => FALSE,
+            'testSuiteLoaderClass' => 'PHPUnit_Runner_StandardTestSuiteLoader'
           ),
           $this->configuration->getPHPUnitConfiguration()
         );

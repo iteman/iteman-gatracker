@@ -39,16 +39,14 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Error.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: Error.php 5156 2009-08-29 05:48:59Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.2.0
  */
 
-require_once 'PHPUnit/Util/Filter.php';
+require_once 'PHPUnit/Framework.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
-
-if (!class_exists('PHPUnit_Framework_Error', FALSE)) {
 
 /**
  * Wrapper for PHP errors.
@@ -58,7 +56,7 @@ if (!class_exists('PHPUnit_Framework_Error', FALSE)) {
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.16
+ * @version    Release: 3.4.3
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.2.0
  */
@@ -81,7 +79,5 @@ class PHPUnit_Framework_Error extends Exception
         $this->line  = $line;
         $this->trace = $trace;
     }
-}
-
 }
 ?>

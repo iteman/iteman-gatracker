@@ -40,7 +40,7 @@
  * @author     Shin Ohno <ganchiku@gmail.com>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: SeleniumTestCaseTest.php 4493 2009-01-17 16:28:59Z sb $
+ * @version    SVN: $Id: SeleniumTestCaseTest.php 5013 2009-07-18 08:49:39Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -56,7 +56,7 @@ require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
  * @author     Shin Ohno <ganchiku@gmail.com>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.16
+ * @version    Release: 3.4.3
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -66,33 +66,36 @@ class Extensions_SeleniumTestCaseTest extends PHPUnit_Extensions_SeleniumTestCas
 
     public function setUp()
     {
-        if (!isset($GLOBALS['PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_ENABLED']) ||
-            !$GLOBALS['PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_ENABLED']) {
+        if (!@fsockopen(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST, PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT, $errno, $errstr)) {
             $this->markTestSkipped(
-              'The Selenium tests are disabled.'
+              sprintf(
+                'Selenium RC not running on %s:%d.',
+                PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST,
+                PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT
+              )
             );
         }
 
         $this->url = sprintf(
           'http://%s:%d/selenium-server/tests/',
-          $GLOBALS['PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST'],
-          $GLOBALS['PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT']
+          PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST,
+          PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT
         );
 
-        $this->setHost($GLOBALS['PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST']);
-        $this->setPort((int)$GLOBALS['PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT']);
-        $this->setBrowser($GLOBALS['PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_BROWSER']);
+        $this->setHost(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST);
+        $this->setPort((int)PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT);
+        $this->setBrowser(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_BROWSER);
         $this->setBrowserUrl($this->url);
     }
 
     public function testOpen()
     {
         $this->open($this->url . 'html/test_open.html');
-        $this->assertEndsWith('html/test_open.html', $this->getLocation());
+        $this->assertStringEndsWith('html/test_open.html', $this->getLocation());
         $this->assertEquals('This is a test of the open command.', $this->getBodyText());
 
         $this->open($this->url . 'html/test_page.slow.html');
-        $this->assertEndsWith('html/test_page.slow.html', $this->getLocation());
+        $this->assertStringEndsWith('html/test_page.slow.html', $this->getLocation());
         $this->assertEquals('Slow Loading Page', $this->getTitle());
     }
 
@@ -261,23 +264,23 @@ class Extensions_SeleniumTestCaseTest extends PHPUnit_Extensions_SeleniumTestCas
         $this->click('popupPage');
         $this->waitForPopUp('myPopupWindow', 1000);
         $this->selectWindow('myPopupWindow');
-        $this->assertEndsWith('html/test_select_window_popup.html', $this->getLocation());
+        $this->assertStringEndsWith('html/test_select_window_popup.html', $this->getLocation());
         $this->assertEquals('Select Window Popup', $this->getTitle());
         $this->close();
         $this->selectWindow('null');
 
-        $this->assertEndsWith('html/test_select_window.html', $this->getLocation());
+        $this->assertStringEndsWith('html/test_select_window.html', $this->getLocation());
         $this->click('popupPage');
         $this->waitForPopUp('myNewWindow', 1000);
         $this->selectWindow('myNewWindow');
-        $this->assertEndsWith('html/test_select_window_popup.html', $this->getLocation());
+        $this->assertStringEndsWith('html/test_select_window_popup.html', $this->getLocation());
         $this->close();
         $this->selectWindow('null');
 
         $this->click('popupAnonymous');
         $this->waitForPopUp('anonymouspopup', 1000);
         $this->selectWindow('anonymouspopup');
-        $this->assertEndsWith('html/test_select_window_popup.html', $this->getLocation());
+        $this->assertStringEndsWith('html/test_select_window_popup.html', $this->getLocation());
         $this->click('closePage');
     }
 
@@ -418,7 +421,7 @@ class Extensions_SeleniumTestCaseTest extends PHPUnit_Extensions_SeleniumTestCas
     public function testRefresh()
     {
         $this->open($this->url . 'html/test_page.slow.html');
-        $this->assertEndsWith('html/test_page.slow.html', $this->getLocation());
+        $this->assertStringEndsWith('html/test_page.slow.html', $this->getLocation());
         $this->assertEquals('Slow Loading Page', $this->getTitle());
 
         $this->click('changeSpan');
@@ -649,11 +652,6 @@ class Extensions_SeleniumTestCaseTest extends PHPUnit_Extensions_SeleniumTestCas
         $this->assertTrue($this->isEditable('normal_select'));
         $this->assertFalse($this->isEditable('disabled_text'));
         $this->assertFalse($this->isEditable('disabled_select'));
-    }
-
-    protected function assertEndsWith($substring, $actual)
-    {
-        $this->assertRegExp('/' . preg_quote($substring, '/') . '$/', $actual);
     }
 }
 ?>

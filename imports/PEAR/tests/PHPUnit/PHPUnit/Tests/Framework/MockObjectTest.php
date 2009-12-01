@@ -39,13 +39,14 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: MockObjectTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: MockObjectTest.php 4599 2009-02-01 21:40:50Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
 
 require_once 'PHPUnit/Framework/TestCase.php';
 
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'AbstractMockTestClass.php';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'AnInterface.php';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'FunctionCallback.php';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'MethodCallback.php';
@@ -61,7 +62,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIREC
  * @author     Frank Kleine <mikey@stubbles.net>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.16
+ * @version    Release: 3.4.3
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -237,7 +238,8 @@ class Framework_MockObjectTest extends PHPUnit_Framework_TestCase
         $mock1 = $this->getMock('PartialMockTestClass');
         $mock2 = $this->getMock('PartialMockTestClass', array(), array(), '', FALSE);
 
-        $this->assertNotEquals(get_class($mock1), get_class($mock2));
+        $this->assertTrue($mock1->constructorCalled);
+        $this->assertFalse($mock2->constructorCalled);
     }
 
     public function testOriginalCloneSettingConsidered()
@@ -246,6 +248,13 @@ class Framework_MockObjectTest extends PHPUnit_Framework_TestCase
         $mock2 = $this->getMock('PartialMockTestClass', array(), array(), '', TRUE, FALSE);
 
         $this->assertNotEquals(get_class($mock1), get_class($mock2));
+    }
+
+    public function testGetMockForAbstractClass()
+    {
+        $mock = $this->getMock('AbstractMockTestClass');
+        $mock->expects($this->never())
+             ->method('doSomething');
     }
 }
 ?>

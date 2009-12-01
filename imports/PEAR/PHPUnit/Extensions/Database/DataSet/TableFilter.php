@@ -39,7 +39,7 @@
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: TableFilter.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: TableFilter.php 4594 2009-02-01 06:48:11Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -60,7 +60,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2009 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.16
+ * @version    Release: 3.4.3
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
@@ -73,10 +73,17 @@ class PHPUnit_Extensions_Database_DataSet_TableFilter extends PHPUnit_Extensions
      */
     protected $originalTable;
 
-    public function __construct(PHPUnit_Extensions_Database_DataSet_ITable $originalTable, Array $excludeColumns)
+    /**
+     * Creates a new table filter using the original table
+     *
+     * @param $originalTable PHPUnit_Extensions_Database_DataSet_ITable
+     * @param $excludeColumns Array @deprecated, use the set* methods instead.
+     */
+    public function __construct(PHPUnit_Extensions_Database_DataSet_ITable $originalTable, Array $excludeColumns = array())
     {
         $this->originalTable = $originalTable;
-        $this->setTableMetaData(new PHPUnit_Extensions_Database_DataSet_TableMetaDataFilter($originalTable->getTableMetaData(), $excludeColumns));
+        $this->setTableMetaData(new PHPUnit_Extensions_Database_DataSet_TableMetaDataFilter($originalTable->getTableMetaData()));
+        $this->addExcludeColumns($excludeColumns);
     }
 
     /**
@@ -102,6 +109,40 @@ class PHPUnit_Extensions_Database_DataSet_TableFilter extends PHPUnit_Extensions
         } else {
             throw new InvalidArgumentException("The given row ({$row}) and column ({$column}) do not exist in table {$this->getTableMetaData()->getTableName()}");
         }
+    }
+
+    /**
+     * Sets the columns to include in the table.
+     * @param Array $includeColumns
+     */
+    public function addIncludeColumns(Array $includeColumns)
+    {
+        $this->tableMetaData->addIncludeColumns($includeColumns);
+    }
+
+    /**
+     * Clears the included columns.
+     */
+    public function clearIncludeColumns()
+    {
+        $this->tableMetaData->clearIncludeColumns();
+    }
+
+    /**
+     * Sets the columns to exclude from the table.
+     * @param Array $excludeColumns
+     */
+    public function addExcludeColumns(Array $excludeColumns)
+    {
+        $this->tableMetaData->addExcludeColumns($excludeColumns);
+    }
+
+    /**
+     * Clears the included columns.
+     */
+    public function clearExcludeColumns()
+    {
+        $this->tableMetaData->clearExcludeColumns();
     }
 }
 ?>

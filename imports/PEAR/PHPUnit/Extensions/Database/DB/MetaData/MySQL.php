@@ -58,7 +58,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.16
+ * @version    Release: 3.4.3
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
@@ -98,7 +98,7 @@ class PHPUnit_Extensions_Database_DB_MetaData_MySQL extends PHPUnit_Extensions_D
      */
     public function getTableColumns($tableName)
     {
-        $query = 'SHOW COLUMNS FROM `' . $tableName . '`';
+        $query = 'SHOW COLUMNS FROM ' . $this->quoteSchemaObject($tableName);
         $statement = $this->pdo->prepare($query);
         $statement->execute();
 
@@ -119,7 +119,7 @@ class PHPUnit_Extensions_Database_DB_MetaData_MySQL extends PHPUnit_Extensions_D
      */
     public function getTablePrimaryKeys($tableName)
     {
-        $query = 'SHOW INDEX FROM `' . $tableName . '`';
+        $query = 'SHOW INDEX FROM ' . $this->quoteSchemaObject($tableName);
         $statement = $this->pdo->prepare($query);
         $statement->execute();
         $statement->setFetchMode(PDO::FETCH_ASSOC);

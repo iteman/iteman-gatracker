@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2007-2009 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: DescriptionOfBehaviourAndExpectationSpec.php 202 2008-12-21 10:56:28Z iteman $
+ * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 2.9.0
  * @since      File available since Release 2.0.0
  */
 
-if (!@include_once 'PHPSpec/Context.php') {
+if (!class_exists('PHPSpec_Context')) {
     return;
 }
 
@@ -45,9 +45,9 @@ if (!@include_once 'PHPSpec/Context.php') {
  * TestCase for the PHPSpec runner.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.2
+ * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 2.9.0
  * @since      Class available since Release 2.0.0
  */
 class Describe振舞やエクスペクテーションの説明 extends PHPSpec_Context
@@ -106,9 +106,9 @@ class Describe振舞やエクスペクテーションの説明 extends PHPSpec_C
  * TestCase for the PHPSpec runner.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.2
+ * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 2.9.0
  * @since      Class available since Release 2.0.0
  */
 class 日本語Spec extends PHPSpec_Context
@@ -167,9 +167,9 @@ class 日本語Spec extends PHPSpec_Context
  * TestCase for the PHPSpec runner.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.2
+ * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 2.9.0
  * @since      Class available since Release 2.0.0
  */
 class EnglishSpec extends PHPSpec_Context

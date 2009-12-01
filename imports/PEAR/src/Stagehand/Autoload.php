@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,28 +29,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_Autoload
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: Autoload.php 30 2008-11-25 14:00:48Z iteman $
+ * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 0.4.0
  * @since      File available since Release 0.1.0
  */
 
-namespace Stagehand;
+require_once 'Stagehand/Autoload/Exception.php';
+require_once 'Stagehand/Autoload/Loader.php';
 
-// {{{ Stagehand\Autoload
+// {{{ Stagehand_Autoload
 
 /**
- * A class loader for classes with Piece, Stagehand, and user-defined namespaces.
+ * A utility to register class loaders to the SPL autoload queue.
  *
  * @package    Stagehand_Autoload
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 0.1.0
+ * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 0.4.0
  * @since      File available since Release 0.1.0
  */
-class Autoload
+class Stagehand_Autoload
 {
 
+    // {{{ constants
+
+    const LOADER_LEGACY = 'Stagehand_Autoload_Loader_LegacyLoader';
+    const LOADER_NAMESPACE = 'Stagehand_Autoload_Loader_NamespaceLoader';
+
+    // }}}
     // {{{ properties
 
     /**#@+
@@ -69,7 +76,7 @@ class Autoload
      * @access private
      */
 
-    private static $_namespaces = array('Piece', 'Stagehand');
+    private static $cache = array();
 
     /**#@-*/
 
@@ -78,81 +85,104 @@ class Autoload
      */
 
     // }}}
-    // {{{ load()
+    // {{{ register()
 
     /**
-     * Loads an appropriate class.
-     *
+     * @param Stagehand_Autoload_Loader $loader
+     * @since Method available since Release 0.2.0
+     */
+    public static function register(Stagehand_Autoload_Loader $loader)
+    {
+        if (function_exists('__autoload')) {
+            spl_autoload_register('__autoload');
+        }
+
+        spl_autoload_register(array($loader, 'load'));
+    }
+
+    // }}}
+    // {{{ getLoader()
+
+    /**
      * @param string $class
+     * @return Stagehand_Autoload_Loader
+     * @throws Stagehand_Autoload_Exception
+     * @since Method available since Release 0.2.0
      */
-    public static function load($class)
+    public static function getLoader($class)
     {
-        do {
-            foreach (self::$_namespaces as $namespace) {
-                if (preg_match("/^$namespace\\\/", $class)) {
-                    break 2;
-                }
+        if (!class_exists($class, false)) {
+            $file = str_replace('_', '/', $class) . '.php';
+            include_once $file;
+            if (!class_exists($class, false)) {
+                throw new Stagehand_Autoload_Exception(
+                    'Class ' .
+                    $class .
+                    ' was not present in ' .
+                    $file .
+                    ', (include_path="' .
+                    get_include_path() .
+                    '")'
+                                                       );
             }
-
-            return false;
-        } while (false);
-
-        if (strpos($class, '.') !== false) {
-            return false;
         }
 
-        $file = str_replace('\\', '/', $class) . '.php';
-        $oldLevel = error_reporting();
-        error_reporting($oldLevel & ~E_WARNING);
-        $result = include $file;
-        error_reporting($oldLevel);
-        if ($result === false) {
-            return false;
+        if (array_key_exists($class, self::$cache)) {
+            return self::$cache[$class];
         }
 
-        if (!class_exists($class, false) && !interface_exists($class, false)) {
-            trigger_error("Class $class was not present in $file, (include_path=\"" . get_include_path() . '")',
-                          E_USER_WARNING
-                          );
-            return false;
-        }
-
-        return true;
+        self::$cache[$class] = new $class();
+        return self::$cache[$class];
     }
 
     // }}}
-    // {{{ addNamespace()
+    // {{{ getLegacyLoader()
 
     /**
-     * Adds a namespace to the targets for autoloading.
-     *
-     * @param string $namespace
+     * @return Stagehand_Autoload_Loader
+     * @since Method available since Release 0.3.0
+     * @deprecated Method deprecated in Release 0.4.0
      */
-    public static function addNamespace($namespace)
+    public static function getLegacyLoader()
     {
-        if (array_search($namespace, self::$_namespaces) !== false) {
-            return;
-        }
-
-        self::$_namespaces[] = $namespace;
+        return self::legacyLoader();
     }
 
     // }}}
-    // {{{ removeNamespace()
+    // {{{ legacyLoader()
 
     /**
-     * Removes a namespace from the targets for autoloading.
-     *
-     * @param string $namespace
+     * @return Stagehand_Autoload_Loader
+     * @since Method available since Release 0.4.0
      */
-    public static function removeNamespace($namespace)
+    public static function legacyLoader()
     {
-        $index = array_search($namespace, self::$_namespaces);
-        if ($index === false) {
-            return;
-        }
+        return self::getLoader(self::LOADER_LEGACY);
+    }
 
-        array_splice(self::$_namespaces, $index, 1);
+    // }}}
+    // {{{ getNamespaceLoader()
+
+    /**
+     * @return Stagehand_Autoload_Loader
+     * @since Method available since Release 0.3.0
+     * @deprecated Method deprecated in Release 0.4.0
+     */
+    public static function getNamespaceLoader()
+    {
+        return self::namespaceLoader();
+    }
+
+    // }}}
+    // {{{ namespaceLoader()
+
+    /**
+     * @return Stagehand_Autoload_Loader
+     * @since Method available since Release 0.4.0
+     */
+    public static function namespaceLoader()
+    {
+        return self::getLoader(self::LOADER_NAMESPACE);
     }
 
     /**#@-*/
@@ -173,39 +203,6 @@ class Autoload
 }
 
 // }}}
-
-// set up __autoload
-if (!($_____t = spl_autoload_functions())
-    || !in_array(array('Stagehand\Autoload', 'load'), spl_autoload_functions())
-    ) {
-    spl_autoload_register(array('Stagehand\Autoload', 'load'));
-    if (function_exists('__autoload') && ($_____t === false)) {
-
-        // __autoload() was being used, but now would be ignored, add
-        // it to the autoload stack
-        spl_autoload_register('__autoload');
-    }
-}
-
-unset($_____t);
-
-// set up include_path if it doesn't register our current location
-$____paths = explode(PATH_SEPARATOR, get_include_path());
-$____found = false;
-foreach ($____paths as $____path) {
-    if ($____path == dirname(dirname(__FILE__))) {
-        $____found = true;
-        break;
-    }
-}
-
-if (!$____found) {
-    set_include_path(get_include_path() . PATH_SEPARATOR . dirname(dirname(__FILE__)));
-}
-
-unset($____paths);
-unset($____path);
-unset($____found);
 
 /*
  * Local Variables:

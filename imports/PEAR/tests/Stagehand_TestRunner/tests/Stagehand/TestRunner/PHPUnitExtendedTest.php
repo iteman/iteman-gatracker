@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: PHPUnitExtendedTest.php 156 2008-05-05 03:50:10Z iteman $
+ * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 2.9.0
  * @since      File available since Release 2.2.0
  */
 
-if (!@include_once 'PHPUnit/Framework/TestCase.php') {
+if (!class_exists('PHPUnit_Framework_TestCase', false)) {
     return;
 }
 
@@ -47,9 +47,9 @@ require_once dirname(__FILE__) . '/PHPUnitCommon.php';
  * TestCase for the PHPUnit runner.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.2
+ * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 2.9.0
  * @since      Class available since Release 2.2.0
  */
 class Stagehand_TestRunner_PHPUnitExtendedTest extends Stagehand_TestRunner_PHPUnitCommon

@@ -13,6 +13,8 @@ PHPUnit_TextUI_Command::main();
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann.
 
+The --log-graphviz functionality is deprecated and will be removed in the future.
+
 ...strict digraph G {
     overlap=scale;
     splines=true;
@@ -30,6 +32,6 @@ PHPUnit %s by Sebastian Bergmann.
 }
 
 
-Time: %i seconds
+Time: %i %s
 
 OK (3 tests, 3 assertions)

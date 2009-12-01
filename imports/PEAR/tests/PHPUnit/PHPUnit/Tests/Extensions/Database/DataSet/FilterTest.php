@@ -39,7 +39,7 @@
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: FilterTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: FilterTest.php 4594 2009-02-01 06:48:11Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -55,7 +55,7 @@ require_once 'PHPUnit/Extensions/Database/Constraint/DataSetIsEqual.php';
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: FilterTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: FilterTest.php 4594 2009-02-01 06:48:11Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -70,7 +70,7 @@ class Extensions_Database_DataSet_FilterTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testFilteredDataSet()
+    public function testDeprecatedFilteredDataSetConstructor()
     {
         $constraint = new PHPUnit_Extensions_Database_Constraint_DataSetIsEqual($this->expectedDataSet);
         $dataSet = new PHPUnit_Extensions_Database_DataSet_FlatXmlDataSet(
@@ -80,8 +80,56 @@ class Extensions_Database_DataSet_FilterTest extends PHPUnit_Framework_TestCase
         $filteredDataSet = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($dataSet, array(
             'table1' => array('table1_id'),
             'table2' => '*',
-            'table3' => array('table3_id')
+            'table3' => 'table3_id'
         ));
+
+        self::assertThat($filteredDataSet, $constraint);
+    }
+
+    public function testExcludeFilteredDataSet()
+    {
+        $constraint = new PHPUnit_Extensions_Database_Constraint_DataSetIsEqual($this->expectedDataSet);
+        $dataSet = new PHPUnit_Extensions_Database_DataSet_FlatXmlDataSet(
+            dirname(__FILE__).'/../_files/XmlDataSets/FilteredTestComparison.xml'
+        );
+
+        $filteredDataSet = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($dataSet);
+
+        $filteredDataSet->addExcludeTables(array('table2'));
+        $filteredDataSet->setExcludeColumnsForTable('table1', array('table1_id'));
+        $filteredDataSet->setExcludeColumnsForTable('table3', array('table3_id'));
+
+        self::assertThat($filteredDataSet, $constraint);
+    }
+
+    public function testIncludeFilteredDataSet()
+    {
+        $constraint = new PHPUnit_Extensions_Database_Constraint_DataSetIsEqual($this->expectedDataSet);
+        $dataSet = new PHPUnit_Extensions_Database_DataSet_FlatXmlDataSet(
+            dirname(__FILE__).'/../_files/XmlDataSets/FilteredTestComparison.xml'
+        );
+
+        $filteredDataSet = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($dataSet);
+
+        $filteredDataSet->addIncludeTables(array('table1', 'table3'));
+        $filteredDataSet->setIncludeColumnsForTable('table1', array('column1', 'column2', 'column3', 'column4'));
+        $filteredDataSet->setIncludeColumnsForTable('table3', array('column9', 'column10', 'column11', 'column12'));
+
+        self::assertThat($filteredDataSet, $constraint);
+    }
+
+    public function testIncludeExcludeMixedDataSet()
+    {
+        $constraint = new PHPUnit_Extensions_Database_Constraint_DataSetIsEqual($this->expectedDataSet);
+        $dataSet = new PHPUnit_Extensions_Database_DataSet_FlatXmlDataSet(
+            dirname(__FILE__).'/../_files/XmlDataSets/FilteredTestComparison.xml'
+        );
+
+        $filteredDataSet = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($dataSet);
+
+        $filteredDataSet->addIncludeTables(array('table1', 'table3'));
+        $filteredDataSet->setExcludeColumnsForTable('table1', array('table1_id'));
+        $filteredDataSet->setIncludeColumnsForTable('table3', array('column9', 'column10', 'column11', 'column12'));
 
         self::assertThat($filteredDataSet, $constraint);
     }

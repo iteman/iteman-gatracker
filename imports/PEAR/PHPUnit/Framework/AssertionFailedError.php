@@ -39,17 +39,14 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: AssertionFailedError.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: AssertionFailedError.php 5156 2009-08-29 05:48:59Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
 
 require_once 'PHPUnit/Framework.php';
-require_once 'PHPUnit/Util/Filter.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
-
-if (!class_exists('PHPUnit_Framework_AssertionFailedError', FALSE)) {
 
 /**
  * Thrown when an assertion failed.
@@ -59,34 +56,12 @@ if (!class_exists('PHPUnit_Framework_AssertionFailedError', FALSE)) {
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.16
+ * @version    Release: 3.4.3
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
 class PHPUnit_Framework_AssertionFailedError extends Exception implements PHPUnit_Framework_SelfDescribing
 {
-    /**
-     * Returns the location where this failure occured.
-     *
-     * @return array
-     * @since  Method available since Release 3.0.0
-     */
-    public function getLocation()
-    {
-        foreach ($this->getTrace() as $frame) {
-            if (!isset($frame['line'])) {
-                break;
-            }
-
-            $result = array(
-              'file' => $frame['file'],
-              'line' => $frame['line']
-            );
-        }
-
-        return $result;
-    }
-
     /**
      * Wrapper for getMessage() which is declared as final.
      *
@@ -96,7 +71,5 @@ class PHPUnit_Framework_AssertionFailedError extends Exception implements PHPUni
     {
         return $this->getMessage();
     }
-}
-
 }
 ?>

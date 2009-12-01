@@ -30,21 +30,23 @@
  *
  * @package    Stagehand_LegacyError
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    GIT: $Id: TestRunner.php 204 2009-12-22 16:44:30Z iteman $
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 0.3.1
  * @since      File available since Release 0.1.0
  */
+
+require_once 'PEAR.php';
 
 // {{{ Stagehand_LegacyError_PEARError
 
 /**
  * @package    Stagehand_LegacyError
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: @package_version@
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 0.3.1
  * @since      Class available since Release 0.1.0
  */
-class Stagehand_LegacyError_PEARError implements Stagehand_LegacyError_Interface
+class Stagehand_LegacyError_PEARError
 {
 
     // {{{ properties
@@ -76,9 +78,9 @@ class Stagehand_LegacyError_PEARError implements Stagehand_LegacyError_Interface
 
     /**
      * @param PEAR_Error $error
-     * @throws Stagehand_LegacyError_PEARError_Exception
+     * @throws Stagehand_LegacyError_Exception
      */
-    public static function toException($error)
+    public static function toException(PEAR_Error $error)
     {
         throw new Stagehand_LegacyError_PEARError_Exception($error);
     }
@@ -90,9 +92,11 @@ class Stagehand_LegacyError_PEARError implements Stagehand_LegacyError_Interface
      */
     public static function enableConversion()
     {
+        $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
         PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK,
                                       array(__CLASS__, 'toException')
                                       );
+        error_reporting($oldErrorReportingLevel);
     }
 
     // }}}
@@ -102,7 +106,9 @@ class Stagehand_LegacyError_PEARError implements Stagehand_LegacyError_Interface
      */
     public static function disableConversion()
     {
+        $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
         PEAR::staticPopErrorHandling();
+        error_reporting($oldErrorReportingLevel);
     }
 
     /**#@-*/

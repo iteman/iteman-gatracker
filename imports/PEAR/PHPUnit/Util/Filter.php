@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Filter.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: Filter.php 5320 2009-11-13 07:02:49Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -54,7 +54,7 @@ require_once 'PHPUnit/Util/FilterIterator.php';
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.16
+ * @version    Release: 3.4.3
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -106,17 +106,20 @@ class PHPUnit_Util_Filter
      * @param  string $directory
      * @param  string $suffix
      * @param  string $group
+     * @param  string $prefix
      * @throws RuntimeException
      * @since  Method available since Release 3.1.5
      */
-    public static function addDirectoryToFilter($directory, $suffix = '.php', $group = 'DEFAULT')
+    public static function addDirectoryToFilter($directory, $suffix = '.php', $group = 'DEFAULT', $prefix = '')
     {
         if (file_exists($directory)) {
-            foreach (self::getIterator($directory, $suffix) as $file) {
+            foreach (self::getIterator($directory, $suffix, $prefix) as $file) {
                 self::addFileToFilter($file->getPathName(), $group);
             }
         } else {
-            throw new RuntimeException($directory . ' does not exist');
+            throw new PHPUnit_Framework_Exception(
+              $directory . ' does not exist'
+            );
         }
     }
 
@@ -141,7 +144,9 @@ class PHPUnit_Util_Filter
                 self::$blacklistedFiles[$group][] = $filename;
             }
         } else {
-            throw new RuntimeException($filename . ' does not exist');
+            throw new PHPUnit_Framework_Exception(
+              $filename . ' does not exist'
+            );
         }
     }
 
@@ -151,17 +156,20 @@ class PHPUnit_Util_Filter
      * @param  string $directory
      * @param  string $suffix
      * @param  string $group
+     * @param  string $prefix
      * @throws RuntimeException
      * @since  Method available since Release 3.1.5
      */
-    public static function removeDirectoryFromFilter($directory, $suffix = '.php', $group = 'DEFAULT')
+    public static function removeDirectoryFromFilter($directory, $suffix = '.php', $group = 'DEFAULT', $prefix = '')
     {
         if (file_exists($directory)) {
-            foreach (self::getIterator($directory, $suffix) as $file) {
+            foreach (self::getIterator($directory, $suffix, $prefix) as $file) {
                 self::removeFileFromFilter($file->getPathName(), $group);
             }
         } else {
-            throw new RuntimeException($directory . ' does not exist');
+            throw new PHPUnit_Framework_Exception(
+              $directory . ' does not exist'
+            );
         }
     }
 
@@ -186,7 +194,9 @@ class PHPUnit_Util_Filter
                 }
             }
         } else {
-            throw new RuntimeException($filename . ' does not exist');
+            throw new PHPUnit_Framework_Exception(
+              $filename . ' does not exist'
+            );
         }
     }
 
@@ -195,17 +205,20 @@ class PHPUnit_Util_Filter
      *
      * @param  string $directory
      * @param  string $suffix
+     * @param  string $prefix
      * @throws RuntimeException
      * @since  Method available since Release 3.1.5
      */
-    public static function addDirectoryToWhitelist($directory, $suffix = '.php')
+    public static function addDirectoryToWhitelist($directory, $suffix = '.php', $prefix = '')
     {
         if (file_exists($directory)) {
-            foreach (self::getIterator($directory, $suffix) as $file) {
+            foreach (self::getIterator($directory, $suffix, $prefix) as $file) {
                 self::addFileToWhitelist($file->getPathName());
             }
         } else {
-            throw new RuntimeException($directory . ' does not exist');
+            throw new PHPUnit_Framework_Exception(
+              $directory . ' does not exist'
+            );
         }
     }
 
@@ -228,7 +241,9 @@ class PHPUnit_Util_Filter
                 self::$whitelistedFiles[] = $filename;
             }
         } else {
-            throw new RuntimeException($filename . ' does not exist');
+            throw new PHPUnit_Framework_Exception(
+              $filename . ' does not exist'
+            );
         }
     }
 
@@ -237,17 +252,20 @@ class PHPUnit_Util_Filter
      *
      * @param  string $directory
      * @param  string $suffix
+     * @param  string $prefix
      * @throws RuntimeException
      * @since  Method available since Release 3.1.5
      */
-    public static function removeDirectoryFromWhitelist($directory, $suffix = '.php')
+    public static function removeDirectoryFromWhitelist($directory, $suffix = '.php', $prefix = '')
     {
         if (file_exists($directory)) {
-            foreach (self::getIterator($directory, $suffix) as $file) {
+            foreach (self::getIterator($directory, $suffix, $prefix) as $file) {
                 self::removeFileFromWhitelist($file->getPathName());
             }
         } else {
-            throw new RuntimeException($directory . ' does not exist');
+            throw new PHPUnit_Framework_Exception(
+              $directory . ' does not exist'
+            );
         }
     }
 
@@ -269,7 +287,9 @@ class PHPUnit_Util_Filter
                 }
             }
         } else {
-            throw new RuntimeException($filename . ' does not exist');
+            throw new PHPUnit_Framework_Exception(
+              $filename . ' does not exist'
+            );
         }
     }
 
@@ -328,37 +348,46 @@ class PHPUnit_Util_Filter
 
             foreach ($codeCoverageInformation as $k => $test) {
                 foreach (array_keys($test['files']) as $file) {
-                    if ($isFilteredCache[$file]) {
+                    if (isset($isFilteredCache[$file]) &&
+                        $isFilteredCache[$file]) {
                         unset($codeCoverageInformation[$k]['files'][$file]);
                     }
                 }
 
                 foreach (array_keys($test['dead']) as $file) {
-                    if ($isFilteredCache[$file]) {
+                    if (isset($isFilteredCache[$file]) &&
+                        $isFilteredCache[$file]) {
                         unset($codeCoverageInformation[$k]['dead'][$file]);
                     }
                 }
 
                 foreach (array_keys($test['executable']) as $file) {
-                    if ($isFilteredCache[$file]) {
-                        unset($codeCoverageInformation[$k]['executable'][$file]);
+                    if (isset($isFilteredCache[$file]) &&
+                        $isFilteredCache[$file]) {
+                        unset(
+                          $codeCoverageInformation[$k]['executable'][$file]
+                        );
                     }
                 }
             }
 
             if (self::$addUncoveredFilesFromWhitelist) {
                 foreach (self::$whitelistedFiles as $whitelistedFile) {
-                    if (!isset(self::$coveredFiles[$whitelistedFile])) {
+                    if (!isset(self::$coveredFiles[$whitelistedFile]) &&
+                        !self::isFiltered($whitelistedFile, $filterTests, TRUE)) {
                         if (file_exists($whitelistedFile)) {
-                            xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
+                            xdebug_start_code_coverage(
+                              XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE
+                            );
                             include_once $whitelistedFile;
                             $coverage = xdebug_get_code_coverage();
                             xdebug_stop_code_coverage();
 
-                            foreach ($coverage as $file => $fileCoverage)
-                            {
-                                if (!in_array($file, self::$whitelistedFiles) || isset(self::$coveredFiles[$file]))
+                            foreach ($coverage as $file => $fileCoverage) {
+                                if (!in_array($file, self::$whitelistedFiles) ||
+                                    isset(self::$coveredFiles[$file])) {
                                     continue;
+                                }
 
                                 foreach ($fileCoverage as $line => $flag) {
                                     if ($flag > 0) {
@@ -409,7 +438,9 @@ class PHPUnit_Util_Filter
         }
 
         foreach ($eTrace as $frame) {
-            if (!self::$filter || (isset($frame['file']) && !self::isFiltered($frame['file'], $filterTests, TRUE))) {
+            if (!self::$filter || (isset($frame['file']) &&
+                is_file($frame['file']) &&
+                !self::isFiltered($frame['file'], $filterTests, TRUE))) {
                 if ($asString === TRUE) {
                     $filteredStacktrace .= sprintf(
                       "%s:%s\n",
@@ -438,27 +469,29 @@ class PHPUnit_Util_Filter
         if (is_bool($filter)) {
             self::$filter = $filter;
         } else {
-            throw new InvalidArgumentException;
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'boolean');
         }
     }
 
     /**
      * Returns a PHPUnit_Util_FilterIterator that iterates
      * over all files in the given directory that have the
-     * given suffix.
+     * given suffix and prefix.
      *
      * @param  string $directory
      * @param  string $suffix
+     * @param  string $prefix
      * @return Iterator
      * @since  Method available since Release 3.1.5
      */
-    protected static function getIterator($directory, $suffix)
+    protected static function getIterator($directory, $suffix, $prefix)
     {
         return new PHPUnit_Util_FilterIterator(
           new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($directory)
           ),
-          $suffix
+          $suffix,
+          $prefix
         );
     }
 
@@ -473,46 +506,29 @@ class PHPUnit_Util_Filter
     {
         $filename = realpath($filename);
 
-        // Use blacklist.
-        if ($ignoreWhitelist || empty(self::$whitelistedFiles)) {
-            $blacklistedFiles = self::$blacklistedFiles['DEFAULT'];
-
-            if ($filterTests) {
-                $blacklistedFiles = array_merge(
-                  $blacklistedFiles,
-                  self::$blacklistedFiles['TESTS']
-                );
-            }
-
-            if (self::$filterPHPUnit) {
-                $blacklistedFiles = array_merge(
-                  $blacklistedFiles,
-                  self::$blacklistedFiles['PHPUNIT']
-                );
-            }
-
-            if (in_array($filename, $blacklistedFiles)) {
-                return TRUE;
-            }
-
-            foreach ($blacklistedFiles as $filteredFile) {
-                if (strpos($filename, $filteredFile) !== FALSE) {
-                    return TRUE;
-                }
-            }
-
-            return FALSE;
+        if (!$ignoreWhitelist && !empty(self::$whitelistedFiles)) {
+            return !in_array($filename, self::$whitelistedFiles);
         }
 
-        // Use whitelist.
-        else
-        {
-            if (in_array($filename, self::$whitelistedFiles)) {
-                return FALSE;
-            }
+        $blacklistedFiles = self::$blacklistedFiles['DEFAULT'];
 
+        if ($filterTests) {
+            $blacklistedFiles = array_merge(
+              $blacklistedFiles, self::$blacklistedFiles['TESTS']
+            );
+        }
+
+        if (self::$filterPHPUnit) {
+            $blacklistedFiles = array_merge(
+              $blacklistedFiles, self::$blacklistedFiles['PHPUNIT']
+            );
+        }
+
+        if (in_array($filename, $blacklistedFiles)) {
             return TRUE;
         }
+
+        return FALSE;
     }
 
     /**
@@ -538,6 +554,17 @@ class PHPUnit_Util_Filter
     }
 
     /**
+     * Returns the list of blacklisted files.
+     *
+     * @return array
+     * @since  Method available since Release 3.4.3
+     */
+    public static function getBlacklistedFiles()
+    {
+        return self::$blacklistedFiles;
+    }
+
+    /**
      * @param  array  $trace
      * @param  string $file
      * @param  int    $line
@@ -552,7 +579,7 @@ class PHPUnit_Util_Filter
                 return TRUE;
             }
         }
-        
+
         return FALSE;
     }
 }

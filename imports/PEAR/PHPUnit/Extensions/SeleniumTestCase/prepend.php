@@ -39,10 +39,12 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: prepend.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: prepend.php 4568 2009-01-27 12:40:55Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.10
  */
+
+$GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'] = FALSE;
 
 if ( isset($_COOKIE['PHPUNIT_SELENIUM_TEST_ID']) &&
     !isset($_GET['PHPUNIT_SELENIUM_TEST_ID']) &&

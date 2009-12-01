@@ -30,8 +30,8 @@
  *
  * @package    Stagehand_LegacyError
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    GIT: $Id: TestRunner.php 204 2009-12-22 16:44:30Z iteman $
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 0.3.1
  * @since      File available since Release 0.1.0
  */
 
@@ -40,11 +40,11 @@
 /**
  * @package    Stagehand_LegacyError
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: @package_version@
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 0.3.1
  * @since      Class available since Release 0.1.0
  */
-class Stagehand_LegacyError_PEARError_Exception extends Stagehand_LegacyError_Exception
+class Stagehand_LegacyError_PEARError_Exception extends Exception implements Stagehand_LegacyError_Exception
 {
 
     // {{{ properties
@@ -79,11 +79,19 @@ class Stagehand_LegacyError_PEARError_Exception extends Stagehand_LegacyError_Ex
      */
     public function __construct(PEAR_Error $error)
     {
-        parent::__construct('Type: ' . get_class($error) .
-                            ' Message: ' . $error->getMessage() .
-                            ' UserInfo: ' . $error->getUserInfo(),
-                            $error->getCode()
-                            );
+        $message = $error->getMessage();
+        $userInfo = $error->getUserInfo();
+        if (!is_null($userInfo)) {
+            $message .= ', ' . $userInfo;
+        }
+
+        parent::__construct($message);
+
+        $backtrace = $error->getBacktrace();
+        if (is_array($backtrace)) {
+            $this->file = $backtrace[1]['file'];
+            $this->line = $backtrace[1]['line'];
+        }
     }
 
     /**#@-*/

@@ -30,23 +30,26 @@
  *
  * @package    Stagehand_LegacyError
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    GIT: $Id: TestRunner.php 204 2009-12-22 16:44:30Z iteman $
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 0.3.1
  * @since      File available since Release 0.1.0
  */
 
+$Stagehand_LegacyError_PEARErrorStack_oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
 require_once 'PEAR/ErrorStack.php';
+error_reporting($Stagehand_LegacyError_PEARErrorStack_oldErrorReportingLevel);
+unset($Stagehand_LegacyError_PEARErrorStack_oldErrorReportingLevel);
 
 // {{{ Stagehand_LegacyError_PEARErrorStack
 
 /**
  * @package    Stagehand_LegacyError
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: @package_version@
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 0.3.1
  * @since      Class available since Release 0.1.0
  */
-class Stagehand_LegacyError_PEARErrorStack implements Stagehand_LegacyError_Interface
+class Stagehand_LegacyError_PEARErrorStack
 {
 
     // {{{ properties
@@ -67,7 +70,7 @@ class Stagehand_LegacyError_PEARErrorStack implements Stagehand_LegacyError_Inte
      * @access private
      */
 
-    private static $_oldCallback;
+    private static $oldCallback;
 
     /**#@-*/
 
@@ -80,9 +83,9 @@ class Stagehand_LegacyError_PEARErrorStack implements Stagehand_LegacyError_Inte
 
     /**
      * @param array $error
-     * @throws Stagehand_LegacyError_PEARErrorStack_Exception
+     * @throws Stagehand_LegacyError_Exceptionxion
      */
-    public static function toException($error)
+    public static function toException(array $error)
     {
         throw new Stagehand_LegacyError_PEARErrorStack_Exception($error);
     }
@@ -94,7 +97,7 @@ class Stagehand_LegacyError_PEARErrorStack implements Stagehand_LegacyError_Inte
      */
     public static function enableConversion()
     {
-        self::$_oldCallback = $GLOBALS['_PEAR_ERRORSTACK_DEFAULT_CALLBACK']['*'];
+        self::$oldCallback = $GLOBALS['_PEAR_ERRORSTACK_DEFAULT_CALLBACK']['*'];
         $GLOBALS['_PEAR_ERRORSTACK_DEFAULT_CALLBACK']['*'] =
             array(__CLASS__, 'toException');
     }
@@ -106,7 +109,7 @@ class Stagehand_LegacyError_PEARErrorStack implements Stagehand_LegacyError_Inte
      */
     public static function disableConversion()
     {
-        $GLOBALS['_PEAR_ERRORSTACK_DEFAULT_CALLBACK']['*'] = self::$_oldCallback;
+        $GLOBALS['_PEAR_ERRORSTACK_DEFAULT_CALLBACK']['*'] = self::$oldCallback;
     }
 
     /**#@-*/

@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,22 +29,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_CLIController
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: TestRunner.php 204 2008-12-22 16:44:30Z iteman $
+ * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 0.1.1
  * @since      File available since Release 0.1.0
  */
 
 require_once 'Console/Getopt.php';
-require_once 'PEAR.php';
 
 // {{{ Stagehand_CLIController
 
 /**
  * @package    Stagehand_CLIController
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: @package_version@
+ * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 0.1.1
  * @since      Class available since Release 0.1.0
  */
 abstract class Stagehand_CLIController
@@ -88,13 +87,17 @@ abstract class Stagehand_CLIController
     public function run()
     {
         if (!array_key_exists('argv', $_SERVER)) {
-            echo "ERROR: either use the CLI php executable, or set register_argc_argv=On in php.ini.\n";;
+            echo "ERROR: either use the CLI php executable, or set register_argc_argv=On in php.ini\n";;
             return 1;
         }
 
         try {
-            list($options, $args) = $this->_parseOptions();
-            $this->_configure($options, $args);
+            list($options, $args) = $this->parseOptions();
+            $continues = $this->configure($options, $args);
+            if (!$continues) {
+                return 0;
+            }
+
             $this->doRun();
         } catch (Exception $e) {
             if (!$e instanceof $this->exceptionClass) {
@@ -115,23 +118,23 @@ abstract class Stagehand_CLIController
      */
 
     // }}}
-    // {{{ doConfigureByOption()
+    // {{{ configureByOption()
 
     /**
      * @param string $option
      * @param string $value
      * @return boolean
      */
-    abstract protected function doConfigureByOption($option, $value);
+    abstract protected function configureByOption($option, $value);
 
     // }}}
-    // {{{ doConfigureByArg()
+    // {{{ configureByArg()
 
     /**
      * @param string $arg
      * @return boolean
      */
-    abstract protected function doConfigureByArg($arg);
+    abstract protected function configureByArg($arg);
 
     // }}}
     // {{{ doRun()
@@ -140,74 +143,71 @@ abstract class Stagehand_CLIController
      */
     abstract protected function doRun();
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
     // }}}
-    // {{{ _parseOptions()
+    // {{{ parseOptions()
 
     /**
      * Parses the command line options.
      *
      * @return array
      */
-    private function _parseOptions()
+    protected function parseOptions()
     {
+        Stagehand_LegacyError_PEARError::enableConversion();
         $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
-
-        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $argv = Console_Getopt::readPHPArgv();
-        PEAR::staticPopErrorHandling();
-        if (PEAR::isError($argv)) {
+        try {
+            $argv = Console_Getopt::readPHPArgv();
+            array_shift($argv);
+            $parsedOptions = Console_Getopt::getopt2($argv, $this->shortOptions, $this->longOptions);
+        } catch (Stagehand_LegacyError_PEARError_Exception $e) {
             error_reporting($oldErrorReportingLevel);
-            throw new $this->exceptionClass(preg_replace('/^Console_Getopt: /', '', $argv->getMessage()));
-        }
-
-        array_shift($argv);
-        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $parsedOptions = Console_Getopt::getopt2($argv,
-                                                 $this->shortOptions,
-                                                 $this->longOptions
-                                                 );
-        PEAR::staticPopErrorHandling();
-        if (PEAR::isError($parsedOptions)) {
+            Stagehand_LegacyError_PEARError::disableConversion();
+            throw new $this->exceptionClass(preg_replace('/^Console_Getopt: /', '', $e->getMessage()));
+        } catch (Exception $e) {
             error_reporting($oldErrorReportingLevel);
-            throw new $this->exceptionClass(preg_replace('/^Console_Getopt: /', '', $parsedOptions->getMessage()));
+            Stagehand_LegacyError_PEARError::disableConversion();
+            throw $e;
         }
-
         error_reporting($oldErrorReportingLevel);
+        Stagehand_LegacyError_PEARError::disableConversion();
 
         return $parsedOptions;
     }
 
     // }}}
-    // {{{ _configure()
+    // {{{ configure()
 
     /**
      * Configures the current process by the command line options and arguments.
      *
      * @param array $options
      * @param array $args
+     * @return boolean
      */
-    private function _configure($options, $args)
+    protected function configure(array $options, array $args)
     {
         foreach ($options as $option) {
-            $doContinue = $this->doConfigureByOption($option[0], @$option[1]);
-            if (!$doContinue) {
-                return;
+            $continues = $this->configureByOption($option[0], @$option[1]);
+            if (!$continues) {
+                return false;
             }
         }
 
         foreach ($args as $arg) {
-            $doContinue = $this->doConfigureByArg($arg);
-            if (!$doContinue) {
-                return;
+            $continues = $this->configureByArg($arg);
+            if (!$continues) {
+                return false;
             }
         }
+
+        return true;
     }
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
 
     /**#@-*/
 

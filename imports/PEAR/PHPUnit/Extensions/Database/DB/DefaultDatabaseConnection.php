@@ -47,6 +47,7 @@
 require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/Util/Filter.php';
 
+require_once 'PHPUnit/Extensions/Database/DataSet/QueryTable.php';
 require_once 'PHPUnit/Extensions/Database/DB/IDatabaseConnection.php';
 require_once 'PHPUnit/Extensions/Database/DB/MetaData.php';
 require_once 'PHPUnit/Extensions/Database/DB/ResultSetTable.php';
@@ -63,7 +64,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2009 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.16
+ * @version    Release: 3.4.3
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
@@ -190,7 +191,7 @@ class PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection implements PHPUni
      */
     public function getRowCount($tableName, $whereClause = NULL)
     {
-        $query = "SELECT COUNT(*) FROM {$tableName}";
+        $query = "SELECT COUNT(*) FROM ".$this->quoteSchemaObject($tableName);
 
         if (isset($whereClause)) {
             $query .= " WHERE {$whereClause}";

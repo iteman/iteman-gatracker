@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2007-2009 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2007-2009 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,16 +29,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2009 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: TestRunner.php 210 2009-01-27 12:42:15Z iteman $
+ * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 2.9.0
  * @since      File available since Release 0.5.0
  */
-
-require_once 'Console/Getopt.php';
-require_once 'Stagehand/TestRunner/AlterationMonitor.php';
-require_once 'Stagehand/TestRunner/Exception.php';
-require_once 'PEAR.php';
 
 // {{{ Stagehand_TestRunner
 
@@ -46,12 +41,12 @@ require_once 'PEAR.php';
  * A testrunner script to run tests automatically.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2009 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    Release: 2.6.2
+ * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 2.9.0
  * @since      Class available since Release 0.5.0
  */
-class Stagehand_TestRunner
+class Stagehand_TestRunner extends Stagehand_CLIController
 {
 
     // {{{ properties
@@ -66,14 +61,17 @@ class Stagehand_TestRunner
      * @access protected
      */
 
+    protected $exceptionClass = 'Stagehand_TestRunner_Exception';
+    protected $shortOptions = 'hVRcp:aw:gm:v';
+    protected $longOptions = array('growl-password=', 'log-junit=', 'classes=');
+    protected $testRunnerName;
+    protected $config;
+
     /**#@-*/
 
     /**#@+
      * @access private
      */
-
-    private $_testRunnerName;
-    private $_config;
 
     /**#@-*/
 
@@ -89,42 +87,8 @@ class Stagehand_TestRunner
      */
     public function __construct($testRunnerName)
     {
-        $this->_testRunnerName = $testRunnerName;
-    }
-
-    // }}}
-    // {{{ run()
-
-    /**
-     * Runs tests automatically.
-     *
-     * @return integer
-     */
-    public function run()
-    {
-        if (!array_key_exists('argv', $_SERVER)) {
-            echo "ERROR: either use the CLI php executable, or set register_argc_argv=On in php.ini.\n";;
-            return 1;
-        }
-
-        try {
-            $this->_config = $this->_loadConfiguration();
-            if (is_null($this->_config)) {
-                return 1;
-            }
-
-            if (!$this->_config->enableAutotest) {
-                $this->_runTests();
-            } else {
-                $this->_monitorAlteration();
-            }
-        } catch (Stagehand_TestRunner_Exception $e) {
-            echo 'ERROR: ' . $e->getMessage() . "\n";
-            $this->_displayUsage();
-            return 1;
-        }
-
-        return 0;
+        $this->testRunnerName = $testRunnerName;
+        $this->config = new Stagehand_TestRunner_Config();
     }
 
     /**#@-*/
@@ -133,86 +97,206 @@ class Stagehand_TestRunner
      * @access protected
      */
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
     // }}}
-    // {{{ _displayUsage()
+    // {{{ configureByOption()
 
     /**
-     * Displays the usage.
+     * @param string $option
+     * @param string $value
+     * @return boolean
      */
-    private function _displayUsage()
+    protected function configureByOption($option, $value)
     {
-        echo "Usage: {$_SERVER['SCRIPT_NAME']} [options] [directory or file]
+        switch ($option) {
+        case 'h':
+            $this->printUsage();
+            return false;
+        case 'V':
+            $this->printVersion();
+            return false;
+        case 'R':
+            $this->config->recursivelyScans = true;
+            return true;
+        case 'c':
+            if (@include_once 'Console/Color.php') {
+                $this->config->colors = true;
+            }
+            return true;
+        case 'p':
+            $this->config->preloadFile = $value;
+            return true;
+        case 'a':
+            $this->config->enablesAutotest = true;
+            return true;
+        case 'w':
+            $this->config->monitoredDirectories = explode(',', $value);
+            return true;
+        case 'g':
+            if (@include_once 'Net/Growl.php') {
+                $usesGrowl = true;
+            }
+            return true;
+        case '--growl-password':
+            $this->config->growlPassword = $value;
+            return true;
+        case 'm':
+            foreach (explode(',', $value) as $methodToBeTested) {
+                $this->config->addMethodToBeTested($methodToBeTested);
+            }
+            return true;
+        case '--classes':
+            foreach (explode(',', $value) as $classToBeTested) {
+                $this->config->addClassToBeTested($classToBeTested);
+            }
+            return true;
+        case '--log-junit':
+            $this->config->junitLogFile = $value;
+            return true;
+        case 'v':
+            $this->config->printsDetailedProgressReport = true;
+            return true;
+        }
+    }
 
-Options:
-  -h                              display this help and exit
-  -V                              display version information and exit
-  -R                              run tests recursively
-  -c                              color the result of a test runner run
-  -p <file>                       preload <file> as a PHP script
-  -a                              watch for changes in one or more directories
-                                  and run tests in the test directory
-                                  recursively when changes are detected
-                                  (autotest)
-  -w <directory1,directory2,...>  specify one or more directories to be watched
-                                  for changes
-  -g                              notify test results to Growl
-      --growl-password=<password> specify <password> for Growl
-  -v                              display detailed progress report (PHPUnit only)
+    // }}}
+    // {{{ configureByArg()
 
-With no [directory or file], run all tests in the current directory.
+    /**
+     * @param string $arg
+     * @return boolean
+     */
+    protected function configureByArg($arg)
+    {
+        $this->config->targetPaths[] = $arg;
+        return true;
+    }
+
+    // }}}
+    // {{{ doRun()
+
+    /**
+     */
+    protected function doRun()
+    {
+        if (!$this->config->enablesAutotest) {
+            $this->runTests();
+        } else {
+            $this->monitorAlteration();
+        }
+    }
+
+    // }}}
+    // {{{ printUsage()
+
+    /**
+     * Prints the usage.
+     */
+    protected function printUsage()
+    {
+        echo "USAGE
+  {$_SERVER['SCRIPT_NAME']} [OPTIONS] DIRECTORY_OR_FILE1 DIRECTORY_OR_FILE2 ...
+
+NOTES
+  If no directories and files are given, {$_SERVER['SCRIPT_NAME']} runs all the tests
+  in the current directory.
+
+OPTIONS
+
+  -h
+     Prints this help and exit.
+
+  -V
+     Prints version information and exit.
+
+  -R
+     Recursively runs tests in the specified directory.
+
+  -c
+     Colors test results.
+
+  -p FILE
+     Preloads FILE before running tests.
+
+  -a
+     Monitors for changes in the specified directories and run tests when
+     changes are detected.
+
+  -w DIRECTORY1,DIRECTORY2,...
+     Specifies one or more directories to be monitored for changes.
+
+  -g
+     Notifies test results to Growl.
+
+  --growl-password=PASSWORD
+     Specifies PASSWORD for Growl.
+
+  -m METHOD1,METHOD2,...
+     Runs only the specified tests in the specified file. (PHPUnit only)
+
+  --classes=CLASS1,CLASS2,...
+     Runs only the specified test classes in the specified file. (PHPUnit only)
+
+  --log-junit=FILE
+     Logs test results into the specified file in JUnit XML format.
+     (PHPUnit and PHPT)
+
+  -v
+     Prints detailed progress report. (PHPUnit and PHPT)
 ";
     }
 
     // }}}
-    // {{{ _displayVersion()
+    // {{{ printVersion()
 
     /**
-     * Displays the version.
+     * Prints the version.
      */
-    private function _displayVersion()
+    protected function printVersion()
     {
-        echo "Stagehand_TestRunner 2.6.2 ({$this->_testRunnerName})
+        echo "Stagehand_TestRunner 2.9.0 ({$this->testRunnerName})
 
-Copyright (c) 2005-2009 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+Copyright (c) 2005-2009 KUBO Atsuhiro <kubo@iteman.jp>,
               2007 Masahiko Sakamoto <msakamoto-sf@users.sourceforge.net>,
 All rights reserved.
 ";
     }
 
     // }}}
-    // {{{ _monitorAlteration()
+    // {{{ monitorAlteration()
 
     /**
-     * Watches for changes in one or more target directories and runs tests in
+     * Monitors for changes in one or more target directories and runs tests in
      * the test directory recursively when changes are detected. And also the test
-     * directory is always added to the target directories.
+     * directory is always added to the directories to be monitored.
      *
      * @throws Stagehand_TestRunner_Exception
      * @since Method available since Release 2.1.0
      */
-    private function _monitorAlteration()
+    protected function monitorAlteration()
     {
-        $targetDirectories = array();
-        foreach (array_merge($this->_config->targetDirectories,
-                             (array)$this->_config->directory) as $directory
+        $monitoredDirectories = array();
+        foreach (array_merge($this->config->monitoredDirectories,
+                             $this->config->targetPaths) as $directory
                  ) {
             if (!is_dir($directory)) {
-                throw new Stagehand_TestRunner_Exception("A specified path [ $directory ] is not found or not a directory.");
+                throw new Stagehand_TestRunner_Exception(
+                    'A specified path [ ' .
+                    $directory .
+                    ' ] is not found or not a directory'
+                                                         );
             }
 
             $directory = realpath($directory);
             if ($directory === false) {
-                throw new Stagehand_TestRunner_Exception("Cannnot get the absolute path of a specified directory [ $directory ]. Make sure all elements of the absolute path have valid permissions.");
+                throw new Stagehand_TestRunner_Exception(
+                    'Cannnot get the absolute path of a specified directory [ ' .
+                    $directory .
+                    ' ]. Make sure all elements of the absolute path have valid permissions.'
+                                                         );
             }
 
-            if (!in_array($directory, $targetDirectories)) {
-                $targetDirectories[] = $directory;
+            if (!in_array($directory, $monitoredDirectories)) {
+                $monitoredDirectories[] = $directory;
             }
         }
 
@@ -224,7 +308,7 @@ All rights reserved.
 
         $options = array();
         if (preg_match('!^/cygdrive/([a-z])/(.+)!', $command, $matches)) {
-            $command = "{$matches[1]}:\\" . str_replace('/', '\\', $matches[2]);
+            $command = $matches[1] . ':\\' . str_replace('/', '\\', $matches[2]);
         }
 
         if (preg_match('/\.bat$/', $command)) {
@@ -243,138 +327,62 @@ All rights reserved.
 
         $options[] = '-R';
 
-        if (!is_null($this->_config->preloadFile)) {
-            $options[] = "-p {$this->_config->preloadFile}";
+        if (!is_null($this->config->preloadFile)) {
+            $options[] = '-p ' . $this->config->preloadFile;
         }
 
-        if ($this->_config->color) {
+        if ($this->config->colors) {
             $options[] = '-c';
         }
 
-        if ($this->_config->useGrowl) {
+        if ($this->config->usesGrowl) {
             $options[] = '-g';
         }
 
-        if (!is_null($this->_config->growlPassword)) {
-            $options[] = "--growl-password={$this->_config->growlPassword}";
+        if (!is_null($this->config->growlPassword)) {
+            $options[] = '--growl-password=' . $this->config->growlPassword;
         }
 
-        $options[] = $this->_config->directory;
+        foreach ($this->config->targetPaths as $targetPath) {
+            $options[] = $targetPath;
+        }
 
-        $monitor = new Stagehand_TestRunner_AlterationMonitor($targetDirectories,
-                                                              "$command " . implode(' ', $options)
-                                                              );
+        $monitor = new Stagehand_AlterationMonitor($monitoredDirectories,
+                                                   create_function('',
+                                                      "passthru('" .
+                                                       $command .
+                                                       ' ' .
+                                                       implode(' ', $options) .
+                                                       "');")
+                                                   );
         $monitor->monitor();
     }
 
     // }}}
-    // {{{ _loadConfiguration()
-
-    /**
-     * Loads the configuration by the default values and command line options.
-     *
-     * @return stdClass
-     * @since Method available since Release 2.1.0
-     */
-    private function _loadConfiguration()
-    {
-        $directory = getcwd();
-        $isRecursive = false;
-        $color = false;
-        $enableAutotest = false;
-        $preloadFile = null;
-        $targetDirectories = array();
-        $useGrowl = false;
-        $growlPassword = null;
-        $isVerbose = false;
-        foreach ($this->_parseOptions() as $options) {
-            if (!count($options)) {
-                continue;
-            }
-
-            foreach ($options as $option) {
-                if (is_array($option)) {
-                    switch ($option[0]) {
-                    case 'h':
-                        $this->_displayUsage();
-                        return;
-                    case 'V':
-                        $this->_displayVersion();
-                        return;
-                    case 'R':
-                        $isRecursive = true;
-                        break;
-                    case 'c':
-                        if (@include_once 'Console/Color.php') {
-                            $color = true;
-                        }
-                        break;
-                    case 'p':
-                        $preloadFile = $option[1];
-                        break;
-                    case 'a':
-                        $enableAutotest = true;
-                        break;
-                    case 'w':
-                        $targetDirectories = explode(',', $option[1]);
-                        break;
-                    case 'g':
-                        if (@include_once 'Net/Growl.php') {
-                            $useGrowl = true;
-                        }
-                        break;
-                    case '--growl-password':
-                        $growlPassword = $option[1];
-                        break;
-                    case 'v':
-                        $isVerbose = true;
-                        break;
-                    }
-                } else {
-                    $directory = $option;
-                }
-            }
-        }
-
-        return (object)array('directory' => $directory,
-                             'isRecursive' => $isRecursive,
-                             'color' => $color,
-                             'enableAutotest' => $enableAutotest,
-                             'preloadFile' => $preloadFile,
-                             'targetDirectories' => $targetDirectories,
-                             'useGrowl' => $useGrowl,
-                             'growlPassword' => $growlPassword,
-                             'isVerbose' => $isVerbose
-                             );
-    }
-
-    // }}}
-    // {{{ _runTests()
+    // {{{ runTests()
 
     /**
      * Runs tests.
      *
      * @since Method available since Release 2.1.0
      */
-    private function _runTests()
+    protected function runTests()
     {
-        include_once "Stagehand/TestRunner/Collector/{$this->_testRunnerName}.php";
-        $className = "Stagehand_TestRunner_Collector_{$this->_testRunnerName}";
-        $collector = new $className($this->_config->directory,
-                                    $this->_config->isRecursive
-                                    );
+        $collectorClass =
+            'Stagehand_TestRunner_Collector_' . $this->testRunnerName . 'Collector';
+        $collector = new $collectorClass($this->config);
         $suite = $collector->collect();
 
-        include_once "Stagehand/TestRunner/Runner/{$this->_testRunnerName}.php";
-        $className = "Stagehand_TestRunner_Runner_{$this->_testRunnerName}";
-        $runner = new $className();
-        $runner->run($suite, $this->_config);
+        $runnerClass =
+            'Stagehand_TestRunner_Runner_' . $this->testRunnerName . 'Runner';
+        $runner = new $runnerClass();
+        $runner->run($suite, $this->config);
 
-        if ($this->_config->useGrowl) {
+        if ($this->config->usesGrowl) {
             $notification = $runner->getNotification();
             $application = new Net_Growl_Application('Stagehand_TestRunner',
                                                      array('Green', 'Red'),
-                                                     $this->_config->growlPassword
+                                                     $this->config->growlPassword
                                                      );
             $growl = new Net_Growl($application);
             $growl->notify($notification->name,
@@ -384,44 +392,11 @@ All rights reserved.
         }
     }
 
-    // }}}
-    // {{{ _parseOptions()
+    /**#@-*/
 
-    /**
-     * Parses the command line options.
-     *
-     * @return array
-     * @throws Stagehand_TestRunner_Exception
-     * @since Method available since Release 2.6.1
+    /**#@+
+     * @access private
      */
-    private function _parseOptions()
-    {
-        $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
-
-        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $argv = Console_Getopt::readPHPArgv();
-        PEAR::staticPopErrorHandling();
-        if (PEAR::isError($argv)) {
-            error_reporting($oldErrorReportingLevel);
-            throw new Stagehand_TestRunner_Exception(preg_replace('/^Console_Getopt: /', '', $argv->getMessage()));
-        }
-
-        array_shift($argv);
-        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $allOptions = Console_Getopt::getopt2($argv,
-                                              'hVRcp:aw:gv',
-                                              array('growl-password=')
-                                              );
-        PEAR::staticPopErrorHandling();
-        if (PEAR::isError($allOptions)) {
-            error_reporting($oldErrorReportingLevel);
-            throw new Stagehand_TestRunner_Exception(preg_replace('/^Console_Getopt: /', '', $allOptions->getMessage()));
-        }
-
-        error_reporting($oldErrorReportingLevel);
-
-        return $allOptions;
-    }
 
     /**#@-*/
 

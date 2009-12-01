@@ -39,16 +39,14 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: SkippedTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: SkippedTest.php 5156 2009-08-29 05:48:59Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
 
-require_once 'PHPUnit/Util/Filter.php';
+require_once 'PHPUnit/Framework.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
-
-if (!interface_exists('PHPUnit_Framework_SkippedTest', FALSE)) {
 
 /**
  * A marker interface for marking a unit test as being skipped.
@@ -58,13 +56,11 @@ if (!interface_exists('PHPUnit_Framework_SkippedTest', FALSE)) {
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.16
+ * @version    Release: 3.4.3
  * @link       http://www.phpunit.de/
  * @since      Interface available since Release 3.0.0
  */
 interface PHPUnit_Framework_SkippedTest
 {
-}
-
 }
 ?>

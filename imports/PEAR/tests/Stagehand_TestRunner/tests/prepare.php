@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008 KUBO Atsuhiro <iteman@users.sourceforge.net>,
+ * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,17 +29,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    SVN: $Id: prepare.php 203 2008-12-21 11:32:38Z iteman $
+ * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 2.9.0
  * @since      File available since Release 2.4.0
  */
 
-error_reporting(E_ALL | E_STRICT);
-
-if (file_exists(dirname(__FILE__) . '/../src/Stagehand/TestRunner.php')) {
-    set_include_path(realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR . get_include_path());
+if (defined('E_DEPRECATED')) {
+    error_reporting(E_ALL & ~E_DEPRECATED);
+} else {
+    error_reporting(E_ALL);
 }
+
+set_include_path(realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR .
+                 get_include_path()
+                 );
 
 /*
  * Local Variables:

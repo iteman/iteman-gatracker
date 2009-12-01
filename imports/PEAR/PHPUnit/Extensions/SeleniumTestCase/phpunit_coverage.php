@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: phpunit_coverage.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: phpunit_coverage.php 4568 2009-01-27 12:40:55Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.10
  */
@@ -49,9 +49,7 @@ require_once 'PHPUnit/Util/FilterIterator.php';
 
 if (isset($_GET['PHPUNIT_SELENIUM_TEST_ID'])) {
     $files = new PHPUnit_Util_FilterIterator(
-      new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator(dirname(__FILE__))
-      ),
+      new RecursiveIteratorIterator(new RecursiveDirectoryIterator(getcwd())),
       $_GET['PHPUNIT_SELENIUM_TEST_ID']
     );
 
