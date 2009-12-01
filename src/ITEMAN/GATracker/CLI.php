@@ -116,14 +116,14 @@ class ITEMAN_GATracker_CLI extends Stagehand_CLIController
      */
 
     // }}}
-    // {{{ doConfigureByOption()
+    // {{{ configureByOption()
 
     /**
      * @param string $option
      * @param string $value
      * @return boolean
      */
-    protected function doConfigureByOption($option, $value)
+    protected function configureByOption($option, $value)
     {
         switch ($option) {
         case 'h':
@@ -148,13 +148,13 @@ class ITEMAN_GATracker_CLI extends Stagehand_CLIController
     }
 
     // }}}
-    // {{{ doConfigureByArg()
+    // {{{ configureByArg()
 
     /**
      * @param string $arg
      * @return boolean
      */
-    protected function doConfigureByArg($arg)
+    protected function configureByArg($arg)
     {
         $this->_config['displayUsage'] = true;
         return false;
