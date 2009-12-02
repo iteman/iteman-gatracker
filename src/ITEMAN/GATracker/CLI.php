@@ -127,10 +127,10 @@ class ITEMAN_GATracker_CLI extends Stagehand_CLIController
     {
         switch ($option) {
         case 'h':
-            $this->_config['displayUsage'] = true;
+            $this->_displayUsage();
             return false;
         case 'V':
-            $this->_config['displayVersion'] = true;
+            $this->_displayVersion();
             return false;
         case '--run-as-filter':
             $this->_config['runAsFilter'] = true;
