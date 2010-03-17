@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2009-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,30 +29,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      File available since Release 2.7.0
  */
 
-// {{{ Stagehand_TestRunner_Config
-
 /**
  * @package    Stagehand_TestRunner
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      Class available since Release 2.7.0
  */
 class Stagehand_TestRunner_Config
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
     public $targetPaths = array();
     public $recursivelyScans = false;
     public $colors = false;
@@ -65,28 +56,12 @@ class Stagehand_TestRunner_Config
     public $testsOnlySpecifiedClasses = false;
     public $elementsToBeTested = array();
     public $printsDetailedProgressReport = false;
-    public $junitLogFile;
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    // }}}
-    // {{{ __construct()
+    public $junitXMLFile;
+    public $logsResultsInJUnitXML = false;
+    public $logsResultsInJUnitXMLInRealtime = false;
+    public $framework;
+    public $runnerClass;
+    public $stopsOnFailure = false;
 
     /**
      */
@@ -94,9 +69,6 @@ class Stagehand_TestRunner_Config
     {
         $this->directory = getcwd();
     }
-
-    // }}}
-    // {{{ addMethodToBeTested()
 
     /**
      * @param string $methodToBeTested
@@ -108,9 +80,6 @@ class Stagehand_TestRunner_Config
         $this->elementsToBeTested[] = strtolower($methodToBeTested);
     }
 
-    // }}}
-    // {{{ addClassToBeTested()
-
     /**
      * @param string $classToBeTested
      * @since Method available since Release 2.8.0
@@ -121,9 +90,6 @@ class Stagehand_TestRunner_Config
         $this->elementsToBeTested[] = strtolower($classToBeTested);
     }
 
-    // }}}
-    // {{{ testsOnlySpecified()
-
     /**
      * @return boolean
      * @since Method available since Release 2.8.0
@@ -133,24 +99,43 @@ class Stagehand_TestRunner_Config
         return $this->testsOnlySpecifiedMethods || $this->testsOnlySpecifiedClasses;
     }
 
-    /**#@-*/
-
-    /**#@+
-     * @access protected
+    /**
+     * @param string $class
+     * @param string $method
+     * @return boolean
+     * @since Method available since Release 2.10.0
      */
+    public function inMethodsToBeTested($class, $method)
+    {
+        foreach (array($class . '::' . $method, $method) as $fullyQualifiedMethodName) {
+            if ($this->inElementsToBeTested($fullyQualifiedMethodName)) {
+                return true;
+            }
+        }
 
-    /**#@-*/
+        return false;
+    }
 
-    /**#@+
-     * @access private
+    /**
+     * @param string $class
+     * @return boolean
+     * @since Method available since Release 2.10.0
      */
+    public function inClassesToBeTested($class)
+    {
+        return $this->inElementsToBeTested($class);
+    }
 
-    /**#@-*/
-
-    // }}}
+    /**
+     * @param string $element
+     * @return boolean
+     * @since Method available since Release 2.10.0
+     */
+    protected function inElementsToBeTested($element)
+    {
+        return in_array(strtolower($element), $this->elementsToBeTested);
+    }
 }
-
-// }}}
 
 /*
  * Local Variables:

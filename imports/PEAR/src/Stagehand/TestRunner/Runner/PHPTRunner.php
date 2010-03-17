@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2009-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,59 +29,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      File available since Release 2.7.0
  */
-
-// {{{ Stagehand_TestRunner_Runner_PHPTRunner
 
 /**
  * A test runner for PHPT.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      Class available since Release 2.7.0
  */
 class Stagehand_TestRunner_Runner_PHPTRunner extends Stagehand_TestRunner_Runner_PHPUnitRunner
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    // }}}
-    // {{{ prettifier()
-
     /**
      * @return Stagehand_TestRunner_Runner_PHPTRunner
      */
@@ -89,9 +53,6 @@ class Stagehand_TestRunner_Runner_PHPTRunner extends Stagehand_TestRunner_Runner
     {
         return $this;
     }
-
-    // }}}
-    // {{{ prettifyTestClass()
 
     /**
      * @param string $name
@@ -102,9 +63,6 @@ class Stagehand_TestRunner_Runner_PHPTRunner extends Stagehand_TestRunner_Runner
         return 'PHPT Tests';
     }
 
-    // }}}
-    // {{{ prettifyTestMethod()
-
     /**
      * @param string $name
      * @return string
@@ -113,19 +71,7 @@ class Stagehand_TestRunner_Runner_PHPTRunner extends Stagehand_TestRunner_Runner
     {
         return $name;
     }
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
 }
-
-// }}}
 
 /*
  * Local Variables:

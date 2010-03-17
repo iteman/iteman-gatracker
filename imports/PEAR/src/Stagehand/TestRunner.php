@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2007-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2007-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,76 +29,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2007-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      File available since Release 0.5.0
  */
-
-// {{{ Stagehand_TestRunner
 
 /**
  * A testrunner script to run tests automatically.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2007-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      Class available since Release 0.5.0
  */
 class Stagehand_TestRunner extends Stagehand_CLIController
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
     protected $exceptionClass = 'Stagehand_TestRunner_Exception';
     protected $shortOptions = 'hVRcp:aw:gm:v';
-    protected $longOptions = array('growl-password=', 'log-junit=', 'classes=');
-    protected $testRunnerName;
+    protected $longOptions =
+        array(
+            'growl-password=',
+            'log-junit=',
+            'log-junit-realtime',
+            'classes=',
+            'stop-on-failure'
+        );
     protected $config;
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    // }}}
-    // {{{ __construct()
-
     /**
-     * @param string $testRunnerName
+     * @param string $framework
      */
-    public function __construct($testRunnerName)
+    public function __construct($framework)
     {
-        $this->testRunnerName = $testRunnerName;
         $this->config = new Stagehand_TestRunner_Config();
+        $this->config->framework = $framework;
     }
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    // }}}
-    // {{{ configureByOption()
 
     /**
      * @param string $option
@@ -150,16 +117,20 @@ class Stagehand_TestRunner extends Stagehand_CLIController
             }
             return true;
         case '--log-junit':
-            $this->config->junitLogFile = $value;
+            $this->config->logsResultsInJUnitXML = true;
+            $this->config->junitXMLFile = $value;
+            return true;
+        case '--log-junit-realtime':
+            $this->config->logsResultsInJUnitXMLInRealtime = true;
+            return true;
+        case '--stop-on-failure':
+            $this->config->stopsOnFailure = true;
             return true;
         case 'v':
             $this->config->printsDetailedProgressReport = true;
             return true;
         }
     }
-
-    // }}}
-    // {{{ configureByArg()
 
     /**
      * @param string $arg
@@ -171,9 +142,6 @@ class Stagehand_TestRunner extends Stagehand_CLIController
         return true;
     }
 
-    // }}}
-    // {{{ doRun()
-
     /**
      */
     protected function doRun()
@@ -184,9 +152,6 @@ class Stagehand_TestRunner extends Stagehand_CLIController
             $this->monitorAlteration();
         }
     }
-
-    // }}}
-    // {{{ printUsage()
 
     /**
      * Prints the usage.
@@ -231,38 +196,44 @@ OPTIONS
      Specifies PASSWORD for Growl.
 
   -m METHOD1,METHOD2,...
-     Runs only the specified tests in the specified file. (PHPUnit only)
+     Runs only the specified tests in the specified file.
+     (PHPUnit and SimpleTest)
 
   --classes=CLASS1,CLASS2,...
-     Runs only the specified test classes in the specified file. (PHPUnit only)
+     Runs only the specified test classes in the specified file.
+     (PHPUnit and SimpleTest)
 
   --log-junit=FILE
-     Logs test results into the specified file in JUnit XML format.
-     (PHPUnit and PHPT)
+     Logs test results into the specified file in the JUnit XML format.
+     (PHPUnit, SimpleTest, and PHPT)
+
+  --log-junit-realtime
+     Logs test results in real-time into the specified file in the JUnit XML format.
+     (PHPUnit, SimpleTest, and PHPT)
 
   -v
-     Prints detailed progress report. (PHPUnit and PHPT)
+     Prints detailed progress report.
+     (PHPUnit and PHPT)
+
+  --stop-on-failure
+     Stops the test run when the first failure or error is raised.
+     (PHPUnit, SimpleTest, and PHPT)
 ";
     }
-
-    // }}}
-    // {{{ printVersion()
 
     /**
      * Prints the version.
      */
     protected function printVersion()
     {
-        echo "Stagehand_TestRunner 2.9.0 ({$this->testRunnerName})
+        echo "Stagehand_TestRunner 2.11.1 ({$this->config->framework})
 
-Copyright (c) 2005-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+Copyright (c) 2005-2010 KUBO Atsuhiro <kubo@iteman.jp>,
               2007 Masahiko Sakamoto <msakamoto-sf@users.sourceforge.net>,
+              2010 KUMAKURA Yousuke <kumatch@gmail.com>,
 All rights reserved.
 ";
     }
-
-    // }}}
-    // {{{ monitorAlteration()
 
     /**
      * Monitors for changes in one or more target directories and runs tests in
@@ -358,9 +329,6 @@ All rights reserved.
         $monitor->monitor();
     }
 
-    // }}}
-    // {{{ runTests()
-
     /**
      * Runs tests.
      *
@@ -368,42 +336,53 @@ All rights reserved.
      */
     protected function runTests()
     {
-        $collectorClass =
-            'Stagehand_TestRunner_Collector_' . $this->testRunnerName . 'Collector';
-        $collector = new $collectorClass($this->config);
-        $suite = $collector->collect();
-
-        $runnerClass =
-            'Stagehand_TestRunner_Runner_' . $this->testRunnerName . 'Runner';
-        $runner = new $runnerClass();
-        $runner->run($suite, $this->config);
-
+        $runner = $this->createRunner();
+        $runner->run($this->createCollector()->collect());
         if ($this->config->usesGrowl) {
-            $notification = $runner->getNotification();
-            $application = new Net_Growl_Application('Stagehand_TestRunner',
-                                                     array('Green', 'Red'),
-                                                     $this->config->growlPassword
-                                                     );
-            $growl = new Net_Growl($application);
-            $growl->notify($notification->name,
-                           'Test Results by Stagehand_TestRunner',
-                           $notification->description
-                           );
+            $this->notifyGrowlOfResults($runner->getNotification());
         }
     }
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
+    /**
+     * @return Stagehand_TestRunner_Collector
+     * @since Method available since Release 2.11.0
      */
+    protected function createCollector()
+    {
+        $factory = new Stagehand_TestRunner_Collector_CollectorFactory($this->config);
+        return $factory->create();
+    }
 
-    /**#@-*/
+    /**
+     * @return Stagehand_TestRunner_Runner
+     * @since Method available since Release 2.11.0
+     */
+    protected function createRunner()
+    {
+        $factory = new Stagehand_TestRunner_Runner_RunnerFactory($this->config);
+        return $factory->create();
+    }
 
-    // }}}
+    /**
+     * @param stdClass $notification
+     * @since Method available since Release 2.11.0
+     */
+    protected function notifyGrowlOfResults(stdClass $notification)
+    {
+        $growl = new Net_Growl(
+                     new Net_Growl_Application(
+                         'Stagehand_TestRunner',
+                         array('Green', 'Red'),
+                         $this->config->growlPassword
+                     )
+                 );
+        $growl->notify(
+            $notification->name,
+            'Test Results by Stagehand_TestRunner',
+            $notification->description
+        );
+    }
 }
-
-// }}}
 
 /*
  * Local Variables:

@@ -31,7 +31,7 @@
  * @package    Stagehand_Autoload
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 0.4.0
+ * @version    Release: 1.0.0
  * @since      File available since Release 0.2.0
  */
 
@@ -41,7 +41,7 @@
  * @package    Stagehand_Autoload
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 0.4.0
+ * @version    Release: 1.0.0
  * @since      File available since Release 0.2.0
  */
 class Stagehand_Autoload_Exception extends Exception {}

@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2007-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2007-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,99 +29,89 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2007-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.1.0
  */
 
 require_once 'PHPUnit/TextUI/TestRunner.php';
-
-// {{{ Stagehand_TestRunner_Runner_PHPUnitRunner
+require_once 'PHPUnit/Util/TestDox/NamePrettifier.php';
 
 /**
  * A test runner for PHPUnit.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2007-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.1.0
  */
 class Stagehand_TestRunner_Runner_PHPUnitRunner extends Stagehand_TestRunner_Runner
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    // }}}
-    // {{{ run()
-
     /**
      * Runs tests based on the given PHPUnit_Framework_TestSuite object.
      *
      * @param PHPUnit_Framework_TestSuite $suite
-     * @param stdClass                    $config
      */
-    public function run($suite, $config)
+    public function run($suite)
     {
+        $testResult = new PHPUnit_Framework_TestResult();
+        $printer = new Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_ResultPrinter(
+                       null, false, $this->config->colors
+                   );
+
         $arguments = array();
-        $arguments['printer'] =
-            new Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_ResultPrinter(
-                null, false, $config->colors
-                                                                                );
+        $arguments['printer'] = $printer;
 
         Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream::register();
-        $arguments['listeners'] = array(
-            new Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_TestDoxPrinter(
-                'testdox://', $config->colors, $this->prettifier()
-                                                                                 )
-                                        );
-        if (!$config->printsDetailedProgressReport) {
+        $arguments['listeners'] =
+            array(
+                new Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_TestDoxPrinter(
+                    'testdox://' . spl_object_hash($testResult),
+                    $this->config->colors,
+                    $this->prettifier()
+                )
+            );
+        if (!$this->config->printsDetailedProgressReport) {
             $arguments['listeners'][] =
                 new Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_ProgressPrinter(
-                    null, false, $config->colors
-                                                                                      );
+                    null, false, $this->config->colors
+                );
         } else {
             $arguments['listeners'][] =
                 new Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter(
-                    null, false, $config->colors
-                                                                                              );
+                    null, false, $this->config->colors
+                );
         }
 
-        if (!is_null($config->junitLogFile)) {
-            $arguments['junitLogfile'] = $config->junitLogFile;
-            $arguments['logIncompleteSkipped'] = true;
+        if ($this->config->logsResultsInJUnitXML) {
+            $junitXMLListener = new Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_JUnitXMLPrinter($this->config->junitXMLFile);
+            if (!$this->config->logsResultsInJUnitXMLInRealtime) {
+                $xmlWriter =
+                    new Stagehand_TestRunner_JUnitXMLWriter_JUnitXMLDOMWriter(
+                        array($junitXMLListener, 'write')
+                    );
+            } else {
+                $xmlWriter = $this->junitXMLStreamWriter(array($junitXMLListener, 'write'));
+            }
+            $junitXMLListener->setXMLWriter($xmlWriter);
+            $arguments['listeners'][] = $junitXMLListener;
         }
 
-        $result = PHPUnit_TextUI_TestRunner::run($suite, $arguments);
+        if ($this->config->stopsOnFailure) {
+            $arguments['stopOnFailure'] = true;
+        }
 
-        if ($config->usesGrowl) {
+        $testRunner = new Stagehand_TestRunner_Runner_PHPUnitRunner_TestRunner();
+        $testRunner->setTestResult($testResult);
+        $testRunner->doRun($suite, $arguments);
+
+        if ($this->config->usesGrowl) {
             ob_start();
-            $printer->printResult($result);
+            $printer->printResult($testResult);
             $output = ob_get_contents();
             ob_end_clean();
 
@@ -135,36 +125,25 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner extends Stagehand_TestRunner_Run
         }
     }
 
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    // }}}
-    // {{{ prettifier()
-
     /**
-     * @return Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_NamePrettifier
+     * @return PHPUnit_Util_TestDox_NamePrettifier
      * @since Method available since Release 2.7.0
      */
     protected function prettifier()
     {
-        return new Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_NamePrettifier();
+        return new PHPUnit_Util_TestDox_NamePrettifier();
     }
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
+    /**
+     * @param callback $streamWriter
+     * @return Stagehand_TestRunner_JUnitXMLWriter_JUnitXMLStreamWriter
+     * @since Method available since Release 2.10.0
      */
-
-    /**#@-*/
-
-    // }}}
+    protected function junitXMLStreamWriter($streamWriter)
+    {
+        return new Stagehand_TestRunner_JUnitXMLWriter_JUnitXMLStreamWriter($streamWriter);
+    }
 }
-
-// }}}
 
 /*
  * Local Variables:

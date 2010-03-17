@@ -31,7 +31,7 @@
  * @package    Stagehand_CLIController
  * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 0.1.1
+ * @version    Release: 0.1.2
  * @since      File available since Release 0.1.0
  */
 
@@ -43,7 +43,7 @@ require_once 'Console/Getopt.php';
  * @package    Stagehand_CLIController
  * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 0.1.1
+ * @version    Release: 0.1.2
  * @since      Class available since Release 0.1.0
  */
 abstract class Stagehand_CLIController
@@ -154,7 +154,7 @@ abstract class Stagehand_CLIController
     protected function parseOptions()
     {
         Stagehand_LegacyError_PEARError::enableConversion();
-        $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT);
+        $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_STRICT & ~E_NOTICE);
         try {
             $argv = Console_Getopt::readPHPArgv();
             array_shift($argv);

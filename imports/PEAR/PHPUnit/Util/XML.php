@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2009, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2002-2010, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,9 +37,8 @@
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: XML.php 5162 2009-08-29 08:49:43Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -54,14 +53,31 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.4.3
+ * @version    Release: 3.4.11
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
 class PHPUnit_Util_XML
 {
+    /**
+     * @param  string $string
+     * @return string
+     * @author Kore Nordmann <mail@kore-nordmann.de>
+     * @since  Method available since Release 3.4.6
+     */
+    public static function prepareString($string)
+    {
+        return preg_replace(
+          '([\\x00-\\x04\\x0b\\x0c\\x0e-\\x1f\\x7f])e',
+          'sprintf( "&#x%02x;", ord( "\\1" ) )',
+          htmlspecialchars(
+            self::convertToUtf8($string), ENT_COMPAT, 'UTF-8'
+          )
+        );
+    }
+
     /**
      * Converts a string to UTF-8 encoding.
      *
@@ -69,7 +85,7 @@ class PHPUnit_Util_XML
      * @return string
      * @since  Method available since Release 3.2.19
      */
-    public static function convertToUtf8($string)
+    protected static function convertToUtf8($string)
     {
         if (!self::isUtf8($string)) {
             if (function_exists('mb_convert_encoding')) {
@@ -89,7 +105,7 @@ class PHPUnit_Util_XML
      * @return boolean
      * @since  Method available since Release 3.3.0
      */
-    public static function isUtf8($string)
+    protected static function isUtf8($string)
     {
         $length = strlen($string);
 

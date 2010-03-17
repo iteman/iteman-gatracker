@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2007-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2007-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,116 +29,75 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2007-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.1.0
  */
-
-// {{{ Stagehand_TestRunner_Collector_PHPUnitCollector
 
 /**
  * A test collector for PHPUnit.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2007-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.1.0
  */
 class Stagehand_TestRunner_Collector_PHPUnitCollector extends Stagehand_TestRunner_Collector
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
     protected $exclude = '^PHPUnit';
     protected $baseClass = 'PHPUnit_Framework_TestCase';
     protected $suffix = 'Test(?:Case)?';
     protected $include = 'Test(?:Case)?$';
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
+    /**
+     * @param string $testCase
+     * @since Method available since Release 2.11.0
      */
+    public function collectTestCase($testCase)
+    {
+        if ($this->config->testsOnlySpecified()) {
+            $this->addTestCaseOnlySpecified($testCase);
+            return;
+        }
 
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    // }}}
-    // {{{ createTestSuite()
+        $this->suite->addTestSuite($testCase);
+    }
 
     /**
      * Creates the test suite object.
      *
+     * @param string $name
      * @return PHPUnit_Framework_TestSuite
      */
-    protected function createTestSuite()
+    protected function createTestSuite($name)
     {
-        return new PHPUnit_Framework_TestSuite();
+        return new PHPUnit_Framework_TestSuite($name);
     }
 
-    // }}}
-    // {{{ addTestCase()
-
     /**
-     * Adds a test case to the test suite object.
-     *
      * @param string $testCase
+     * @since Method available since Release 2.10.0
      */
-    protected function addTestCase($testCase)
+    protected function addTestCaseOnlySpecified($testCase)
     {
-        if (!$this->config->testsOnlySpecified()) {
-            $this->suite->addTestSuite($testCase);
-        } else {
-            $test = new ReflectionClass($testCase);
-            if ($test->isAbstract()) {
-                return;
-            }
+        $test = new ReflectionClass($testCase);
+        if ($test->isAbstract()) {
+            return;
+        }
 
-            if ($this->config->testsOnlySpecifiedMethods) {
-                $this->suite->addTestSuite(new Stagehand_TestRunner_Collector_PHPUnitCollector_MethodFilterTestSuite($test, $this->config->elementsToBeTested));
-            } elseif ($this->config->testsOnlySpecifiedClasses) {
-                if (in_array(strtolower($test->getName()), $this->config->elementsToBeTested)) {
-                    $this->suite->addTestSuite($test);
-                }
+        if ($this->config->testsOnlySpecifiedMethods) {
+            $this->suite->addTestSuite(new Stagehand_TestRunner_Collector_PHPUnitCollector_MethodFilterTestSuite($test, $this->config));
+        } elseif ($this->config->testsOnlySpecifiedClasses) {
+            if ($this->config->inClassesToBeTested($test->getName())) {
+                $this->suite->addTestSuite($test);
             }
         }
     }
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
 }
-
-// }}}
 
 /*
  * Local Variables:

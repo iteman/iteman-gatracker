@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2008-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,9 +29,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.4.0
  */
@@ -39,58 +39,30 @@
 require_once 'PHPUnit/Util/TestDox/ResultPrinter/Text.php';
 require_once 'PHPUnit/Runner/BaseTestRunner.php';
 
-// {{{ Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_TestDoxPrinter
-
 /**
  * A result printer for TestDox documentation.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.4.0
  */
 class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_TestDoxPrinter extends PHPUnit_Util_TestDox_ResultPrinter_Text
 {
 
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
     protected $colors;
     protected $testStatuses = array();
+    protected $testStatusMessages = array();
     protected $testTypeOfInterest = 'PHPUnit_Framework_Test';
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    // }}}
-    // {{{ __construct()
 
     /**
      * Constructor.
      *
-     * @param  resource  $out
-     * @param  boolean   $colors
-     * @param  mixed     $prettifier
+     * @param  resource $out
+     * @param  boolean  $colors
+     * @param  mixed    $prettifier
      */
     public function __construct($out = NULL, $colors, $prettifier)
     {
@@ -99,8 +71,31 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_TestDoxPrinter extends P
         $this->prettifier = $prettifier;
     }
 
-    // }}}
-    // {{{ startTest()
+    /**
+     * @param PHPUnit_Framework_Test $test
+     * @param Exception              $e
+     * @param float                  $time
+     * @since Method available since Release 2.11.0
+     */
+    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        parent::addIncompleteTest($test, $e, $time);
+        $this->testStatusMessages[ $this->currentTestMethodPrettified ] = $test->getStatusMessage();
+    }
+
+    /**
+     * Skipped test.
+     *
+     * @param  PHPUnit_Framework_Test $test
+     * @param  Exception              $e
+     * @param  float                  $time
+     * @since Method available since Release 2.11.0
+     */
+    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        parent::addSkippedTest($test, $e, $time);
+        $this->testStatusMessages[ $this->currentTestMethodPrettified ] = $test->getStatusMessage();
+    }
 
     /**
      * @param PHPUnit_Framework_Test $test
@@ -113,9 +108,6 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_TestDoxPrinter extends P
         }
     }
 
-    // }}}
-    // {{{ endTest()
-
     /**
      * @param PHPUnit_Framework_Test $test
      * @param float                  $time
@@ -126,15 +118,6 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_TestDoxPrinter extends P
         $this->testStatuses[ $this->currentTestMethodPrettified ] = $this->testStatus;
         parent::endTest($test, $time);
     }
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    // }}}
-    // {{{ onTest()
 
     /**
      * @param string  $name
@@ -147,8 +130,23 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_TestDoxPrinter extends P
             return;
         }
 
+        $testStatus = $this->testStatuses[$name];
+        if ($this->testStatuses[$name] == PHPUnit_Runner_BaseTestRunner::STATUS_INCOMPLETE
+            || $this->testStatuses[$name] == PHPUnit_Runner_BaseTestRunner::STATUS_SKIPPED) {
+            if (strlen($this->testStatusMessages[$name])) {
+                $name = $name .
+                        ' (' .
+                        str_replace(
+                            array("\x0d", "\x0a"),
+                            '',
+                            $this->testStatusMessages[$name]
+                        ) .
+                        ')';
+            }
+        }
+
         if ($this->colors) {
-            switch ($this->testStatuses[$name]) {
+            switch ($testStatus) {
             case PHPUnit_Runner_BaseTestRunner::STATUS_PASSED:
                 $name = Stagehand_TestRunner_Coloring::green($name);
                 break;
@@ -167,19 +165,7 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_TestDoxPrinter extends P
 
         parent::onTest($name, $success);
     }
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
 }
-
-// }}}
 
 /*
  * Local Variables:

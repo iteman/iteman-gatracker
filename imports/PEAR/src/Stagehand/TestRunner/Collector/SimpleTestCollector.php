@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * Copyright (c) 2007 Masahiko Sakamoto <msakamoto-sf@users.sourceforge.net>,
- *               2007-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ *               2007-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,104 +31,60 @@
  *
  * @package    Stagehand_TestRunner
  * @copyright  2007 Masahiko Sakamoto <msakamoto-sf@users.sourceforge.net>
- * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2007-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://simpletest.org/
  * @since      File available since Release 2.1.0
  */
 
 require_once 'simpletest/test_case.php';
 
-// {{{ Stagehand_TestRunner_Collector_SimpleTestCollector
-
 /**
  * A test collector for SimpleTest.
  *
  * @package    Stagehand_TestRunner
  * @copyright  2007 Masahiko Sakamoto <msakamoto-sf@users.sourceforge.net>
- * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2007-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://simpletest.org/
  * @since      Class available since Release 2.1.0
  */
 class Stagehand_TestRunner_Collector_SimpleTestCollector extends Stagehand_TestRunner_Collector
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
     protected $exclude = '^(UnitTestCase$|PHPUnit)';
     protected $baseClass = 'UnitTestCase';
     protected $suffix = 'Test(?:Case)?';
     protected $include = 'Test(?:Case)?$';
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
+    /**
+     * @param string $testCase
+     * @since Method available since Release 2.11.0
      */
+    public function collectTestCase($testCase)
+    {
+        $test = new ReflectionClass($testCase);
+        if ($test->isAbstract()) {
+            return;
+        }
 
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    // }}}
-    // {{{ createTestSuite()
+        $this->suite->add(new $testCase());
+    }
 
     /**
      * Creates the test suite object.
      *
+     * @param string $name
      * @return TestSuite
      */
-    protected function createTestSuite()
+    protected function createTestSuite($name)
     {
-        return new TestSuite();
+        $suite = new Stagehand_TestRunner_Runner_SimpleTestRunner_TestSuite($name);
+        $suite->setConfig($this->config);
+        return $suite;
     }
-
-    // }}}
-    // {{{ addTestCase()
-
-    /**
-     * Adds a test case to the test suite object.
-     *
-     * @param string $testCase
-     */
-    protected function addTestCase($testCase)
-    {
-        $this->suite->addTestClass($testCase); // TODO NOT addTestCases()?
-    }
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
 }
-
-// }}}
 
 /*
  * Local Variables:

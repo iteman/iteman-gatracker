@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2009-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,86 +29,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      File available since Release 2.7.0
  */
 
 require_once 'PHPUnit/Extensions/PhptTestCase.php';
 
-// {{{ Stagehand_TestRunner_Collector_PHPTCollector
-
 /**
  * A test collector for PHPT.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      Class available since Release 2.7.0
  */
 class Stagehand_TestRunner_Collector_PHPTCollector extends Stagehand_TestRunner_Collector
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    // }}}
-    // {{{ createTestSuite()
-
     /**
-     * Creates the test suite object.
-     *
-     * @return PHPUnit_Framework_TestSuite
-     */
-    protected function createTestSuite()
-    {
-        return new PHPUnit_Framework_TestSuite('PHPT Tests');
-    }
-
-    // }}}
-    // {{{ addTestCase()
-
-    /**
-     * Adds a test case to the test suite object.
-     *
      * @param string $testCase
+     * @since Method available since Release 2.11.0
      */
-    protected function addTestCase($testCase)
+    public function collectTestCase($testCase)
     {
         $this->suite->addTest(new PHPUnit_Extensions_PhptTestCase($testCase));
     }
 
-    // }}}
-    // {{{ collectTestCasesFromFile()
+    /**
+     * Creates the test suite object.
+     *
+     * @param string $name
+     * @return PHPUnit_Framework_TestSuite
+     */
+    protected function createTestSuite($name)
+    {
+        return new PHPUnit_Framework_TestSuite($name);
+    }
 
     /**
      * Collects all test cases included in the given file.
@@ -121,21 +79,9 @@ class Stagehand_TestRunner_Collector_PHPTCollector extends Stagehand_TestRunner_
             return;
         }
 
-        $this->testCases[] = $file;
+        $this->collectTestCase($file);
     }
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
 }
-
-// }}}
 
 /*
  * Local Variables:

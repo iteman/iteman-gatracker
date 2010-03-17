@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2008-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,65 +29,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      File available since Release 2.3.0
  */
-
-// {{{ Stagehand_TestRunner_Runner
 
 /**
  * The base class for test runners.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      Class available since Release 2.3.0
  */
 abstract class Stagehand_TestRunner_Runner
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
     protected $notification;
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
+    /**
+     * @var Stagehand_TestRunner_Config
      */
+    protected $config;
 
-    /**#@-*/
-
-    /**#@+
-     * @access public
+    /**
+     * @param Stagehand_TestRunner_Config $config
+     * @since Method available since Release 2.10.0
      */
-
-    // }}}
-    // {{{ run()
+    public function __construct(Stagehand_TestRunner_Config $config)
+    {
+        $this->config = $config;
+    }
 
     /**
      * Runs tests.
      *
-     * @param mixed    $suite
-     * @param stdClass $config
+     * @param mixed $suite
      */
-    abstract public function run($suite, $config);
-
-    // }}}
-    // {{{ getNotification()
+    abstract public function run($suite);
 
     /**
      * Gets a notification object for Growl.
@@ -98,25 +78,7 @@ abstract class Stagehand_TestRunner_Runner
     {
         return $this->notification;
     }
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
 }
-
-// }}}
 
 /*
  * Local Variables:

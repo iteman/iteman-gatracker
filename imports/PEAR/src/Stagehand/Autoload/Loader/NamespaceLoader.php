@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2009-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,9 +29,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_Autoload
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 0.4.0
+ * @version    Release: 1.0.0
  * @since      File available since Release 0.2.0
  */
 
@@ -41,9 +41,9 @@ require_once 'Stagehand/Autoload/Loader.php';
 
 /**
  * @package    Stagehand_Autoload
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 0.4.0
+ * @version    Release: 1.0.0
  * @since      File available since Release 0.2.0
  */
 class Stagehand_Autoload_Loader_NamespaceLoader extends Stagehand_Autoload_Loader
@@ -80,6 +80,23 @@ class Stagehand_Autoload_Loader_NamespaceLoader extends Stagehand_Autoload_Loade
     /**#@+
      * @access protected
      */
+
+    // }}}
+    // {{{ normalizeClassName()
+
+    /**
+     * @param string $class
+     * @return string
+     * @since Method available since Release 0.5.0
+     */
+    protected function normalizeClassName($class)
+    {
+        if (substr($class, 0, 1) == $this->namespaceSeparator) {
+            return substr($class, 1);
+        }
+
+        return parent::normalizeClassName($class);
+    }
 
     /**#@-*/
 

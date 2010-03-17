@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2009, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2002-2010, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,13 +37,13 @@
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Filter.php 5320 2009-11-13 07:02:49Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
 
+require_once 'PHPUnit/Framework/Exception.php';
 require_once 'PHPUnit/Util/FilterIterator.php';
 
 /**
@@ -52,9 +52,9 @@ require_once 'PHPUnit/Util/FilterIterator.php';
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.4.3
+ * @version    Release: 3.4.11
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -107,7 +107,7 @@ class PHPUnit_Util_Filter
      * @param  string $suffix
      * @param  string $group
      * @param  string $prefix
-     * @throws RuntimeException
+     * @throws PHPUnit_Framework_Exception
      * @since  Method available since Release 3.1.5
      */
     public static function addDirectoryToFilter($directory, $suffix = '.php', $group = 'DEFAULT', $prefix = '')
@@ -128,7 +128,7 @@ class PHPUnit_Util_Filter
      *
      * @param  string $filename
      * @param  string $group
-     * @throws RuntimeException
+     * @throws PHPUnit_Framework_Exception
      * @since  Method available since Release 2.1.0
      */
     public static function addFileToFilter($filename, $group = 'DEFAULT')
@@ -157,7 +157,7 @@ class PHPUnit_Util_Filter
      * @param  string $suffix
      * @param  string $group
      * @param  string $prefix
-     * @throws RuntimeException
+     * @throws PHPUnit_Framework_Exception
      * @since  Method available since Release 3.1.5
      */
     public static function removeDirectoryFromFilter($directory, $suffix = '.php', $group = 'DEFAULT', $prefix = '')
@@ -178,7 +178,7 @@ class PHPUnit_Util_Filter
      *
      * @param  string $filename
      * @param  string $group
-     * @throws RuntimeException
+     * @throws PHPUnit_Framework_Exception
      * @since  Method available since Release 2.1.0
      */
     public static function removeFileFromFilter($filename, $group = 'DEFAULT')
@@ -206,7 +206,7 @@ class PHPUnit_Util_Filter
      * @param  string $directory
      * @param  string $suffix
      * @param  string $prefix
-     * @throws RuntimeException
+     * @throws PHPUnit_Framework_Exception
      * @since  Method available since Release 3.1.5
      */
     public static function addDirectoryToWhitelist($directory, $suffix = '.php', $prefix = '')
@@ -229,7 +229,7 @@ class PHPUnit_Util_Filter
      * When the whitelist is not empty, whitelisting is used.
      *
      * @param  string $filename
-     * @throws RuntimeException
+     * @throws PHPUnit_Framework_Exception
      * @since  Method available since Release 3.1.0
      */
     public static function addFileToWhitelist($filename)
@@ -253,7 +253,7 @@ class PHPUnit_Util_Filter
      * @param  string $directory
      * @param  string $suffix
      * @param  string $prefix
-     * @throws RuntimeException
+     * @throws PHPUnit_Framework_Exception
      * @since  Method available since Release 3.1.5
      */
     public static function removeDirectoryFromWhitelist($directory, $suffix = '.php', $prefix = '')
@@ -273,7 +273,7 @@ class PHPUnit_Util_Filter
      * Removes a file from the whitelist.
      *
      * @param  string $filename
-     * @throws RuntimeException
+     * @throws PHPUnit_Framework_Exception
      * @since  Method available since Release 3.1.0
      */
     public static function removeFileFromWhitelist($filename)

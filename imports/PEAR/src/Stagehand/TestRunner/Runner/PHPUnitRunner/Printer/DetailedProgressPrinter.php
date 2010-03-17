@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2008-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,9 +29,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpunit.de/
  * @since      File available since Release 1.2.0
  */
@@ -41,48 +41,18 @@ require_once 'PHPUnit/Framework/Test.php';
 require_once 'PHPUnit/Framework/AssertionFailedError.php';
 require_once 'PHPUnit/Framework/TestSuite.php';
 
-// {{{ Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter
-
 /**
  * A result printer for PHPUnit.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 1.2.0
  */
 class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter extends PHPUnit_TextUI_ResultPrinter
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    // }}}
-    // {{{ addError()
-
     /**
      * An error occurred.
      *
@@ -92,15 +62,14 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter 
      */
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-        $this->write($this->colors ? Stagehand_TestRunner_Coloring::magenta('raised an error')
-                                   : 'raised an error'
-                     );
+        $message = 'raised an error';
+        $this->write(
+            $this->colors ? Stagehand_TestRunner_Coloring::magenta($message)
+                          : $message
+        );
 
         parent::addError($test, $e, $time);
     }
-
-    // }}}
-    // {{{ addFailure()
 
     /**
      * A failure occurred.
@@ -111,15 +80,14 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter 
      */
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
-        $this->write($this->colors ? Stagehand_TestRunner_Coloring::red('failed')
-                                   : 'failed'
-                     );
+        $message = 'failed';
+        $this->write(
+            $this->colors ? Stagehand_TestRunner_Coloring::red($message)
+                          : $message
+        );
 
         parent::addFailure($test, $e, $time);
     }
-
-    // }}}
-    // {{{ addIncompleteTest()
 
     /**
      * Incomplete test.
@@ -130,15 +98,20 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter 
      */
     public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-        $this->write($this->colors ? Stagehand_TestRunner_Coloring::yellow('was incomplete')
-                                   : 'was incomplete'
-                     );
+        $message = 'was incomplete';
+        $message = 'skipped';
+        $statusMessage = $test->getStatusMessage();
+        if (strlen($statusMessage)) {
+            $message .= ' (' . $statusMessage . ')';
+        }
+
+        $this->write(
+            $this->colors ? Stagehand_TestRunner_Coloring::yellow($message)
+                          : $message
+        );
 
         parent::addIncompleteTest($test, $e, $time);
     }
-
-    // }}}
-    // {{{ addSkippedTest()
 
     /**
      * Skipped test.
@@ -149,15 +122,19 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter 
      */
     public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-        $this->write($this->colors ? Stagehand_TestRunner_Coloring::yellow('skipped')
-                                   : 'skipped'
-                     );
+        $message = 'skipped';
+        $statusMessage = $test->getStatusMessage();
+        if (strlen($statusMessage)) {
+            $message .= ' (' . $statusMessage . ')';
+        }
+
+        $this->write(
+            $this->colors ? Stagehand_TestRunner_Coloring::yellow($message)
+                          : $message
+        );
 
         parent::addSkippedTest($test, $e, $time);
     }
-
-    // }}}
-    // {{{ startTestSuite()
 
     /**
      * A testsuite started.
@@ -167,7 +144,8 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter 
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
         if (strlen($suite->getName())) {
-            if ($this->lastEvent == PHPUnit_TextUI_ResultPrinter::EVENT_TESTSUITE_END) {
+            if ($this->lastEvent == PHPUnit_TextUI_ResultPrinter::EVENT_TESTSUITE_END
+                || $this->lastEvent == PHPUnit_TextUI_ResultPrinter::EVENT_TEST_END) {
                 $this->write("\n\n");
             }
 
@@ -177,9 +155,6 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter 
         parent::startTestSuite($suite);
     }
 
-    // }}}
-    // {{{ startTest()
-
     /**
      * A test started.
      *
@@ -187,7 +162,8 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter 
      */
     public function startTest(PHPUnit_Framework_Test $test)
     {
-        if ($this->lastEvent == PHPUnit_TextUI_ResultPrinter::EVENT_TEST_END) {
+        if ($this->lastEvent == PHPUnit_TextUI_ResultPrinter::EVENT_TEST_END
+            || $this->lastEvent == PHPUnit_TextUI_ResultPrinter::EVENT_TESTSUITE_END) {
             $this->write("\n");
         }
 
@@ -195,9 +171,6 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter 
 
         parent::startTest($test);
     }
-
-    // }}}
-    // {{{ endTest()
 
     /**
      * A test ended.
@@ -208,35 +181,22 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_Printer_DetailedProgressPrinter 
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
         if (!$this->lastTestFailed) {
-            $this->write($this->colors ? Stagehand_TestRunner_Coloring::green('passed')
-                                      : 'passed'
-                         );
+            $message = 'passed';
+            $this->write(
+                $this->colors ? Stagehand_TestRunner_Coloring::green($message)
+                              : $message
+            );
         }
 
         parent::endTest($test, $time);
     }
-
-    // }}}
-    // {{{ writeProgress()
 
     /**
      * @param  string $progress
      * @since  Method available since Release 2.7.0
      */
     protected function writeProgress($progress) {}
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
 }
-
-// }}}
 
 /*
  * Local Variables:

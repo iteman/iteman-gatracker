@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2007-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2007-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,100 +29,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2007-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpspec.org/
  * @since      File available since Release 2.1.0
  */
-
-// {{{ Stagehand_TestRunner_Collector_PHPSpecCollector
 
 /**
  * A test collector for PHPSpec.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2007-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2007-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpspec.org/
  * @since      Class available since Release 2.1.0
  */
 class Stagehand_TestRunner_Collector_PHPSpecCollector extends Stagehand_TestRunner_Collector
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
     protected $baseClass = 'PHPSpec_Context';
     protected $suffix = 'Spec';
     protected $include = '(^[Dd]escribe|[Ss]pec$)';
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    // }}}
-    // {{{ createTestSuite()
-
     /**
-     * Creates the test suite ArrayObject.
-     *
-     * @return ArrayObject
-     */
-    protected function createTestSuite()
-    {
-        return new ArrayObject();
-    }
-
-    // }}}
-    // {{{ addTestCase()
-
-    /**
-     * Adds a test case to the test suite ArrayObject.
-     *
      * @param string $testCase
+     * @since Method available since Release 2.11.0
      */
-    protected function addTestCase($testCase)
+    public function collectTestCase($testCase)
     {
         $this->suite[] = $testCase;
     }
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
+    /**
+     * Creates the test suite object.
+     *
+     * @param string $name
+     * @return ArrayObject
      */
-
-    /**#@-*/
-
-    // }}}
+    protected function createTestSuite($name)
+    {
+        return new ArrayObject();
+    }
 }
-
-// }}}
 
 /*
  * Local Variables:

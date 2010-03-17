@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2009, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2002-2010, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,13 +37,18 @@
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: prepend.php 4568 2009-01-27 12:40:55Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.10
  */
 
+// By default the code coverage files are written to the same directory
+// that contains the covered sourcecode files. Use this setting to change
+// the default behaviour and set a specific directory to write the files to.
+// If you change the default setting, please make sure to also configure
+// the same directory in phpunit_coverage.php. Also note that the webserver
+// needs write access to the directory.
 $GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'] = FALSE;
 
 if ( isset($_COOKIE['PHPUNIT_SELENIUM_TEST_ID']) &&

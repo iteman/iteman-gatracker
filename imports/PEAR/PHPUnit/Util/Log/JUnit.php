@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2009, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2002-2010, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,9 +37,8 @@
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: JUnit.php 5162 2009-08-29 08:49:43Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.3.0
  */
@@ -60,9 +59,9 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.4.3
+ * @version    Release: 3.4.11
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.1.0
  */
@@ -186,12 +185,7 @@ class PHPUnit_Util_Log_JUnit extends PHPUnit_Util_Printer implements PHPUnit_Fra
                        PHPUnit_Util_Filter::getFilteredStacktrace($e, FALSE);
 
             $error = $this->document->createElement(
-              'error',
-              htmlspecialchars(
-                PHPUnit_Util_XML::convertToUtf8($buffer),
-                ENT_COMPAT,
-                'UTF-8'
-              )
+              'error', PHPUnit_Util_XML::prepareString($buffer)
             );
 
             $error->setAttribute('type', get_class($e));
@@ -226,12 +220,7 @@ class PHPUnit_Util_Log_JUnit extends PHPUnit_Util_Printer implements PHPUnit_Fra
                            );
 
                 $failure = $this->document->createElement(
-                  'failure',
-                  htmlspecialchars(
-                    PHPUnit_Util_XML::convertToUtf8($buffer),
-                    ENT_COMPAT,
-                    'UTF-8'
-                  )
+                  'failure', PHPUnit_Util_XML::prepareString($buffer)
                 );
 
                 $failure->setAttribute('type', get_class($e));
@@ -255,13 +244,9 @@ class PHPUnit_Util_Log_JUnit extends PHPUnit_Util_Printer implements PHPUnit_Fra
         if ($this->logIncompleteSkipped && $this->currentTestCase !== NULL) {
             $error = $this->document->createElement(
               'error',
-              htmlspecialchars(
-                PHPUnit_Util_XML::convertToUtf8(
-                  "Incomplete Test\n" .
-                  PHPUnit_Util_Filter::getFilteredStacktrace($e, FALSE)
-                ),
-                ENT_COMPAT,
-                'UTF-8'
+              PHPUnit_Util_XML::prepareString(
+                "Incomplete Test\n" .
+                PHPUnit_Util_Filter::getFilteredStacktrace($e, FALSE)
               )
             );
 
@@ -288,13 +273,9 @@ class PHPUnit_Util_Log_JUnit extends PHPUnit_Util_Printer implements PHPUnit_Fra
         if ($this->logIncompleteSkipped && $this->currentTestCase !== NULL) {
             $error = $this->document->createElement(
               'error',
-              htmlspecialchars(
-                PHPUnit_Util_XML::convertToUtf8(
-                  "Skipped Test\n" .
-                  PHPUnit_Util_Filter::getFilteredStacktrace($e, FALSE)
-                ),
-                ENT_COMPAT,
-                'UTF-8'
+              PHPUnit_Util_XML::prepareString(
+                "Skipped Test\n" .
+                PHPUnit_Util_Filter::getFilteredStacktrace($e, FALSE)
               )
             );
 

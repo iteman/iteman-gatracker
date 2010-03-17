@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2009, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2002-2010, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,9 +37,8 @@
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Fileloader.php 5315 2009-11-12 18:40:09Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.3.0
  */
@@ -57,9 +56,9 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.4.3
+ * @version    Release: 3.4.11
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.3.0
  */
@@ -81,7 +80,9 @@ class PHPUnit_Util_Fileloader
         }
 
         if (!is_readable($filename)) {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'existing file');
+            throw new RuntimeException(
+              sprintf('Cannot open file "%s".' . "\n", $filename)
+            );
         }
 
         if ($syntaxCheck) {
@@ -100,13 +101,9 @@ class PHPUnit_Util_Fileloader
      */
     public static function load($filename)
     {
-        $filename = PHPUnit_Util_Filesystem::fileExistsInIncludePath($filename);
-
-        if (!$filename) {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(
-              1, 'existing file', $filename
-            );
-        }
+        $filename = PHPUnit_Util_Filesystem::fileExistsInIncludePath(
+          $filename
+        );
 
         $oldVariableNames = array_keys(get_defined_vars());
 

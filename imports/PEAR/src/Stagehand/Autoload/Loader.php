@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2009-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,9 +29,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_Autoload
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 0.4.0
+ * @version    Release: 1.0.0
  * @since      File available since Release 0.2.0
  */
 
@@ -39,9 +39,9 @@
 
 /**
  * @package    Stagehand_Autoload
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 0.4.0
+ * @version    Release: 1.0.0
  * @since      File available since Release 0.2.0
  */
 abstract class Stagehand_Autoload_Loader
@@ -89,23 +89,18 @@ abstract class Stagehand_Autoload_Loader
             return false;
         }
 
-        $found = false;
-        foreach ($this->namespaces as $namespace) {
-            $pattern =
-                '/^' . $namespace . preg_quote($this->namespaceSeparator) . '/';
-            if (preg_match($pattern, $class)) {
-                $found = true;
-                break;
-            }
+        $class = $this->normalizeClassName($class);
+        if (class_exists($class, false)) {
+            return true;
         }
 
-        if (!$found) {
+        if (!$this->inNamespaces($class)) {
             return false;
         }
 
         $file = str_replace($this->namespaceSeparator, '/', $class) . '.php';
         $oldErrorReportingLevel = error_reporting(error_reporting() & ~E_WARNING);
-        $result = include $file;
+        $result = $this->loadFile($file);
         error_reporting($oldErrorReportingLevel);
         if ($result === false) {
             return false;
@@ -142,7 +137,7 @@ abstract class Stagehand_Autoload_Loader
             return;
         }
 
-        array_unshift($this->namespaces, $namespace);
+        $this->namespaces[] = $namespace;
     }
 
     /**#@-*/
@@ -150,6 +145,64 @@ abstract class Stagehand_Autoload_Loader
     /**#@+
      * @access protected
      */
+
+    // }}}
+    // {{{ loadFile()
+
+    /**
+     * @param string $file
+     * @return boolean
+     */
+    protected function loadFile($file)
+    {
+        return include $file;
+    }
+
+    // }}}
+    // {{{ normalizeClassName()
+
+    /**
+     * @param string $class
+     * @return string
+     * @since Method available since Release 0.5.0
+     */
+    protected function normalizeClassName($class)
+    {
+        return $class;
+    }
+
+    // }}}
+    // {{{ inNamespaces()
+
+    /**
+     * @param string $class
+     * @return boolean
+     * @since Method available since Release 0.5.0
+     */
+    protected function inNamespaces($class)
+    {
+        foreach ($this->namespaces as $namespace) {
+            if ($this->matchNamespace($class, $namespace)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // }}}
+    // {{{ matchNamespace()
+
+    /**
+     * @param string $class
+     * @param string $namespace
+     * @return boolean
+     * @since Method available since Release 0.5.0
+     */
+    protected function matchNamespace($class, $namespace)
+    {
+        return (boolean)preg_match('/^' . preg_quote($namespace . $this->namespaceSeparator) . '/', $class);
+    }
 
     /**#@-*/
 

@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2008-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,70 +29,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      File available since Release 2.4.0
  */
-
-// {{{ Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox
 
 /**
  * A class which has only one static property to keep TestDox documentation.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @since      Class available since Release 2.4.0
  */
 class Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox
 {
+    public static $testDoxesByResult = array();
 
-    // {{{ properties
-
-    /**#@+
-     * @access public
+    /**
+     * @param string $resultID
+     * @since Method available since Release 2.10.0
      */
+    public static function initialize($resultID)
+    {
+        self::$testDoxesByResult[$resultID] = '';
+    }
 
-    public static $testDox;
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
+    /**
+     * @param string $resultID
+     * @param string $testDox
+     * @since Method available since Release 2.10.0
      */
+    public static function append($resultID, $testDox)
+    {
+        self::$testDoxesByResult[$resultID] .= $testDox;
+    }
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
+    /**
+     * @param string $resultID
+     * @return string
+     * @since Method available since Release 2.10.0
      */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
+    public static function get($resultID)
+    {
+        return self::$testDoxesByResult[$resultID];
+    }
 }
-
-// }}}
 
 /*
  * Local Variables:

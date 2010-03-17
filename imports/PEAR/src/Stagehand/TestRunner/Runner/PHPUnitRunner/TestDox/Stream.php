@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2008-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,56 +29,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.php.net/manual/ja/function.stream-wrapper-register.php
  * @since      File available since Release 2.4.0
  */
-
-// {{{ Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream
 
 /**
  * A stream wrapper to print TestDox documentation.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.php.net/manual/ja/function.stream-wrapper-register.php
  * @since      Class available since Release 2.4.0
  */
 class Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
     protected $position = 0;
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    // }}}
-    // {{{ stream_open()
+    protected $resultID;
 
     /**
      * The implementation of stream_open().
@@ -86,16 +57,17 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream
      * @param string  $path
      * @param string  $mode
      * @param integer $options
-     * @param string  $opened_path
+     * @param string  &$opened_path
      * @return boolean
      */
-    public function stream_open($path, $mode, $options, $opened_path)
+    public function stream_open($path, $mode, $options, &$opened_path)
     {
+        preg_match('!^testdox://(.+)$!', $path, $matches);
+        $this->resultID = $matches[1];
+        Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox::initialize($this->resultID);
+        $opened_path = $path;
         return true;
     }
-
-    // }}}
-    // {{{ stream_close()
 
     /**
      * The implementation of stream_close().
@@ -108,9 +80,6 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream
      */
     public function stream_close() {}
 
-    // }}}
-    // {{{ stream_read()
-
     /**
      * The implementation of stream_read().
      *
@@ -119,13 +88,10 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream
      */
     public function stream_read($count)
     {
-        $data = substr(Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox::$testDox, $this->position, $count);
+        $data = substr($this->getTestDox(), $this->position, $count);
         $this->position += strlen($data);
         return $data;
     }
-
-    // }}}
-    // {{{ stream_write()
 
     /**
      * The implementation of stream_write().
@@ -135,16 +101,10 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream
      */
     public function stream_write($data)
     {
-        Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox::$testDox =
-            substr(Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox::$testDox, 0, $this->position) .
-            $data .
-            substr(Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox::$testDox, $this->position + strlen($data));
+        $this->appendTestDox($data);
         $this->position += strlen($data);
         return strlen($data);
     }
-
-    // }}}
-    // {{{ stream_eof()
 
     /**
      * The implementation of stream_eof().
@@ -153,11 +113,8 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream
      */
     public function stream_eof()
     {
-        return $this->position >= strlen(Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox::$testDox);
+        return $this->position >= strlen($this->getTestDox());
     }
-
-    // }}}
-    // {{{ stream_tell()
 
     /**
      * The implementation of stream_tell().
@@ -168,9 +125,6 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream
     {
         return $this->position;
     }
-
-    // }}}
-    // {{{ stream_seek()
 
     /**
      * The implementation of stream_seek().
@@ -183,7 +137,7 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream
     {
         switch ($whence) {
         case SEEK_SET:
-            if ($offset < strlen(Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox::$testDox) && $offset >= 0) {
+            if ($offset < strlen($this->getTestDox()) && $offset >= 0) {
                 $this->position = $offset;
                 return true;
             } else {
@@ -197,8 +151,8 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream
                 return false;
             }
         case SEEK_END:
-            if (strlen(Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox::$testDox) + $offset >= 0) {
-                $this->position = strlen(Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox::$testDox) + $offset;
+            if (strlen($this->getTestDox()) + $offset >= 0) {
+                $this->position = strlen($this->getTestDox()) + $offset;
                 return true;
             } else {
                 return false;
@@ -208,34 +162,33 @@ class Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox_Stream
         }        
     }
 
-    // }}}
-    // {{{ register()
-
-    /**
-     */
     public static function register()
     {
-        stream_wrapper_register('testdox',  __CLASS__);
+        if (!in_array('testdox', stream_get_wrappers())) {
+            stream_wrapper_register('testdox',  __CLASS__);
+        }
     }
 
-    /**#@-*/
-
-    /**#@+
-     * @access protected
+    /**
+     * @return string
+     * @since Method available since Release 2.10.0
      */
+    protected function getTestDox()
+    {
+        return Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox::get($this->resultID);
+    }
 
-    /**#@-*/
-
-    /**#@+
-     * @access private
+    /**
+     * @param string $testDox
+     * @since Method available since Release 2.10.0
      */
-
-    /**#@-*/
-
-    // }}}
+    protected function appendTestDox($testDox)
+    {
+        Stagehand_TestRunner_Runner_PHPUnitRunner_TestDox::append(
+            $this->resultID, $testDox
+        );
+    }
 }
-
-// }}}
 
 /*
  * Local Variables:

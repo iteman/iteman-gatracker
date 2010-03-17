@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2009-2010 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,69 +29,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Stagehand_TestRunner
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.7.0
  */
 
 require_once 'PHPUnit/Framework/TestSuite.php';
 
-// {{{ Stagehand_TestRunner_Collector_PHPUnitCollector_MethodFilterTestSuite
-
 /**
  * @package    Stagehand_TestRunner
- * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009-2010 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 2.9.0
+ * @version    Release: 2.11.1
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.7.0
  */
 class Stagehand_TestRunner_Collector_PHPUnitCollector_MethodFilterTestSuite extends PHPUnit_Framework_TestSuite
 {
-
-    // {{{ properties
-
-    /**#@+
-     * @access public
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    protected $methodsToBeTested = array();
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    /**#@+
-     * @access public
-     */
-
-    // }}}
-    // {{{ __construct()
+    protected $config;
 
     /**
-     * @param ReflectionClass $theClass
-     * @param array           $methodsToBeTested
+     * @param ReflectionClass             $theClass
+     * @param Stagehand_TestRunner_Config $config
      */
-    public function __construct(ReflectionClass $theClass, $methodsToBeTested)
+    public function __construct(ReflectionClass $theClass, Stagehand_TestRunner_Config $config)
     {
-        $this->methodsToBeTested = array_map('strtolower', $methodsToBeTested);
+        $this->config = $config;
         parent::__construct($theClass);
     }
-
-    // }}}
-    // {{{ addTest()
 
     /**
      * @param PHPUnit_Framework_Test $test
@@ -108,15 +75,6 @@ class Stagehand_TestRunner_Collector_PHPUnitCollector_MethodFilterTestSuite exte
         parent::addTest($test, $groups);
     }
 
-    /**#@-*/
-
-    /**#@+
-     * @access protected
-     */
-
-    // }}}
-    // {{{ addTestMethod()
-
     /**
      * @param ReflectionClass  $class
      * @param ReflectionMethod $method
@@ -124,31 +82,11 @@ class Stagehand_TestRunner_Collector_PHPUnitCollector_MethodFilterTestSuite exte
      */
     protected function addTestMethod(ReflectionClass $class, ReflectionMethod $method, array &$names)
     {
-        foreach (
-            array(
-                strtolower($class->getName()) . '::' . strtolower($method->getName()),
-                strtolower($method->getName())
-                  ) as $methodName
-                 ) {
-            if (in_array($methodName, $this->methodsToBeTested)) {
-                parent::addTestMethod($class, $method, $names);
-                break;
-            }
+        if ($this->config->inMethodsToBeTested($class->getName(), $method->getName())) {
+            parent::addTestMethod($class, $method, $names);
         }
     }
-
-    /**#@-*/
-
-    /**#@+
-     * @access private
-     */
-
-    /**#@-*/
-
-    // }}}
 }
-
-// }}}
 
 /*
  * Local Variables:

@@ -31,7 +31,7 @@
  * @package    Stagehand_Autoload
  * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 0.4.0
+ * @version    Release: 1.0.0
  * @since      File available since Release 0.1.0
  */
 
@@ -46,7 +46,7 @@ require_once 'Stagehand/Autoload/Loader.php';
  * @package    Stagehand_Autoload
  * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    Release: 0.4.0
+ * @version    Release: 1.0.0
  * @since      File available since Release 0.1.0
  */
 class Stagehand_Autoload
@@ -136,19 +136,6 @@ class Stagehand_Autoload
     }
 
     // }}}
-    // {{{ getLegacyLoader()
-
-    /**
-     * @return Stagehand_Autoload_Loader
-     * @since Method available since Release 0.3.0
-     * @deprecated Method deprecated in Release 0.4.0
-     */
-    public static function getLegacyLoader()
-    {
-        return self::legacyLoader();
-    }
-
-    // }}}
     // {{{ legacyLoader()
 
     /**
@@ -158,19 +145,6 @@ class Stagehand_Autoload
     public static function legacyLoader()
     {
         return self::getLoader(self::LOADER_LEGACY);
-    }
-
-    // }}}
-    // {{{ getNamespaceLoader()
-
-    /**
-     * @return Stagehand_Autoload_Loader
-     * @since Method available since Release 0.3.0
-     * @deprecated Method deprecated in Release 0.4.0
-     */
-    public static function getNamespaceLoader()
-    {
-        return self::namespaceLoader();
     }
 
     // }}}
