@@ -39,11 +39,12 @@ if (defined('E_DEPRECATED')) {
     error_reporting(error_reporting() & ~E_DEPRECATED);
 }
 
-set_include_path(realpath(dirname(__FILE__)) . PATH_SEPARATOR .
-                 realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR .
-                 realpath(dirname(__FILE__) . '/../imports/PEAR/src') . PATH_SEPARATOR .
-                 realpath(dirname(__FILE__) . '/../imports/PEAR')
-                 );
+set_include_path(
+    realpath(dirname(__FILE__)) . PATH_SEPARATOR .
+    realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR .
+    realpath(dirname(__FILE__) . '/../imports/PEAR/src') . PATH_SEPARATOR .
+    realpath(dirname(__FILE__) . '/../imports/PEAR')
+);
 
 require_once 'PHPUnit/Framework.php';
 require_once 'Stagehand/Autoload.php';
