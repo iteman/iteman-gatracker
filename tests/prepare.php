@@ -30,7 +30,7 @@
  * @package    ITEMAN_GATracker
  * @copyright  2008-2009 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    GIT: $Id$
+ * @version    Release: @package_version@
  * @since      File available since Release 0.1.0
  */
 
