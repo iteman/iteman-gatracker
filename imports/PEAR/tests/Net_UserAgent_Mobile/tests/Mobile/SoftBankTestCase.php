@@ -4,22 +4,40 @@
 /**
  * PHP versions 5
  *
- * LICENSE: This source file is subject to version 3.0 of the PHP license
- * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
- * the PHP License and are unable to obtain it through the web, please
- * send a note to license@php.net so we can mail you a copy immediately.
+ * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   Networking
  * @package    Net_UserAgent_Mobile
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: SoftBankTestCase.php,v 1.6 2008/05/10 11:39:46 kuboa Exp $
+ * @author     KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    CVS: $Id: SoftBankTestCase.php,v 1.11 2009/05/10 17:28:48 kuboa Exp $
  * @since      File available since Release 0.31.0
  */
 
-require_once 'PHPUnit/Framework/TestCase.php';
+require_once dirname(__FILE__) . '/AbstractTestCase.php';
 require_once 'Net/UserAgent/Mobile/SoftBank.php';
 
 // {{{ Net_UserAgent_Mobile_SoftBankTestCase
@@ -29,13 +47,13 @@ require_once 'Net/UserAgent/Mobile/SoftBank.php';
  *
  * @category   Networking
  * @package    Net_UserAgent_Mobile
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    Release: 1.0.0RC1
+ * @author     KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 1.0.0
  * @since      Class available since Release 0.31.0
  */
-class Net_UserAgent_Mobile_SoftBankTestCase extends PHPUnit_Framework_TestCase
+class Net_UserAgent_Mobile_SoftBankTestCase extends Net_UserAgent_Mobile_AbstractTestCase
 {
 
     // {{{ properties
@@ -59,33 +77,33 @@ class Net_UserAgent_Mobile_SoftBankTestCase extends PHPUnit_Framework_TestCase
     private $_profiles = array(
 
                                // 3GC
-                               'SoftBank/1.0/810P/PJP10/123456789012345 Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '810P'),
-                               'SoftBank/1.0/805SC/SCJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '805SC'),
-                               'SoftBank/1.0/912SH/SHJ001/123456789012345 Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '912SH'),
-                               'SoftBank/1.0/813SH/SHJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '813SH'),
-                               'SoftBank/1.0/707SC2/SCJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '707SC2'),
-                               'SoftBank/1.0/911T/TJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '911T'),
-                               'SoftBank/1.0/813SHe/SHJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '813SHe'),
-                               'SoftBank/1.0/813T/TJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '813T'),
-                               'SoftBank/1.0/708SC/SCJ001/123456789012345 Browser/NetFront/3.3' => array('model' => '708SC'),
-                               'SoftBank/1.0/706N/NJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '706N'),
-                               'SoftBank/1.0/706P/PJP10/123456789012345 Browser/Teleca-Browser/3.1 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '706P'),
-                               'SoftBank/1.0/812T/TJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '812T'),
-                               'SoftBank/1.0/812SH/SHJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '812SH'),
-                               'SoftBank/1.0/709SC/SCJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '709SC'),
-                               'SoftBank/1.0/707SC/SCJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '707SC'),
-                               'SoftBank/1.0/911SH/SHJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '911SH'),
-                               'SoftBank/1.0/910SH/SHJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '910SH'),
-                               'SoftBank/1.0/910T/TJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '910T'),
-                               'SoftBank/1.0/810SH/SHJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '810SH'),
-                               'SoftBank/1.0/811SH/SHJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '811SH'),
-                               'SoftBank/1.0/810T/TJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '810T'),
-                               'SoftBank/1.0/811T/TJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '811T'),
-                               'SoftBank/1.0/705N/NJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '705N'),
-                               'SoftBank/1.0/705NK/NKJ001/123456789012345 Series60/3.0 NokiaN73/3.0650 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '705NK'),
-                               'SoftBank/1.0/705P/PJP10/123456789012345 Browser/Teleca-Browser/3.1 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '705P'),
-                               'SoftBank/1.0/705SC/SCJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '705SC'),
-                               'SoftBank/1.0/706SC/SCJ001/123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '706SC'),
+                               'SoftBank/1.0/810P/PJP10/SN123456789012345 Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '810P'),
+                               'SoftBank/1.0/805SC/SCJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '805SC'),
+                               'SoftBank/1.0/912SH/SHJ001/SN123456789012345 Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '912SH'),
+                               'SoftBank/1.0/813SH/SHJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '813SH'),
+                               'SoftBank/1.0/707SC2/SCJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '707SC2'),
+                               'SoftBank/1.0/911T/TJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '911T'),
+                               'SoftBank/1.0/813SHe/SHJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '813SHe'),
+                               'SoftBank/1.0/813T/TJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '813T'),
+                               'SoftBank/1.0/708SC/SCJ001/SN123456789012345 Browser/NetFront/3.3' => array('model' => '708SC'),
+                               'SoftBank/1.0/706N/NJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '706N'),
+                               'SoftBank/1.0/706P/PJP10/SN123456789012345 Browser/Teleca-Browser/3.1 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '706P'),
+                               'SoftBank/1.0/812T/TJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '812T'),
+                               'SoftBank/1.0/812SH/SHJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '812SH'),
+                               'SoftBank/1.0/709SC/SCJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '709SC'),
+                               'SoftBank/1.0/707SC/SCJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '707SC'),
+                               'SoftBank/1.0/911SH/SHJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '911SH'),
+                               'SoftBank/1.0/910SH/SHJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '910SH'),
+                               'SoftBank/1.0/910T/TJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '910T'),
+                               'SoftBank/1.0/810SH/SHJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '810SH'),
+                               'SoftBank/1.0/811SH/SHJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '811SH'),
+                               'SoftBank/1.0/810T/TJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '810T'),
+                               'SoftBank/1.0/811T/TJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '811T'),
+                               'SoftBank/1.0/705N/NJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '705N'),
+                               'SoftBank/1.0/705NK/NKJ001/SN123456789012345 Series60/3.0 NokiaN73/3.0650 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '705NK'),
+                               'SoftBank/1.0/705P/PJP10/SN123456789012345 Browser/Teleca-Browser/3.1 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '705P'),
+                               'SoftBank/1.0/705SC/SCJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '705SC'),
+                               'SoftBank/1.0/706SC/SCJ001/SN123456789012345 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '706SC'),
                                'SoftBank/1.0/810P/PJP10 Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '810P'),
                                'SoftBank/1.0/805SC/SCJ001 Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '805SC'),
                                'SoftBank/1.0/912SH/SHJ001 Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1' => array('model' => '912SH'),
@@ -248,7 +266,7 @@ class Net_UserAgent_Mobile_SoftBankTestCase extends PHPUnit_Framework_TestCase
             if (array_key_exists('Ext-Profile', $profile)) {
                 $this->assertEquals($profile['Ext-Profile'], $javaInfo['Ext-Profile']);
             } else {
-                if (!is_null($javaInfo['Ext-Profile'])) {
+                if (array_key_exists('Ext-Profile', $javaInfo)) {
                     $this->fail($agent->getModel());
                 }
             }

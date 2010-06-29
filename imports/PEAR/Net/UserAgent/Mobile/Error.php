@@ -2,9 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 /**
- * PHP versions 5
+ * PHP versions 4 and 5
  *
- * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2009 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,17 +31,42 @@
  * @category   Networking
  * @package    Net_UserAgent_Mobile
  * @author     KUBO Atsuhiro <kubo@iteman.jp>
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    CVS: $Id: prepare.php,v 1.5 2009/05/10 17:28:47 kuboa Exp $
- * @since      File available since Release 0.31.0
+ * @version    CVS: $Id: Error.php,v 1.1 2009/05/26 08:48:16 kuboa Exp $
+ * @since      File available since Release 1.0.0RC3
  */
 
-error_reporting(E_ALL);
+require_once 'PEAR.php';
 
-set_include_path(realpath(dirname(__FILE__) . '/..') . PATH_SEPARATOR .
-                 get_include_path()
-                 );
+// {{{ constants
+
+/**
+ * Constants for error handling.
+ */
+define('NET_USERAGENT_MOBILE_OK',               1);
+define('NET_USERAGENT_MOBILE_ERROR',           -1);
+define('NET_USERAGENT_MOBILE_ERROR_NOMATCH',   -2);
+define('NET_USERAGENT_MOBILE_ERROR_NOT_FOUND', -3);
+
+// }}}
+// {{{ Net_UserAgent_Mobile_Error
+
+/**
+ * Net_UserAgent_Mobile_Error implements a class for reporting user agent error
+ * messages
+ *
+ * @category   Networking
+ * @package    Net_UserAgent_Mobile
+ * @author     KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2003-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 1.0.0
+ * @since      Class available since Release 0.1
+ */
+class Net_UserAgent_Mobile_Error extends PEAR_Error {}
+
+// }}}
 
 /*
  * Local Variables:

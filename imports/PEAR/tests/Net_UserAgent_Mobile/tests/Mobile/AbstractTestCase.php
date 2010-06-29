@@ -4,7 +4,7 @@
 /**
  * PHP versions 5
  *
- * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * Copyright (c) 2009 KUBO Atsuhiro <kubo@iteman.jp>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,17 +31,75 @@
  * @category   Networking
  * @package    Net_UserAgent_Mobile
  * @author     KUBO Atsuhiro <kubo@iteman.jp>
- * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
- * @version    CVS: $Id: prepare.php,v 1.5 2009/05/10 17:28:47 kuboa Exp $
- * @since      File available since Release 0.31.0
+ * @version    CVS: $Id: AbstractTestCase.php,v 1.3 2009/05/10 17:28:47 kuboa Exp $
+ * @since      File available since Release 1.0.0RC2
  */
 
-error_reporting(E_ALL);
+require_once 'PHPUnit/Framework/TestCase.php';
 
-set_include_path(realpath(dirname(__FILE__) . '/..') . PATH_SEPARATOR .
-                 get_include_path()
-                 );
+// {{{ Net_UserAgent_Mobile_AbstractTestCase
+
+/**
+ * @category   Networking
+ * @package    Net_UserAgent_Mobile
+ * @author     KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 1.0.0
+ * @since      Class available since Release 1.0.0RC2
+ */
+abstract class Net_UserAgent_Mobile_AbstractTestCase extends PHPUnit_Framework_TestCase
+{
+
+    // {{{ properties
+
+    /**#@+
+     * @access public
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access public
+     */
+
+    public function setUp()
+    {
+        PEAR::staticPushErrorHandling(PEAR_ERROR_TRIGGER);
+    }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    /**#@-*/
+
+    // }}}
+}
+
+// }}}
 
 /*
  * Local Variables:

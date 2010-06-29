@@ -4,22 +4,40 @@
 /**
  * PHP version 5
  *
- * LICENSE: This source file is subject to version 3.0 of the PHP license
- * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
- * the PHP License and are unable to obtain it through the web, please
- * send a note to license@php.net so we can mail you a copy immediately.
+ * Copyright (c) 2008-2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   Networking
  * @package    Net_UserAgent_Mobile
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: DoCoMoTestCase.php,v 1.16 2008/05/10 11:39:46 kuboa Exp $
+ * @author     KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    CVS: $Id: DoCoMoTestCase.php,v 1.28 2009/06/23 08:06:58 kuboa Exp $
  * @since      File available since Release 0.31.0
  */
 
-require_once 'PHPUnit/Framework/TestCase.php';
+require_once dirname(__FILE__) . '/AbstractTestCase.php';
 require_once 'Net/UserAgent/Mobile/DoCoMo.php';
 
 // {{{ Net_UserAgent_Mobile_DoCoMoTestCase
@@ -29,13 +47,13 @@ require_once 'Net/UserAgent/Mobile/DoCoMo.php';
  *
  * @category   Networking
  * @package    Net_UserAgent_Mobile
- * @author     KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @copyright  2008 KUBO Atsuhiro <iteman@users.sourceforge.net>
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    Release: 1.0.0RC1
+ * @author     KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2008-2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
+ * @version    Release: 1.0.0
  * @since      Class available since Release 0.31.0
  */
-class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
+class Net_UserAgent_Mobile_DoCoMoTestCase extends Net_UserAgent_Mobile_AbstractTestCase
 {
 
     // {{{ properties
@@ -58,9 +76,10 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
 
     /**
      * @link http://www.nttdocomo.co.jp/service/imode/make/content/spec/useragent/index.html
+     * @link http://www.nttdocomo.co.jp/service/imode/make/content/browser/browser2/useragent/index.html
      * @link http://www.nttdocomo.co.jp/service/imode/make/content/spec/screen_area/index.html
      * @link http://www.nttdocomo.co.jp/binary/pdf/service/imode/make/content/spec/imode_spec.pdf
-     * @version Sat, 10 May 2008 11:30:45 GMT
+     * @version Mon, 22 Jun 2009 12:46:24 GMT
      */
     private $_profiles = array(
 
@@ -104,10 +123,11 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/1.0/N209i/c08' => array('model' => 'N209i', 'htmlVersion' => '2.0', 'width' => 108, 'height' => 82, 'version' => '1.0', 'cacheSize' => 8, 'isFoma' => false, 'vendor' => 'N', 'series' => '209i'),
                                'DoCoMo/1.0/P209i' => array('model' => 'P209i', 'htmlVersion' => '2.0', 'width' => 96, 'height' => 87, 'version' => '1.0', 'cacheSize' => 5, 'isFoma' => false, 'vendor' => 'P', 'series' => '209i'),
                                'DoCoMo/1.0/P209i/c10' => array('model' => 'P209i', 'htmlVersion' => '2.0', 'width' => 96, 'height' => 87, 'version' => '1.0', 'cacheSize' => 10, 'isFoma' => false, 'vendor' => 'P', 'series' => '209i'),
-                               'DoCoMo/1.0/P209is' => array('model' => 'P209is', 'htmlVersion' => '2.0', 'width' => 96, 'height' => 87, 'version' => '1.0', 'cacheSize' => 5, 'isFoma' => false, 'vendor' => 'P', 'series' => '209i'),
-                               'DoCoMo/1.0/P209is/c10' => array('model' => 'P209is', 'htmlVersion' => '2.0', 'width' => 96, 'height' => 87, 'version' => '1.0', 'cacheSize' => 10, 'isFoma' => false, 'vendor' => 'P', 'series' => '209i'),
+                               'DoCoMo/1.0/P209iS' => array('model' => 'P209iS', 'htmlVersion' => '2.0', 'width' => 96, 'height' => 87, 'version' => '1.0', 'cacheSize' => 5, 'isFoma' => false, 'vendor' => 'P', 'series' => '209i'),
+                               'DoCoMo/1.0/P209iS/c10' => array('model' => 'P209iS', 'htmlVersion' => '2.0', 'width' => 96, 'height' => 87, 'version' => '1.0', 'cacheSize' => 10, 'isFoma' => false, 'vendor' => 'P', 'series' => '209i'),
                                'DoCoMo/1.0/R209i' => array('model' => 'R209i', 'htmlVersion' => '2.0', 'width' => 96, 'height' => 72, 'version' => '1.0', 'cacheSize' => 5, 'isFoma' => false, 'vendor' => 'R', 'series' => '209i'),
                                'DoCoMo/1.0/P651ps' => array('model' => 'P651ps', 'htmlVersion' => '2.0', 'width' => 96, 'height' => 87, 'version' => '1.0', 'cacheSize' => 5, 'isFoma' => false, 'vendor' => 'P', 'series' => '651'),
+                               'DoCoMo/1.0/P651ps/c10' => array('model' => 'P651ps', 'htmlVersion' => '2.0', 'width' => 96, 'height' => 87, 'version' => '1.0', 'cacheSize' => 10, 'isFoma' => false, 'vendor' => 'P', 'series' => '651'),
                                'DoCoMo/1.0/R691i' => array('model' => 'R691i', 'htmlVersion' => '2.0', 'width' => 96, 'height' => 72, 'version' => '1.0', 'cacheSize' => 5, 'isFoma' => false, 'vendor' => 'R', 'series' => '691i'),
                                'DoCoMo/1.0/F210i/c10' => array('model' => 'F210i', 'htmlVersion' => '2.0', 'width' => 96, 'height' => 113, 'version' => '1.0', 'cacheSize' => 10, 'isFoma' => false, 'vendor' => 'F', 'series' => '210i'),
                                'DoCoMo/1.0/N210i' => array('model' => 'N210i', 'htmlVersion' => '2.0', 'width' => 118, 'height' => 113, 'version' => '1.0', 'cacheSize' => 5, 'isFoma' => false, 'vendor' => 'N', 'series' => '210i'),
@@ -214,8 +234,13 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 NM850iG(c100;TD)' => array('model' => 'NM850iG', 'htmlVersion' => '4.0', 'width' => 176, 'height' => 144, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'NM', 'series' => '850i', 'status' => 'TD'),
                                'DoCoMo/2.0 NM850iG(c100;TJ)' => array('model' => 'NM850iG', 'htmlVersion' => '4.0', 'width' => 176, 'height' => 144, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'NM', 'series' => '850i', 'status' => 'TJ'),
                                'DoCoMo/2.0 NM705i(c100;TB;W15H13)' => array('model' => 'NM705i', 'htmlVersion' => '4.0', 'width' => 231, 'height' => 235, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'NM', 'series' => '705i', 'status' => 'TB'),
+                               'DoCoMo/2.0 NM705i(c100;TB;W38H18)' => array('model' => 'NM705i', 'htmlVersion' => '4.0', 'width' => 231, 'height' => 235, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'NM', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 NM705i(c100;TD)' => array('model' => 'NM705i', 'htmlVersion' => '4.0', 'width' => 231, 'height' => 235, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'NM', 'series' => '705i', 'status' => 'TD'),
                                'DoCoMo/2.0 NM705i(c100;TJ)' => array('model' => 'NM705i', 'htmlVersion' => '4.0', 'width' => 231, 'height' => 235, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'NM', 'series' => '705i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 NM706i(c100;TB;W15H13)' => array('model' => 'NM706i', 'htmlVersion' => '4.0', 'width' => 231, 'height' => 235, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'NM', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 NM706i(c100;TB;W38H18)' => array('model' => 'NM706i', 'htmlVersion' => '4.0', 'width' => 231, 'height' => 235, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'NM', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 NM706i(c100;TD)' => array('model' => 'NM706i', 'htmlVersion' => '4.0', 'width' => 231, 'height' => 235, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'NM', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 NM706i(c100;TJ)' => array('model' => 'NM706i', 'htmlVersion' => '4.0', 'width' => 231, 'height' => 235, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'NM', 'series' => '706i', 'status' => 'TJ'),
 
                                // HTML 5.0
                                'DoCoMo/1.0/D505i/c20/TB/W20H10' => array('model' => 'D505i', 'htmlVersion' => '5.0', 'width' => 240, 'height' => 270, 'version' => '1.0', 'cacheSize' => 20, 'isFoma' => false, 'vendor' => 'D', 'series' => '505i', 'status' => 'TB'),
@@ -326,6 +351,10 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/1.0/N506iS2/c20/TB/W16H09' => array('model' => 'N506iS2', 'htmlVersion' => '5.0', 'width' => 240, 'height' => 295, 'version' => '1.0', 'cacheSize' => 20, 'isFoma' => false, 'vendor' => 'N', 'series' => '506i', 'status' => 'TB'),
                                'DoCoMo/1.0/N506iS2/c30/TD' => array('model' => 'N506iS2', 'htmlVersion' => '5.0', 'width' => 240, 'height' => 295, 'version' => '1.0', 'cacheSize' => 30, 'isFoma' => false, 'vendor' => 'N', 'series' => '506i', 'status' => 'TD'),
                                'DoCoMo/1.0/N506iS2/c20/TJ' => array('model' => 'N506iS2', 'htmlVersion' => '5.0', 'width' => 240, 'height' => 295, 'version' => '1.0', 'cacheSize' => 20, 'isFoma' => false, 'vendor' => 'N', 'series' => '506i', 'status' => 'TJ'),
+                               'DoCoMo/1.0/P506iC/c20/TB/W20H10' => array('model' => 'P506iC', 'htmlVersion' => '5.0', 'width' => 240, 'height' => 266, 'version' => '1.0', 'cacheSize' => 20, 'isFoma' => false, 'vendor' => 'P', 'series' => '506i', 'status' => 'TB'),
+                               'DoCoMo/1.0/P506iC/c20/TB/W30H14' => array('model' => 'P506iC', 'htmlVersion' => '5.0', 'width' => 240, 'height' => 266, 'version' => '1.0', 'cacheSize' => 20, 'isFoma' => false, 'vendor' => 'P', 'series' => '506i', 'status' => 'TB'),
+                               'DoCoMo/1.0/P506iC/c30/TD' => array('model' => 'P506iC', 'htmlVersion' => '5.0', 'width' => 240, 'height' => 266, 'version' => '1.0', 'cacheSize' => 30, 'isFoma' => false, 'vendor' => 'P', 'series' => '506i', 'status' => 'TD'),
+                               'DoCoMo/1.0/P506iC/c20/TJ' => array('model' => 'P506iC', 'htmlVersion' => '5.0', 'width' => 240, 'height' => 266, 'version' => '1.0', 'cacheSize' => 20, 'isFoma' => false, 'vendor' => 'P', 'series' => '506i', 'status' => 'TJ'),
                                'DoCoMo/1.0/D253i/c10/TB/W17H09' => array('model' => 'D253i', 'htmlVersion' => '5.0', 'width' => 176, 'height' => 198, 'version' => '1.0', 'cacheSize' => 10, 'isFoma' => false, 'vendor' => 'D', 'series' => '253i', 'status' => 'TB'),
                                'DoCoMo/1.0/D253i/c10/TB/W14H07' => array('model' => 'D253i', 'htmlVersion' => '5.0', 'width' => 176, 'height' => 198, 'version' => '1.0', 'cacheSize' => 10, 'isFoma' => false, 'vendor' => 'D', 'series' => '253i', 'status' => 'TB'),
                                'DoCoMo/1.0/D253i/c10/TB/W25H12' => array('model' => 'D253i', 'htmlVersion' => '5.0', 'width' => 176, 'height' => 198, 'version' => '1.0', 'cacheSize' => 10, 'isFoma' => false, 'vendor' => 'D', 'series' => '253i', 'status' => 'TB'),
@@ -568,6 +597,7 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P902i(c100;TB;W24H12)' => array('model' => 'P902i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TB'),
                                'DoCoMo/2.0 P902i(c100;TB;W20H10)' => array('model' => 'P902i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TB'),
                                'DoCoMo/2.0 P902i(c100;TB;W30H15)' => array('model' => 'P902i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P902i(c100;TB;W24H10)' => array('model' => 'P902i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TB'),
                                'DoCoMo/2.0 P902i(c100;TD)' => array('model' => 'P902i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TD'),
                                'DoCoMo/2.0 P902i(c100;TJ)' => array('model' => 'P902i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TJ'),
                                'DoCoMo/2.0 SH902i(c100;TB;W24H12)' => array('model' => 'SH902i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 240, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '902i', 'status' => 'TB'),
@@ -588,6 +618,7 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P902iS(c100;TB;W24H12)' => array('model' => 'P902iS', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TB'),
                                'DoCoMo/2.0 P902iS(c100;TB;W20H10)' => array('model' => 'P902iS', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TB'),
                                'DoCoMo/2.0 P902iS(c100;TB;W30H15)' => array('model' => 'P902iS', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P902iS(c100;TB;W24H10)' => array('model' => 'P902iS', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TB'),
                                'DoCoMo/2.0 P902iS(c100;TD)' => array('model' => 'P902iS', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TD'),
                                'DoCoMo/2.0 P902iS(c100;TJ)' => array('model' => 'P902iS', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '902i', 'status' => 'TJ'),
                                'DoCoMo/2.0 N902iS(c100;TB;W24H12)' => array('model' => 'N902iS', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '902i', 'status' => 'TB'),
@@ -710,6 +741,8 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P703imyu(c100;TJ)' => array('model' => 'P703imyu', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '703i', 'status' => 'TJ'),
                                'DoCoMo/2.0 F883i(c100;TB;W20H08)' => array('model' => 'F883i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 256, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '883i', 'status' => 'TB'),
                                'DoCoMo/2.0 F883i(c100;TB;W16H08)' => array('model' => 'F883i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 256, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '883i', 'status' => 'TB'),
+                               'DoCoMo/2.0 F883iS(c100;TB;W20H08)' => array('model' => 'F883iS', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 256, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '883i', 'status' => 'TB'),
+                               'DoCoMo/2.0 F883iS(c100;TB;W16H08)' => array('model' => 'F883iS', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 256, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '883i', 'status' => 'TB'),
                                'DoCoMo/2.0 P704imyu(c100;TB;W20H10)' => array('model' => 'P704imyu', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '704i', 'status' => 'TB'),
                                'DoCoMo/2.0 P704imyu(c100;TB;W24H12)' => array('model' => 'P704imyu', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '704i', 'status' => 'TB'),
                                'DoCoMo/2.0 P704imyu(c100;TB;W30H15)' => array('model' => 'P704imyu', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '704i', 'status' => 'TB'),
@@ -732,6 +765,28 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 L705iX(c100;TB;W21H11)' => array('model' => 'L705iX', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 L705iX(c100;TD)' => array('model' => 'L705iX', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '705i', 'status' => 'TD'),
                                'DoCoMo/2.0 L705iX(c100;TJ)' => array('model' => 'L705iX', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '705i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 L852i(c100;TB;W24H14)' => array('model' => 'L852i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 298, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '852i', 'status' => 'TB'),
+                               'DoCoMo/2.0 L852i(c100;TB;W20H12)' => array('model' => 'L852i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 298, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '852i', 'status' => 'TB'),
+                               'DoCoMo/2.0 L852i(c100;TB;W30H18)' => array('model' => 'L852i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 298, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '852i', 'status' => 'TB'),
+                               'DoCoMo/2.0 L852i(c100;TD)' => array('model' => 'L852i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 298, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '852i', 'status' => 'TD'),
+                               'DoCoMo/2.0 L852i(c100;TJ)' => array('model' => 'L852i', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 298, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '852i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 L706ie(c100;TB;W16H09)' => array('model' => 'L706ie', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 L706ie(c100;TB;W20H11)' => array('model' => 'L706ie', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 L706ie(c100;TB;W24H14)' => array('model' => 'L706ie', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 L706ie(c100;TB;W21H11)' => array('model' => 'L706ie', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 L706ie(c100;TD)' => array('model' => 'L706ie', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 L706ie(c100;TJ)' => array('model' => 'L706ie', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => '706i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 L01A(c100;TB;W24H17)' => array('model' => 'L01A', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 L01A(c100;TB;W20H14)' => array('model' => 'L01A', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 L01A(c100;TB;W30H21)' => array('model' => 'L01A', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 L01A(c100;TD)' => array('model' => 'L01A', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => null, 'status' => 'TD'),
+                               'DoCoMo/2.0 L01A(c100;TJ)' => array('model' => 'L01A', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => null, 'status' => 'TJ'),
+                               'DoCoMo/2.0 L03A(c100;TB;W16H09)' => array('model' => 'L03A', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 L03A(c100;TB;W20H11)' => array('model' => 'L03A', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 L03A(c100;TB;W24H14)' => array('model' => 'L03A', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 L03A(c100;TB;W20H11)' => array('model' => 'L03A', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 L03A(c100;TD)' => array('model' => 'L03A', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => null, 'status' => 'TD'),
+                               'DoCoMo/2.0 L03A(c100;TJ)' => array('model' => 'L03A', 'htmlVersion' => '6.0', 'width' => 240, 'height' => 280, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'L', 'series' => null, 'status' => 'TJ'),
 
                                // HTML 7.0
                                'DoCoMo/2.0 SH903i(c100;TB;W24H16)' => array('model' => 'SH903i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '903i', 'status' => 'TB', 'isGPS' => true),
@@ -742,6 +797,7 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P903i(c100;TB;W24H12)' => array('model' => 'P903i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 P903i(c100;TB;W20H10)' => array('model' => 'P903i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 P903i(c100;TB;W30H15)' => array('model' => 'P903i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P903i(c100;TB;W24H10)' => array('model' => 'P903i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 P903i(c100;TD)' => array('model' => 'P903i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TD', 'isGPS' => true),
                                'DoCoMo/2.0 P903i(c100;TJ)' => array('model' => 'P903i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TJ', 'isGPS' => true),
                                'DoCoMo/2.0 N903i(c100;TB;W24H12)' => array('model' => 'N903i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '903i', 'status' => 'TB', 'isGPS' => true),
@@ -782,6 +838,7 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P903iTV(c100;TB;W24H15)' => array('model' => 'P903iTV', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB'),
                                'DoCoMo/2.0 P903iTV(c100;TB;W20H13)' => array('model' => 'P903iTV', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB'),
                                'DoCoMo/2.0 P903iTV(c100;TB;W30H19)' => array('model' => 'P903iTV', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P903iTV(c100;TB;W24H13)' => array('model' => 'P903iTV', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB'),
                                'DoCoMo/2.0 P903iTV(c100;TD)' => array('model' => 'P903iTV', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TD'),
                                'DoCoMo/2.0 P903iTV(c100;TJ)' => array('model' => 'P903iTV', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TJ'),
                                'DoCoMo/2.0 SH903iTV(c100;TB;W24H16)' => array('model' => 'SH903iTV', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '903i', 'status' => 'TB'),
@@ -798,6 +855,7 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P903iX(c100;TB;W24H12)' => array('model' => 'P903iX', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB'),
                                'DoCoMo/2.0 P903iX(c100;TB;W20H10)' => array('model' => 'P903iX', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB'),
                                'DoCoMo/2.0 P903iX(c100;TB;W30H15)' => array('model' => 'P903iX', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P903iX(c100;TB;W24H10)' => array('model' => 'P903iX', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TB'),
                                'DoCoMo/2.0 P903iX(c100;TD)' => array('model' => 'P903iX', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TD'),
                                'DoCoMo/2.0 P903iX(c100;TJ)' => array('model' => 'P903iX', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '903i', 'status' => 'TJ'),
                                'DoCoMo/2.0 SO903iTV(c100;TB;W24H18)' => array('model' => 'SO903iTV', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 368, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '903i', 'status' => 'TB'),
@@ -820,6 +878,7 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P703i(c100;TB;W24H12)' => array('model' => 'P703i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '703i', 'status' => 'TB'),
                                'DoCoMo/2.0 P703i(c100;TB;W20H10)' => array('model' => 'P703i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '703i', 'status' => 'TB'),
                                'DoCoMo/2.0 P703i(c100;TB;W30H15)' => array('model' => 'P703i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '703i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P703i(c100;TB;W24H10)' => array('model' => 'P703i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '703i', 'status' => 'TB'),
                                'DoCoMo/2.0 P703i(c100;TD)' => array('model' => 'P703i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '703i', 'status' => 'TD'),
                                'DoCoMo/2.0 P703i(c100;TJ)' => array('model' => 'P703i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '703i', 'status' => 'TJ'),
                                'DoCoMo/2.0 D703i(c100;TB;W23H12)' => array('model' => 'D703i', 'htmlVersion' => '7.0', 'width' => 230, 'height' => 240, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'D', 'series' => '703i', 'status' => 'TB'),
@@ -872,6 +931,7 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P904i(c100;TB;W24H15)' => array('model' => 'P904i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '904i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 P904i(c100;TB;W20H13)' => array('model' => 'P904i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '904i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 P904i(c100;TB;W30H19)' => array('model' => 'P904i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '904i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P904i(c100;TB;W24H13)' => array('model' => 'P904i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '904i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 P904i(c100;TD)' => array('model' => 'P904i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '904i', 'status' => 'TD', 'isGPS' => true),
                                'DoCoMo/2.0 P904i(c100;TJ)' => array('model' => 'P904i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '904i', 'status' => 'TJ', 'isGPS' => true),
                                'DoCoMo/2.0 SO704i(c100;TB;W24H18)' => array('model' => 'SO704i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 368, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '704i', 'status' => 'TB'),
@@ -905,13 +965,13 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P704i(c100;TB;W24H12)' => array('model' => 'P704i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '704i', 'status' => 'TB'),
                                'DoCoMo/2.0 P704i(c100;TB;W20H10)' => array('model' => 'P704i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '704i', 'status' => 'TB'),
                                'DoCoMo/2.0 P704i(c100;TB;W30H15)' => array('model' => 'P704i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '704i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P704i(c100;TB;W24H10)' => array('model' => 'P704i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '704i', 'status' => 'TB'),
                                'DoCoMo/2.0 P704i(c100;TD)' => array('model' => 'P704i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '704i', 'status' => 'TD'),
                                'DoCoMo/2.0 P704i(c100;TJ)' => array('model' => 'P704i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 270, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '704i', 'status' => 'TJ'),
                                'DoCoMo/2.0 F883iES(c100;TB;W20H08)' => array('model' => 'F883iES', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 256, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '883i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F883iES(c100;TB;W16H08)' => array('model' => 'F883iES', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 256, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '883i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F883iESS(c100;TB;W20H08)' => array('model' => 'F883iESS', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 256, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '883i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F883iESS(c100;TB;W16H08)' => array('model' => 'F883iESS', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 256, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '883i', 'status' => 'TB', 'isGPS' => true),
-
                                'DoCoMo/2.0 F801i(c100;TB;W24H17)' => array('model' => 'F801i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '801i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F801i(c100;TB;W20H14)' => array('model' => 'F801i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '801i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F801i(c100;TB;W30H22)' => array('model' => 'F801i', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '801i', 'status' => 'TB', 'isGPS' => true),
@@ -940,8 +1000,20 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 SH705i2(c100;TB;W20H13)' => array('model' => 'SH705i2', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 SH705i2(c100;TB;W24H16)' => array('model' => 'SH705i2', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 SH705i2(c100;TB;W30H20)' => array('model' => 'SH705i2', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '705i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH705i2(c100;TB;W24H16)' => array('model' => 'SH705i2', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 SH705i2(c100;TD)' => array('model' => 'SH705i2', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '705i', 'status' => 'TD'),
                                'DoCoMo/2.0 SH705i2(c100;TJ)' => array('model' => 'SH705i2', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '705i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 SH706ie(c100;TB;W20H13)' => array('model' => 'SH706ie', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706ie(c100;TB;W24H16)' => array('model' => 'SH706ie', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706ie(c100;TB;W30H20)' => array('model' => 'SH706ie', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706ie(c100;TB;W24H16)' => array('model' => 'SH706ie', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706ie(c100;TD)' => array('model' => 'SH706ie', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 SH706ie(c100;TJ)' => array('model' => 'SH706ie', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 F05A(c100;TB;W24H17)' => array('model' => 'F05A', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F05A(c100;TB;W20H14)' => array('model' => 'F05A', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F05A(c100;TB;W30H22)' => array('model' => 'F05A', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F05A(c100;TD)' => array('model' => 'F05A', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 F05A(c100;TJ)' => array('model' => 'F05A', 'htmlVersion' => '7.0', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
 
                                // HTML 7.1
                                'DoCoMo/2.0 SH905i(c100;TB;W24H16)' => array('model' => 'SH905i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
@@ -975,6 +1047,7 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P905i(c100;TB;W24H15)' => array('model' => 'P905i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 P905i(c100;TB;W20H13)' => array('model' => 'P905i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 P905i(c100;TB;W30H19)' => array('model' => 'P905i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P905i(c100;TB;W24H13)' => array('model' => 'P905i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 P905i(c100;TD)' => array('model' => 'P905i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TD', 'isGPS' => true),
                                'DoCoMo/2.0 P905i(c100;TJ)' => array('model' => 'P905i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TJ', 'isGPS' => true),
                                'DoCoMo/2.0 F905i(c100;TB;W24H17)' => array('model' => 'F905i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
@@ -1033,8 +1106,8 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 F905iBiz(c100;TB;W20H10)' => array('model' => 'F905iBiz', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F905iBiz(c100;TB;W30H22)' => array('model' => 'F905iBiz', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F905iBiz(c100;TB;W30H15)' => array('model' => 'F905iBiz', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
-                               'DoCoMo/2.0 F905iBiz(c100;TB;W16H12)' => array('model' => 'F905iBiz', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
-                               'DoCoMo/2.0 F905iBiz(c100;TB;W16H8)' => array('model' => 'F905iBiz', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F905iBiz(c100;TB;W17H12)' => array('model' => 'F905iBiz', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F905iBiz(c100;TB;W17H8)' => array('model' => 'F905iBiz', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F905iBiz(c100;TB;W40H29)' => array('model' => 'F905iBiz', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F905iBiz(c100;TB;W40H20)' => array('model' => 'F905iBiz', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '905i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F905iBiz(c100;TD)' => array('model' => 'F905iBiz', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '905i', 'status' => 'TD', 'isGPS' => true),
@@ -1042,12 +1115,14 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P905iTV(c100;TB;W24H15)' => array('model' => 'P905iTV', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TB'),
                                'DoCoMo/2.0 P905iTV(c100;TB;W20H13)' => array('model' => 'P905iTV', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TB'),
                                'DoCoMo/2.0 P905iTV(c100;TB;W30H19)' => array('model' => 'P905iTV', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P905iTV(c100;TB;W24H13)' => array('model' => 'P905iTV', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TB'),
                                'DoCoMo/2.0 P905iTV(c100;TD)' => array('model' => 'P905iTV', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TD'),
                                'DoCoMo/2.0 P905iTV(c100;TJ)' => array('model' => 'P905iTV', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '905i', 'status' => 'TJ'),
                                'DoCoMo/2.0 P705i(c100;TB;W24H15)' => array('model' => 'P705i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 P705i(c100;TB;W20H13)' => array('model' => 'P705i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 P705i(c100;TB;W30H19)' => array('model' => 'P705i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 P705i(c100;TB;W16H10)' => array('model' => 'P705i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P705i(c100;TB;W24H13)' => array('model' => 'P705i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 P705i(c100;TD)' => array('model' => 'P705i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TD'),
                                'DoCoMo/2.0 P705i(c100;TJ)' => array('model' => 'P705i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TJ'),
                                'DoCoMo/2.0 N705i(c100;TB;W24H16)' => array('model' => 'N705i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '705i', 'status' => 'TB'),
@@ -1066,6 +1141,7 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P705imyu(c100;TB;W20H13)' => array('model' => 'P705imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 P705imyu(c100;TB;W30H19)' => array('model' => 'P705imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 P705imyu(c100;TB;W16H10)' => array('model' => 'P705imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P705imyu(c100;TB;W24H13)' => array('model' => 'P705imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 P705imyu(c100;TD)' => array('model' => 'P705imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TD'),
                                'DoCoMo/2.0 P705imyu(c100;TJ)' => array('model' => 'P705imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TJ'),
                                'DoCoMo/2.0 SO705i(c100;TB;W24H16)' => array('model' => 'SO705i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '705i', 'status' => 'TB'),
@@ -1078,12 +1154,345 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                                'DoCoMo/2.0 P705iCL(c100;TB;W20H13)' => array('model' => 'P705iCL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 P705iCL(c100;TB;W24H15)' => array('model' => 'P705iCL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 P705iCL(c100;TB;W30H19)' => array('model' => 'P705iCL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P705iCL(c100;TB;W24H13)' => array('model' => 'P705iCL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TB'),
                                'DoCoMo/2.0 P705iCL(c100;TD)' => array('model' => 'P705iCL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TD'),
                                'DoCoMo/2.0 P705iCL(c100;TJ)' => array('model' => 'P705iCL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '705i', 'status' => 'TJ'),
                                'DoCoMo/2.0 F884i(c100;TB;W20H11)' => array('model' => 'F884i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 364, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '884i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F884i(c100;TB;W16H11)' => array('model' => 'F884i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 364, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '884i', 'status' => 'TB', 'isGPS' => true),
                                'DoCoMo/2.0 F884i(c100;TD)' => array('model' => 'F884i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 364, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '884i', 'status' => 'TD', 'isGPS' => true),
-                               'DoCoMo/2.0 F884i(c100;TJ)' => array('model' => 'F884i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 364, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '884i', 'status' => 'TJ', 'isGPS' => true)
+                               'DoCoMo/2.0 F884i(c100;TJ)' => array('model' => 'F884i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 364, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '884i', 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 F884iES(c100;TB;W20H8)' => array('model' => 'F884iES', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 282, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '884i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F884iES(c100;TB;W16H8)' => array('model' => 'F884iES', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 282, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '884i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F884iES(c100;TD)' => array('model' => 'F884iES', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 282, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '884i', 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 F884iES(c100;TJ)' => array('model' => 'F884iES', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 282, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '884i', 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 N906iL(c100;TB;W24H16)' => array('model' => 'N906iL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906iL(c100;TB;W20H13)' => array('model' => 'N906iL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906iL(c100;TB;W30H20)' => array('model' => 'N906iL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906iL(c100;TB;W16H10)' => array('model' => 'N906iL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906iL(c100;TD)' => array('model' => 'N906iL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 N906iL(c100;TJ)' => array('model' => 'N906iL', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 N706i(c100;TB;W24H16)' => array('model' => 'N706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706i(c100;TB;W20H13)' => array('model' => 'N706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706i(c100;TB;W30H20)' => array('model' => 'N706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706i(c100;TB;W16H10)' => array('model' => 'N706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706i(c100;TD)' => array('model' => 'N706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 N706i(c100;TJ)' => array('model' => 'N706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 SO706i(c100;TB;W24H16)' => array('model' => 'SO706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SO706i(c100;TB;W20H13)' => array('model' => 'SO706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SO706i(c100;TB;W30H20)' => array('model' => 'SO706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SO706i(c100;TB;W16H10)' => array('model' => 'SO706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SO706i(c100;TD)' => array('model' => 'SO706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 SO706i(c100;TJ)' => array('model' => 'SO706i', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '706i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 P706imyu(c100;TB;W24H15)' => array('model' => 'P706imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P706imyu(c100;TB;W20H13)' => array('model' => 'P706imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P706imyu(c100;TB;W30H19)' => array('model' => 'P706imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P706imyu(c100;TB;W16H10)' => array('model' => 'P706imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P706imyu(c100;TB;W24H13)' => array('model' => 'P706imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P706imyu(c100;TD)' => array('model' => 'P706imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 P706imyu(c100;TJ)' => array('model' => 'P706imyu', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 N706ie(c100;TB;W20H13)' => array('model' => 'N706ie', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706ie(c100;TB;W24H16)' => array('model' => 'N706ie', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706ie(c100;TB;W30H20)' => array('model' => 'N706ie', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706ie(c100;TB;W16H10)' => array('model' => 'N706ie', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706ie(c100;TB;W24H16)' => array('model' => 'N706ie', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706ie(c100;TD)' => array('model' => 'N706ie', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 N706ie(c100;TJ)' => array('model' => 'N706ie', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 N706i2(c100;TB;W24H16)' => array('model' => 'N706i2', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706i2(c100;TB;W20H13)' => array('model' => 'N706i2', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706i2(c100;TB;W30H20)' => array('model' => 'N706i2', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706i2(c100;TB;W16H10)' => array('model' => 'N706i2', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 N706i2(c100;TD)' => array('model' => 'N706i2', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 N706i2(c100;TJ)' => array('model' => 'N706i2', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '706i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 N03A(c100;TB;W24H16)' => array('model' => 'N03A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N03A(c100;TB;W20H13)' => array('model' => 'N03A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N03A(c100;TB;W30H20)' => array('model' => 'N03A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N03A(c100;TB;W16H10)' => array('model' => 'N03A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N03A(c100;TD)' => array('model' => 'N03A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TD'),
+                               'DoCoMo/2.0 N03A(c100;TJ)' => array('model' => 'N03A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TJ'),
+                               'DoCoMo/2.0 N05A(c100;TB;W20H13)' => array('model' => 'N05A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N05A(c100;TB;W24H16)' => array('model' => 'N05A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N05A(c100;TB;W30H20)' => array('model' => 'N05A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N05A(c100;TB;W16H10)' => array('model' => 'N05A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N05A(c100;TB;W24H16)' => array('model' => 'N05A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N05A(c100;TD)' => array('model' => 'N05A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TD'),
+                               'DoCoMo/2.0 N05A(c100;TJ)' => array('model' => 'N05A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TJ'),
+                               'DoCoMo/2.0 F07A(c100;TB;W20H08)' => array('model' => 'F07A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 256, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 F07A(c100;TB;W16H08)' => array('model' => 'F07A', 'htmlVersion' => '7.1', 'width' => 240, 'height' => 256, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+
+                               // HTML 7.2
+                               'DoCoMo/2.0 P906i(c100;TB;W24H15)' => array('model' => 'P906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P906i(c100;TB;W20H13)' => array('model' => 'P906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P906i(c100;TB;W30H19)' => array('model' => 'P906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P906i(c100;TB;W16H10)' => array('model' => 'P906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P906i(c100;TB;W24H13)' => array('model' => 'P906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P906i(c100;TD)' => array('model' => 'P906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '906i', 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 P906i(c100;TJ)' => array('model' => 'P906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '906i', 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 SO906i(c100;TB;W24H18)' => array('model' => 'SO906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 368, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SO906i(c100;TB;W20H15)' => array('model' => 'SO906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 368, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SO906i(c100;TB;W30H23)' => array('model' => 'SO906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 368, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SO906i(c100;TB;W16H12)' => array('model' => 'SO906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 368, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SO906i(c100;TB;W12H9)' => array('model' => 'SO906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 368, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SO906i(c100;TB;W20H10)' => array('model' => 'SO906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 368, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SO906i(c100;TD)' => array('model' => 'SO906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 368, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '906i', 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 SO906i(c100;TJ)' => array('model' => 'SO906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 368, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SO', 'series' => '906i', 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 SH906i(c100;TB;W24H16)' => array('model' => 'SH906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH906i(c100;TB;W24H12)' => array('model' => 'SH906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH906i(c100;TB;W20H13)' => array('model' => 'SH906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH906i(c100;TB;W20H10)' => array('model' => 'SH906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH906i(c100;TB;W30H20)' => array('model' => 'SH906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH906i(c100;TB;W30H15)' => array('model' => 'SH906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH906i(c100;TB;W16H10)' => array('model' => 'SH906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH906i(c100;TB;W16H08)' => array('model' => 'SH906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH906i(c100;TD)' => array('model' => 'SH906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 SH906i(c100;TJ)' => array('model' => 'SH906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 N906imyu(c100;TB;W24H16)' => array('model' => 'N906imyu', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906imyu(c100;TB;W20H13)' => array('model' => 'N906imyu', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906imyu(c100;TB;W30H20)' => array('model' => 'N906imyu', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906imyu(c100;TB;W16H10)' => array('model' => 'N906imyu', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906imyu(c100;TD)' => array('model' => 'N906imyu', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 N906imyu(c100;TJ)' => array('model' => 'N906imyu', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TB;W24H17)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TB;W24H12)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TB;W20H14)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TB;W20H10)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TB;W30H22)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TB;W30H15)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TB;W17H12)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TB;W17H8)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TB;W40H29)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TB;W40H20)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TD)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 F906i(c100;TJ)' => array('model' => 'F906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '906i', 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 N906i(c100;TB;W24H16)' => array('model' => 'N906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906i(c100;TB;W20H13)' => array('model' => 'N906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906i(c100;TB;W30H20)' => array('model' => 'N906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906i(c100;TB;W16H10)' => array('model' => 'N906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N906i(c100;TD)' => array('model' => 'N906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 N906i(c100;TJ)' => array('model' => 'N906i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => '906i', 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 SH906iTV(c100;TB;W20H13)' => array('model' => 'SH906iTV', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH906iTV(c100;TB;W20H10)' => array('model' => 'SH906iTV', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH906iTV(c100;TB;W24H16)' => array('model' => 'SH906iTV', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH906iTV(c100;TB;W24H12)' => array('model' => 'SH906iTV', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH906iTV(c100;TB;W30H20)' => array('model' => 'SH906iTV', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH906iTV(c100;TB;W30H15)' => array('model' => 'SH906iTV', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH906iTV(c100;TB;W16H10)' => array('model' => 'SH906iTV', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH906iTV(c100;TB;W16H08)' => array('model' => 'SH906iTV', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH906iTV(c100;TB;W24H16)' => array('model' => 'SH906iTV', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH906iTV(c100;TD)' => array('model' => 'SH906iTV', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TD'),
+                               'DoCoMo/2.0 SH906iTV(c100;TJ)' => array('model' => 'SH906iTV', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '906i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 F706i(c100;TB;W24H17)' => array('model' => 'F706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 F706i(c100;TB;W20H14)' => array('model' => 'F706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 F706i(c100;TB;W30H22)' => array('model' => 'F706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 F706i(c100;TB;W17H12)' => array('model' => 'F706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 F706i(c100;TD)' => array('model' => 'F706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 F706i(c100;TJ)' => array('model' => 'F706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => '706i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 SH706i(c100;TB;W24H16)' => array('model' => 'SH706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706i(c100;TB;W24H12)' => array('model' => 'SH706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706i(c100;TB;W20H13)' => array('model' => 'SH706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706i(c100;TB;W20H10)' => array('model' => 'SH706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706i(c100;TB;W30H20)' => array('model' => 'SH706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706i(c100;TB;W30H15)' => array('model' => 'SH706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706i(c100;TB;W16H10)' => array('model' => 'SH706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706i(c100;TB;W16H08)' => array('model' => 'SH706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706i(c100;TD)' => array('model' => 'SH706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 SH706i(c100;TJ)' => array('model' => 'SH706i', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 P706ie(c100;TB;W20H13)' => array('model' => 'P706ie', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P706ie(c100;TB;W24H15)' => array('model' => 'P706ie', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P706ie(c100;TB;W30H19)' => array('model' => 'P706ie', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P706ie(c100;TB;W16H10)' => array('model' => 'P706ie', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P706ie(c100;TB;W24H13)' => array('model' => 'P706ie', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 P706ie(c100;TD)' => array('model' => 'P706ie', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 P706ie(c100;TJ)' => array('model' => 'P706ie', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => '706i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 SH706iw(c100;TB;W24H16)' => array('model' => 'SH706iw', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706iw(c100;TB;W24H12)' => array('model' => 'SH706iw', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706iw(c100;TB;W20H13)' => array('model' => 'SH706iw', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706iw(c100;TB;W20H10)' => array('model' => 'SH706iw', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706iw(c100;TB;W30H20)' => array('model' => 'SH706iw', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706iw(c100;TB;W30H15)' => array('model' => 'SH706iw', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706iw(c100;TB;W16H10)' => array('model' => 'SH706iw', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706iw(c100;TB;W16H08)' => array('model' => 'SH706iw', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TB'),
+                               'DoCoMo/2.0 SH706iw(c100;TD)' => array('model' => 'SH706iw', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TD'),
+                               'DoCoMo/2.0 SH706iw(c100;TJ)' => array('model' => 'SH706iw', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => '706i', 'status' => 'TJ'),
+                               'DoCoMo/2.0 F01A(c100;TB;W24H17)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;TB;W24H12)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;TB;W20H14)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;TB;W20H10)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;TB;W30H22)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;TB;W30H15)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;TB;W17H12)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;TB;W17H8)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;TB;W40H29)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;TB;W40H20)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;SD)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'SD', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;TD)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;SJ)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'SJ', 'isGPS' => true),
+                               'DoCoMo/2.0 F01A(c100;TJ)' => array('model' => 'F01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 F02A(c100;TB;W24H17)' => array('model' => 'F02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 F02A(c100;TB;W20H14)' => array('model' => 'F02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 F02A(c100;TB;W30H22)' => array('model' => 'F02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 F02A(c100;TB;W17H12)' => array('model' => 'F02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 F02A(c100;TB;W40H29)' => array('model' => 'F02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 F02A(c100;TD)' => array('model' => 'F02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TD'),
+                               'DoCoMo/2.0 F02A(c100;TJ)' => array('model' => 'F02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TJ'),
+                               'DoCoMo/2.0 F03A(c100;TB;W24H17)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;TB;W24H12)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;TB;W20H14)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;TB;W20H10)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;TB;W30H22)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;TB;W30H15)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;TB;W17H12)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;TB;W17H8)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;TB;W40H29)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;TB;W40H20)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;SD)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'SD', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;TD)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;SJ)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'SJ', 'isGPS' => true),
+                               'DoCoMo/2.0 F03A(c100;TJ)' => array('model' => 'F03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 F04A(c100;TB;W24H17)' => array('model' => 'F04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 F04A(c100;TB;W20H14)' => array('model' => 'F04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 F04A(c100;TB;W30H22)' => array('model' => 'F04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 F04A(c100;TB;W17H12)' => array('model' => 'F04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 F04A(c100;TB;W40H29)' => array('model' => 'F04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 F04A(c100;TD)' => array('model' => 'F04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TD'),
+                               'DoCoMo/2.0 F04A(c100;TJ)' => array('model' => 'F04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TJ'),
+                               'DoCoMo/2.0 F06A(c100;TB;W24H17)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F06A(c100;TB;W24H12)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F06A(c100;TB;W20H14)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F06A(c100;TB;W20H10)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F06A(c100;TB;W30H22)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F06A(c100;TB;W30H15)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F06A(c100;TB;W17H12)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F06A(c100;TB;W17H8)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F06A(c100;TB;W40H29)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F06A(c100;TB;W40H20)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F06A(c100;TD)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 F06A(c100;TJ)' => array('model' => 'F06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 352, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 P01A(c100;TB;W24H15)' => array('model' => 'P01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P01A(c100;TB;W20H13)' => array('model' => 'P01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P01A(c100;TB;W30H19)' => array('model' => 'P01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P01A(c100;TB;W16H10)' => array('model' => 'P01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P01A(c100;TB;W24H13)' => array('model' => 'P01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P01A(c100;SD)' => array('model' => 'P01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'SD', 'isGPS' => true),
+                               'DoCoMo/2.0 P01A(c100;TD)' => array('model' => 'P01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 P01A(c100;SJ)' => array('model' => 'P01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'SJ', 'isGPS' => true),
+                               'DoCoMo/2.0 P01A(c100;TJ)' => array('model' => 'P01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 P02A(c100;TB;W24H15)' => array('model' => 'P02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P02A(c100;TB;W20H13)' => array('model' => 'P02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P02A(c100;TB;W30H19)' => array('model' => 'P02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P02A(c100;TB;W16H10)' => array('model' => 'P02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P02A(c100;TB;W24H13)' => array('model' => 'P02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P02A(c100;SD)' => array('model' => 'P02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'SD', 'isGPS' => true),
+                               'DoCoMo/2.0 P02A(c100;TD)' => array('model' => 'P02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 P02A(c100;SJ)' => array('model' => 'P02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'SJ', 'isGPS' => true),
+                               'DoCoMo/2.0 P02A(c100;TJ)' => array('model' => 'P02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 P03A(c100;TB;W24H15)' => array('model' => 'P03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P03A(c100;TB;W20H13)' => array('model' => 'P03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P03A(c100;TB;W30H19)' => array('model' => 'P03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P03A(c100;TB;W16H10)' => array('model' => 'P03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P03A(c100;TB;W24H13)' => array('model' => 'P03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P03A(c100;TD)' => array('model' => 'P03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TD'),
+                               'DoCoMo/2.0 P03A(c100;TJ)' => array('model' => 'P03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TJ'),
+                               'DoCoMo/2.0 P04A(c100;TB;W24H15)' => array('model' => 'P04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P04A(c100;TB;W20H13)' => array('model' => 'P04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P04A(c100;TB;W30H19)' => array('model' => 'P04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P04A(c100;TB;W16H10)' => array('model' => 'P04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P04A(c100;TB;W24H13)' => array('model' => 'P04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P04A(c100;TD)' => array('model' => 'P04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TD'),
+                               'DoCoMo/2.0 P04A(c100;TJ)' => array('model' => 'P04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TJ'),
+                               'DoCoMo/2.0 P05A(c100;TB;W24H15)' => array('model' => 'P05A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P05A(c100;TB;W20H13)' => array('model' => 'P05A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P05A(c100;TB;W30H19)' => array('model' => 'P05A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P05A(c100;TB;W16H10)' => array('model' => 'P05A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P05A(c100;TB;W24H13)' => array('model' => 'P05A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P05A(c100;TD)' => array('model' => 'P05A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TD'),
+                               'DoCoMo/2.0 P05A(c100;TJ)' => array('model' => 'P05A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TJ'),
+                               'DoCoMo/2.0 P06A(c100;TB;W20H13)' => array('model' => 'P06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P06A(c100;TB;W24H15)' => array('model' => 'P06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P06A(c100;TB;W30H19)' => array('model' => 'P06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P06A(c100;TB;W16H10)' => array('model' => 'P06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P06A(c100;TB;W24H13)' => array('model' => 'P06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 P06A(c100;TD)' => array('model' => 'P06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TD'),
+                               'DoCoMo/2.0 P06A(c100;TJ)' => array('model' => 'P06A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TJ'),
+                               'DoCoMo/2.0 SH01A(c100;TB;W24H16)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P10A(c100;TB;W24H15)' => array('model' => 'P10A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 350, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => false),
+                               'DoCoMo/2.0 SH01A(c100;TB;W24H12)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH01A(c100;TB;W20H13)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH01A(c100;TB;W20H10)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH01A(c100;TB;W30H20)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH01A(c100;TB;W30H15)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH01A(c100;TB;W16H10)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH01A(c100;TB;W16H08)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH01A(c100;SD)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'SD', 'isGPS' => true),
+                               'DoCoMo/2.0 SH01A(c100;TD)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 SH01A(c100;SJ)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'SJ', 'isGPS' => true),
+                               'DoCoMo/2.0 SH01A(c100;TJ)' => array('model' => 'SH01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 SH02A(c100;TB;W24H16)' => array('model' => 'SH02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH02A(c100;TB;W20H13)' => array('model' => 'SH02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH02A(c100;TB;W30H20)' => array('model' => 'SH02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH02A(c100;TB;W16H10)' => array('model' => 'SH02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH02A(c100;TD)' => array('model' => 'SH02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 SH02A(c100;TJ)' => array('model' => 'SH02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 SH03A(c100;TB;W24H16)' => array('model' => 'SH03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH03A(c100;TB;W20H13)' => array('model' => 'SH03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH03A(c100;TB;W30H20)' => array('model' => 'SH03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH03A(c100;TB;W16H10)' => array('model' => 'SH03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH03A(c100;SD)' => array('model' => 'SH03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'SD', 'isGPS' => true),
+                               'DoCoMo/2.0 SH03A(c100;TD)' => array('model' => 'SH03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 SH03A(c100;SJ)' => array('model' => 'SH03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'SJ', 'isGPS' => true),
+                               'DoCoMo/2.0 SH03A(c100;TJ)' => array('model' => 'SH03A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;TB;W24H16)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;TB;W24H12)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;TB;W20H13)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;TB;W20H10)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;TB;W30H20)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;TB;W30H15)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;TB;W16H10)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;TB;W16H08)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;SD)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'SD', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;TD)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;SJ)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'SJ', 'isGPS' => true),
+                               'DoCoMo/2.0 SH04A(c100;TJ)' => array('model' => 'SH04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;TB;W24H16)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;TB;W24H12)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;TB;W20H13)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;TB;W20H10)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;TB;W30H20)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;TB;W30H15)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;TB;W16H10)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;TB;W16H8)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;SD)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'SD', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;TD)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;SJ)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'SJ', 'isGPS' => true),
+                               'DoCoMo/2.0 N01A(c100;TJ)' => array('model' => 'N01A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 N02A(c100;TB;W24H16)' => array('model' => 'N02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N02A(c100;TB;W20H13)' => array('model' => 'N02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N02A(c100;TB;W30H20)' => array('model' => 'N02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N02A(c100;TB;W16H10)' => array('model' => 'N02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N02A(c100;SD)' => array('model' => 'N02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'SD', 'isGPS' => true),
+                               'DoCoMo/2.0 N02A(c100;TD)' => array('model' => 'N02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TD', 'isGPS' => true),
+                               'DoCoMo/2.0 N02A(c100;SJ)' => array('model' => 'N02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'SJ', 'isGPS' => true),
+                               'DoCoMo/2.0 N02A(c100;TJ)' => array('model' => 'N02A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TJ', 'isGPS' => true),
+                               'DoCoMo/2.0 N04A(c100;TB;W24H16)' => array('model' => 'N04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N04A(c100;TB;W20H13)' => array('model' => 'N04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N04A(c100;TB;W30H20)' => array('model' => 'N04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N04A(c100;TB;W16H10)' => array('model' => 'N04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB'),
+                               'DoCoMo/2.0 N04A(c100;SD)' => array('model' => 'N04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'SD'),
+                               'DoCoMo/2.0 N04A(c100;TD)' => array('model' => 'N04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TD'),
+                               'DoCoMo/2.0 N04A(c100;SJ)' => array('model' => 'N04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'SJ'),
+                               'DoCoMo/2.0 N04A(c100;TJ)' => array('model' => 'N04A', 'htmlVersion' => '7.2', 'width' => 240, 'height' => 320, 'version' => '2.0', 'cacheSize' => 100, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TJ'),
+
+                               // i-mode browser 2.0
+                               'DoCoMo/2.0 P07A3(c500;TB;W24H15)' => array('model' => 'P07A3', 'htmlVersion' => null, 'width' => 480, 'height' => 662, 'version' => '2.0', 'cacheSize' => 500, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P08A3(c500;TB;W24H15)' => array('model' => 'P08A3', 'htmlVersion' => null, 'width' => 480, 'height' => 662, 'version' => '2.0', 'cacheSize' => 500, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 P09A3(c500;TB;W24H15)' => array('model' => 'P09A3', 'htmlVersion' => null, 'width' => 480, 'height' => 662, 'version' => '2.0', 'cacheSize' => 500, 'isFoma' => true, 'vendor' => 'P', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N06A3(c500;TB;W24H16)' => array('model' => 'N06A3', 'htmlVersion' => null, 'width' => 480, 'height' => 640, 'version' => '2.0', 'cacheSize' => 500, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N08A3(c500;TB;W24H16)' => array('model' => 'N08A3', 'htmlVersion' => null, 'width' => 480, 'height' => 640, 'version' => '2.0', 'cacheSize' => 500, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 N09A3(c500;TB;W24H16)' => array('model' => 'N09A3', 'htmlVersion' => null, 'width' => 480, 'height' => 640, 'version' => '2.0', 'cacheSize' => 500, 'isFoma' => true, 'vendor' => 'N', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 F08A3(c500;TB;W24H16)' => array('model' => 'F08A3', 'htmlVersion' => null, 'width' => 480, 'height' => 648, 'version' => '2.0', 'cacheSize' => 500, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => false),
+                               'DoCoMo/2.0 F09A3(c500;TB;W24H16)' => array('model' => 'F09A3', 'htmlVersion' => null, 'width' => 480, 'height' => 648, 'version' => '2.0', 'cacheSize' => 500, 'isFoma' => true, 'vendor' => 'F', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH05A3(c500;TB;W24H14)' => array('model' => 'SH05A3', 'htmlVersion' => null, 'width' => 480, 'height' => 592, 'version' => '2.0', 'cacheSize' => 500, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH06A3(c500;TB;W24H14)' => array('model' => 'SH06A3', 'htmlVersion' => null, 'width' => 480, 'height' => 592, 'version' => '2.0', 'cacheSize' => 500, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true),
+                               'DoCoMo/2.0 SH07A3(c500;TB;W24H14)' => array('model' => 'SH07A3', 'htmlVersion' => null, 'width' => 480, 'height' => 592, 'version' => '2.0', 'cacheSize' => 500, 'isFoma' => true, 'vendor' => 'SH', 'series' => null, 'status' => 'TB', 'isGPS' => true)
                                );
 
     /**#@-*/
@@ -1091,6 +1500,11 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
     /**#@+
      * @access public
      */
+
+    public function setUp()
+    {
+        $GLOBALS['NET_USERAGENT_MOBILE_DoCoMo_ScreenInfo_Instance'] = null;
+    }
 
     public function testShouldDetectUserAgentsAsDocomo()
     {
@@ -1112,7 +1526,10 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
         while (list($userAgent, $profile) = each($this->_profiles)) {
             $agent = new Net_UserAgent_Mobile_DoCoMo($userAgent);
 
-            $this->assertEquals($profile['model'], $agent->getModel());
+            $this->assertEquals($profile['model'],
+                                $agent->getModel(),
+                                $agent->getUserAgent()
+                                );
         }
     }
 
@@ -1122,7 +1539,9 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
         while (list($userAgent, $profile) = each($this->_profiles)) {
             $agent = new Net_UserAgent_Mobile_DoCoMo($userAgent);
 
-            $this->assertEquals($profile['htmlVersion'], $agent->getHTMLVersion());
+            $this->assertEquals($profile['htmlVersion'], $agent->getHTMLVersion(),
+                                $agent->getUserAgent()
+                                );
         }
     }
 
@@ -1133,8 +1552,12 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
             $agent = new Net_UserAgent_Mobile_DoCoMo($userAgent);
             $display = $agent->getDisplay();
 
-            $this->assertEquals($profile['width'], $display->getWidth());
-            $this->assertEquals($profile['height'], $display->getHeight());
+            $this->assertEquals($profile['width'], $display->getWidth(),
+                                $agent->getUserAgent()
+                                );
+            $this->assertEquals($profile['height'], $display->getHeight(),
+                                $agent->getUserAgent()
+                                );
         }
     }
 
@@ -1158,6 +1581,28 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
     }
 
     public function testShouldSupportDenaWebCrawler()
+    {
+        $agent = new Net_UserAgent_Mobile_DoCoMo('DoCoMo/2.0 N902iS(c100;TB;W24H12)(compatible; moba-crawler; http://crawler.dena.jp/)');
+
+        $this->assertTrue($agent->isDoCoMo());
+        $this->assertEquals('N902iS', $agent->getModel());
+        $this->assertEquals('TB', $agent->getStatus());
+        $this->assertNull($agent->getBandwidth());
+        $this->assertNull($agent->getSerialNumber());
+        $this->assertTrue($agent->isFOMA());
+        $this->assertNull($agent->getCardID());
+        $this->assertEquals('compatible; moba-crawler; http://crawler.dena.jp/',
+                            $agent->getComment()
+                            );
+        $this->assertEquals(100, $agent->getCacheSize());
+        $this->assertEquals('DoCoMo', $agent->getName());
+        $this->assertEquals('2.0', $agent->getVersion());
+    }
+
+    /**
+     * @since Method available since Release 1.0.0RC2
+     */
+    public function testShouldSupportGoogleMobileWebCrawler()
     {
         $agent = new Net_UserAgent_Mobile_DoCoMo('DoCoMo/2.0 N902iS(c100;TB;W24H12)(compatible; moba-crawler; http://crawler.dena.jp/)');
 
@@ -1241,7 +1686,9 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
         while (list($userAgent, $profile) = each($this->_profiles)) {
             $agent = new Net_UserAgent_Mobile_DoCoMo($userAgent);
 
-            $this->assertEquals($profile['vendor'], $agent->getVendor());
+            $this->assertEquals($profile['vendor'], $agent->getVendor(),
+                                $agent->getUserAgent()
+                                );
         }
     }
 
@@ -1254,7 +1701,9 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
         while (list($userAgent, $profile) = each($this->_profiles)) {
             $agent = new Net_UserAgent_Mobile_DoCoMo($userAgent);
 
-            $this->assertEquals($profile['series'], $agent->getSeries());
+            $this->assertEquals($profile['series'], $agent->getSeries(),
+                                $agent->getUserAgent()
+                                );
         }
     }
 
@@ -1268,10 +1717,12 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
             $agent = new Net_UserAgent_Mobile_DoCoMo($userAgent);
 
             if (array_key_exists('status', $profile)) {
-                $this->assertEquals($profile['status'], $agent->getStatus());
+                $this->assertEquals($profile['status'], $agent->getStatus(),
+                                    $agent->getUserAgent()
+                                    );
             } else {
                 if (!is_null($agent->getStatus())) {
-                    $this->fail($agent->getModel());
+                    $this->fail($agent->getUserAgent());
                 }
             }
         }
@@ -1286,7 +1737,7 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
                           'DoCoMo/2.0 N2001(c10;ser0123456789abcde;icc01234567890123456789)' => array('serialNumber' => '0123456789abcde'),
                           'DoCoMo/2.0 NM850iG(c100;TB;W22H10;ser123456789012345;icc)' => array('serialNumber' => '123456789012345')
                           );
-        while (list($userAgent, $profile) = each($this->_profiles)) {
+        while (list($userAgent, $profile) = each($profiles)) {
             $agent = new Net_UserAgent_Mobile_DoCoMo($userAgent);
 
             $this->assertEquals($profile['serialNumber'], $agent->getSerialNumber());
@@ -1331,10 +1782,12 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
 
             if (!array_key_exists('isGPS', $profile)) {
                 if ($agent->isGPS()) {
-                    $this->fail($agent->getModel());
+                    $this->fail($agent->getUserAgent());
                 }
             } else {
-                $this->assertTrue($agent->isGPS(), $agent->getModel());
+                $this->assertEquals($profile['isGPS'], $agent->isGPS(),
+                                    $agent->getUserAgent()
+                                    );
             }
         }
     }
@@ -1358,7 +1811,7 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
     /**
      * @since Method available since Release 1.0.0RC1
      */
-    public function testShouldUseAnExternalScreenInformationIfTheEnvironmentVariableIsGiven1()
+    public function testShouldUseAnExternalScreenInformationIfTheEnvironmentVariableIsGiven()
     {
         $_SERVER['DOCOMO_MAP'] = dirname(__FILE__) . '/' . basename(__FILE__, '.php') . '/docomo-screen.xml';
         $agent = new Net_UserAgent_Mobile_DoCoMo('DoCoMo/2.0 P705iCL(c100;TB;W16H10)');
@@ -1368,6 +1821,27 @@ class Net_UserAgent_Mobile_DoCoMoTestCase extends PHPUnit_Framework_TestCase
         $this->assertEquals(999, $display->getHeight());
         $this->assertFalse($display->isColor());
         $this->assertEquals(999, $display->getDepth());
+    }
+
+    /**
+     * @since Method available since Release 1.0.0RC3
+     */
+    public function testShouldProvideTheBrowserVersionOfAUserAgent()
+    {
+        reset($this->_profiles);
+        while (list($userAgent, $profile) = each($this->_profiles)) {
+            $agent = new Net_UserAgent_Mobile_DoCoMo($userAgent);
+
+            if ($agent->getCacheSize() == 500) {
+                $this->assertEquals('2.0', $agent->getBrowserVersion(),
+                                    $agent->getUserAgent()
+                                    );
+            } else {
+                $this->assertEquals('1.0', $agent->getBrowserVersion(),
+                                    $agent->getUserAgent()
+                                    );
+            }
+        }
     }
 
     /**#@-*/
