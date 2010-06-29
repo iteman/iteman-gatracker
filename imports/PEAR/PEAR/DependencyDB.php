@@ -10,7 +10,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: DependencyDB.php,v 1.44 2009/03/21 15:15:26 dufuz Exp $
+ * @version    CVS: $Id: DependencyDB.php 286686 2009-08-02 17:38:57Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 1.4.0a1
  */
@@ -30,7 +30,7 @@ $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'] = array();
  * @author     Tomas V.V.Cox <cox@idec.net.com>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -164,18 +164,19 @@ class PEAR_DependencyDB
     {
         if (!is_file($this->_depdb)) {
             $this->rebuildDB();
-        } else {
-            $depdb = $this->_getDepDB();
-            // Datatype format has been changed, rebuild the Deps DB
-            if ($depdb['_version'] < $this->_version) {
-                $this->rebuildDB();
-            }
+            return;
+        }
 
-            if ($depdb['_version']{0} > $this->_version{0}) {
-                return PEAR::raiseError('Dependency database is version ' .
-                    $depdb['_version'] . ', and we are version ' .
-                    $this->_version . ', cannot continue');
-            }
+        $depdb = $this->_getDepDB();
+        // Datatype format has been changed, rebuild the Deps DB
+        if ($depdb['_version'] < $this->_version) {
+            $this->rebuildDB();
+        }
+
+        if ($depdb['_version']{0} > $this->_version{0}) {
+            return PEAR::raiseError('Dependency database is version ' .
+                $depdb['_version'] . ', and we are version ' .
+                $this->_version . ', cannot continue');
         }
     }
 
@@ -228,9 +229,10 @@ class PEAR_DependencyDB
         foreach ($depend as $info) {
             $temp = $this->getDependencies($info);
             foreach ($temp as $dep) {
-                if (isset($dep['dep'], $dep['dep']['channel'], $dep['dep']['name']) &&
-                      strtolower($dep['dep']['channel']) == $channel &&
-                      strtolower($dep['dep']['name']) == $package
+                if (
+                    isset($dep['dep'], $dep['dep']['channel'], $dep['dep']['name']) &&
+                    strtolower($dep['dep']['channel']) == $channel &&
+                    strtolower($dep['dep']['name']) == $package
                 ) {
                     if (!isset($dependencies[$info['channel']])) {
                         $dependencies[$info['channel']] = array();
@@ -741,13 +743,6 @@ class PEAR_DependencyDB
                     break;
                 }
             }
-
-            if (!$found) {
-                $data['packages'][$depchannel][$dep['name']][] = array(
-                    'channel' => $channel,
-                    'package' => $package
-                );
-            }
         } else {
             if (!isset($data['packages'])) {
                 $data['packages'] = array();
@@ -761,6 +756,10 @@ class PEAR_DependencyDB
                 $data['packages'][$depchannel][$dep['name']] = array();
             }
 
+            $found = false;
+        }
+
+        if (!$found) {
             $data['packages'][$depchannel][$dep['name']][] = array(
                 'channel' => $channel,
                 'package' => $package

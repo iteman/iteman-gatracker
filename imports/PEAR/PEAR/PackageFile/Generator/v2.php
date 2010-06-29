@@ -10,7 +10,7 @@
  * @author     Stephan Schmidt (original XML_Serializer code)
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: v2.php,v 1.51 2009/03/27 17:11:18 dufuz Exp $
+ * @version    CVS: $Id: v2.php 278907 2009-04-17 21:10:04Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 1.4.0a1
  */
@@ -31,7 +31,7 @@ require_once 'XML/Util.php';
  * @author     Stephan Schmidt (original XML_Serializer code)
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -113,7 +113,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
      */
     function getPackagerVersion()
     {
-        return '1.8.1';
+        return '1.9.1';
     }
 
     /**
@@ -377,7 +377,8 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $arr['changelog']['release'][0] = $release;
             }
 
-            foreach ($arr['changelog']['release'] as &$c) {
+            foreach (array_keys($arr['changelog']['release']) as $key) {
+                $c =& $arr['changelog']['release'][$key];
                 if (isset($c['notes'])) {
                     // This trims out the indenting, needs fixing
                     $c['notes'] = "\n" . trim($c['notes']) . "\n";
@@ -397,7 +398,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
             $this->options['beautifyFilelist'] = true;
         }
 
-        $arr['attribs']['packagerversion'] = '1.8.1';
+        $arr['attribs']['packagerversion'] = '1.9.1';
         if ($this->serialize($arr, $options)) {
             return $this->_serializedData . "\n";
         }
@@ -871,7 +872,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
             if ($this->options['encoding'] == 'UTF-8' &&
                   version_compare(phpversion(), '5.0.0', 'lt')
             ) {
-                $tag = utf8_encode($tag);
+                $tag['content'] = utf8_encode($tag['content']);
             }
 
             if ($replaceEntities === true) {

@@ -9,7 +9,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: PackageFile.php,v 1.48 2009/04/09 22:16:26 dufuz Exp $
+ * @version    CVS: $Id: PackageFile.php 286670 2009-08-02 14:16:06Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 1.4.0a1
  */
@@ -35,7 +35,7 @@ define('PEAR_PACKAGEFILE_ERROR_INVALID_PACKAGEVERSION', 2);
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -205,9 +205,10 @@ class PEAR_PackageFile
                 return $pf;
             }
 
-            if (!$pf->validate($state)) {
+            if (!$pf->validate($state)) {;
                 if ($this->_config->get('verbose') > 0
-                    && $this->_logger && $pf->getValidationWarnings(false)) {
+                    && $this->_logger && $pf->getValidationWarnings(false)
+                ) {
                     foreach ($pf->getValidationWarnings(false) as $warning) {
                         $this->_logger->log(0, 'ERROR: ' . $warning['message']);
                     }
@@ -323,11 +324,11 @@ class PEAR_PackageFile
             $ret = PEAR::raiseError("Could not get contents of package \"$file\"".
                                      '. Invalid tgz file.');
             return $ret;
-        } else {
-            if (!count($content) && !@is_file($file)) {
-                $ret = PEAR::raiseError("could not open file \"$file\"");
-                return $ret;
-            }
+        }
+
+        if (!count($content) && !@is_file($file)) {
+            $ret = PEAR::raiseError("could not open file \"$file\"");
+            return $ret;
         }
 
         $xml      = null;

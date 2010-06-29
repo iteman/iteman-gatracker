@@ -10,7 +10,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: Install.php,v 1.153 2009/03/08 04:01:11 dufuz Exp $
+ * @version    CVS: $Id: Install.php 287477 2009-08-19 14:19:43Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 0.1
  */
@@ -30,7 +30,7 @@ require_once 'PEAR/Command/Common.php';
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
  */
@@ -563,8 +563,7 @@ Run post-installation scripts in package <package>, if any exist.
             }
         }
 
-        $abstractpackages = array();
-        $otherpackages    = array();
+        $abstractpackages = $otherpackages = array();
         // parse params
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
 
@@ -658,7 +657,7 @@ Run post-installation scripts in package <package>, if any exist.
         }
 
         $this->downloader = &$this->getDownloader($this->ui, $options, $this->config);
-        $errors = $downloaded = $binaries   = array();
+        $errors = $downloaded = $binaries = array();
         $downloaded = &$this->downloader->download($packages);
         if (PEAR::isError($downloaded)) {
             return $this->raiseError($downloaded);
@@ -703,8 +702,7 @@ Run post-installation scripts in package <package>, if any exist.
             return true;
         }
 
-        $extrainfo = array();
-        $binaries  = array();
+        $binaries = $extrainfo = array();
         foreach ($downloaded as $param) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->installer->install($param, $options);
@@ -1203,10 +1201,14 @@ Run post-installation scripts in package <package>, if any exist.
                     return $this->raiseError($chan);
                 }
 
+                $base2 = false;
                 $preferred_mirror = $this->config->get('preferred_mirror', null, $channel);
                 if ($chan->supportsREST($preferred_mirror) &&
-                      $base = $chan->getBaseURL('REST1.0', $preferred_mirror))
-                {
+                    (
+                       //($base2 = $chan->getBaseURL('REST1.4', $preferred_mirror)) ||
+                       ($base  = $chan->getBaseURL('REST1.0', $preferred_mirror))
+                    )
+                ) {
                     $dorest = true;
                 }
 
@@ -1218,10 +1220,15 @@ Run post-installation scripts in package <package>, if any exist.
                 }
 
                 if ($dorest) {
-                    $rest = &$this->config->getREST('1.0', array());
-                    $installed = array_flip($reg->listPackages($channel));
+                    if ($base2) {
+                        $rest = &$this->config->getREST('1.4', array());
+                        $base = $base2;
+                    } else {
+                        $rest = &$this->config->getREST('1.0', array());
+                    }
 
-                    $latest = $rest->listLatestUpgrades($base, $state, $installed, $channel, $reg);
+                    $installed = array_flip($reg->listPackages($channel));
+                    $latest    = $rest->listLatestUpgrades($base, $state, $installed, $channel, $reg);
                 }
 
                 PEAR::staticPopErrorHandling();

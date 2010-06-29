@@ -34,38 +34,26 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   Testing
  * @package    PHPUnit
+ * @subpackage Extensions_Database_DB
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.phpunit.de/
- * @since      File available since Release 3.2.0
+ * @since      File available since Release 1.0.0
  */
-
-require_once 'PHPUnit/Framework.php';
-require_once 'PHPUnit/Util/Filter.php';
-
-require_once 'PHPUnit/Extensions/Database/DataSet/QueryTable.php';
-require_once 'PHPUnit/Extensions/Database/DB/IDatabaseConnection.php';
-require_once 'PHPUnit/Extensions/Database/DB/MetaData.php';
-require_once 'PHPUnit/Extensions/Database/DB/ResultSetTable.php';
-require_once 'PHPUnit/Extensions/Database/DB/DataSet.php';
-require_once 'PHPUnit/Extensions/Database/DB/FilteredDataSet.php';
-
-PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
 
 /**
  * Provides a basic interface for communicating with a database.
  *
- * @category   Testing
  * @package    PHPUnit
+ * @subpackage Extensions_Database_DB
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2010 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.4.11
+ * @version    Release: 1.0.0beta1
  * @link       http://www.phpunit.de/
- * @since      Class available since Release 3.2.0
+ * @since      Class available since Release 1.0.0
  */
 class PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection implements PHPUnit_Extensions_Database_DB_IDatabaseConnection
 {
@@ -73,11 +61,6 @@ class PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection implements PHPUni
      * @var PDO
      */
     protected $connection;
-
-    /**
-     * @var string
-     */
-    protected $schema;
 
     /**
      * The metadata object used to retrieve table meta data from the database.
@@ -92,12 +75,10 @@ class PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection implements PHPUni
      * @param PDO $connection
      * @param string $schema - The name of the database schema you will be testing against.
      */
-    public function __construct(PDO $connection, $schema)
+    public function __construct(PDO $connection, $schema = '')
     {
         $this->connection = $connection;
         $this->metaData = PHPUnit_Extensions_Database_DB_MetaData::createMetaData($connection, $schema);
-        $this->schema = $schema;
-
         $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
@@ -127,7 +108,7 @@ class PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection implements PHPUni
      */
     public function getSchema()
     {
-        return $this->schema;
+        return $this->getMetaData()->getSchema();
     }
 
     /**
@@ -228,4 +209,3 @@ class PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection implements PHPUni
         return $this->getMetaData()->allowsCascading();
     }
 }
-?>

@@ -34,8 +34,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   Testing
  * @package    PHPUnit
+ * @subpackage Extensions_SeleniumTestCase
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -43,19 +43,15 @@
  * @since      File available since Release 3.3.0
  */
 
-require_once 'PHPUnit/Util/Filter.php';
-
-PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
-
 /**
  * Implementation of the Selenium RC client/server protocol.
  *
- * @category   Testing
  * @package    PHPUnit
+ * @subpackage Extensions_SeleniumTestCase
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.4.11
+ * @version    Release: 1.0.0beta1
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.3.0
  */
@@ -1090,9 +1086,14 @@ class PHPUnit_Extensions_SeleniumTestCase_Driver
                     PHPUnit_Framework_Assert::assertNotEquals($expected, $result);
                 }
             } else {
+                $caseInsensitive = FALSE;
+
                 if (strpos($expected, 'regexp:') === 0) {
                     $expected = substr($expected, strlen('regexp:'));
-                } else {
+                } else if (strpos($expected, 'regexpi:') === 0) {
+                    $expected        = substr($expected, strlen('regexpi:'));
+                    $caseInsensitive = TRUE;
+                } else  {
                     if (strpos($expected, 'glob:') === 0) {
                         $expected = substr($expected, strlen('glob:'));
                     }
@@ -1102,15 +1103,19 @@ class PHPUnit_Extensions_SeleniumTestCase_Driver
                     );
                 }
 
-                $expected = str_replace('/', '\/', $expected);
+                $expected = '/' . str_replace('/', '\/', $expected) . '/';
+
+                if ($caseInsensitive) {
+                    $expected .= 'i';
+                }
 
                 if (!isset($info['negative']) || !$info['negative']) {
                     PHPUnit_Framework_Assert::assertRegExp(
-                      '/' . $expected . '/', $result
+                      $expected, $result
                     );
                 } else {
                     PHPUnit_Framework_Assert::assertNotRegExp(
-                      '/' . $expected . '/', $result
+                      $expected, $result
                     );
                 }
             }
@@ -1216,4 +1221,3 @@ class PHPUnit_Extensions_SeleniumTestCase_Driver
         }
     }
 }
-?>

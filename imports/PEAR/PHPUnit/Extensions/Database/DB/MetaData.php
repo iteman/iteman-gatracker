@@ -34,33 +34,27 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   Testing
  * @package    PHPUnit
+ * @subpackage Extensions_Database_DB
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.phpunit.de/
- * @since      File available since Release 3.2.0
+ * @since      File available since Release 1.0.0
  */
-
-require_once 'PHPUnit/Framework.php';
-require_once 'PHPUnit/Util/Filter.php';
-require_once 'PHPUnit/Extensions/Database/DB/IMetaData.php';
-
-PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
 
 /**
  * Provides a basic constructor for all meta data classes and a factory for
  * generating the appropriate meta data class.
  *
- * @category   Testing
  * @package    PHPUnit
+ * @subpackage Extensions_Database_DB
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2010 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.4.11
+ * @version    Release: 1.0.0beta1
  * @link       http://www.phpunit.de/
- * @since      Class available since Release 3.2.0
+ * @since      Class available since Release 1.0.0
  */
 abstract class PHPUnit_Extensions_Database_DB_MetaData implements PHPUnit_Extensions_Database_DB_IMetaData
 {
@@ -68,7 +62,8 @@ abstract class PHPUnit_Extensions_Database_DB_MetaData implements PHPUnit_Extens
         'pgsql'  => 'PHPUnit_Extensions_Database_DB_MetaData_PgSQL',
         'mysql'  => 'PHPUnit_Extensions_Database_DB_MetaData_MySQL',
         'oci'    => 'PHPUnit_Extensions_Database_DB_MetaData_Oci',
-        'sqlite' => 'PHPUnit_Extensions_Database_DB_MetaData_Sqlite'
+        'sqlite' => 'PHPUnit_Extensions_Database_DB_MetaData_Sqlite',
+        'sqlite2'=> 'PHPUnit_Extensions_Database_DB_MetaData_Sqlite'
     );
 
     /**
@@ -102,7 +97,7 @@ abstract class PHPUnit_Extensions_Database_DB_MetaData implements PHPUnit_Extens
      * @param PDO $pdo
      * @param string $schema
      */
-    public final function __construct(PDO $pdo, $schema)
+    public final function __construct(PDO $pdo, $schema = '')
     {
         $this->pdo = $pdo;
         $this->schema = $schema;
@@ -116,7 +111,7 @@ abstract class PHPUnit_Extensions_Database_DB_MetaData implements PHPUnit_Extens
      * @param string $schema
      * @return PHPUnit_Extensions_Database_DB_MetaData
      */
-    public static function createMetaData(PDO $pdo, $schema)
+    public static function createMetaData(PDO $pdo, $schema = '')
     {
         $driverName = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
         if (isset(self::$metaDataClassMap[$driverName])) {
@@ -231,14 +226,3 @@ abstract class PHPUnit_Extensions_Database_DB_MetaData implements PHPUnit_Extens
         return FALSE;
     }
 }
-
-/**
- * I am not sure why these requires can't go above the class, but when they do
- * the classes can't find the PHPUnit_Extensions_Database_DB_MetaData
- * class.
- */
-require_once 'PHPUnit/Extensions/Database/DB/MetaData/Sqlite.php';
-require_once 'PHPUnit/Extensions/Database/DB/MetaData/InformationSchema.php';
-require_once 'PHPUnit/Extensions/Database/DB/MetaData/MySQL.php';
-require_once 'PHPUnit/Extensions/Database/DB/MetaData/PgSQL.php';
-?>

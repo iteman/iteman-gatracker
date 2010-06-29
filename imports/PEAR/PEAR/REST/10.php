@@ -9,7 +9,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: 10.php,v 1.60 2009/03/07 23:09:56 dufuz Exp $
+ * @version    CVS: $Id: 10.php 287558 2009-08-21 22:21:28Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 1.4.0a12
  */
@@ -27,7 +27,7 @@ require_once 'PEAR/REST.php';
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a12
  */
@@ -61,16 +61,18 @@ class PEAR_REST_10
      */
     function getDownloadURL($base, $packageinfo, $prefstate, $installed, $channel = false)
     {
-        $channel = $packageinfo['channel'];
-        $package = $packageinfo['package'];
         $states = $this->betterStates($prefstate, true);
         if (!$states) {
             return PEAR::raiseError('"' . $prefstate . '" is not a valid state');
         }
 
-        $state   = isset($packageinfo['state'])   ? $packageinfo['state']   : null;
-        $version = isset($packageinfo['version']) ? $packageinfo['version'] : null;
-        $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml', false, false, $channel);
+        $channel  = $packageinfo['channel'];
+        $package  = $packageinfo['package'];
+        $state    = isset($packageinfo['state'])   ? $packageinfo['state']   : null;
+        $version  = isset($packageinfo['version']) ? $packageinfo['version'] : null;
+        $restFile = $base . 'r/' . strtolower($package) . '/allreleases.xml';
+
+        $info = $this->_rest->retrieveData($restFile, false, false, $channel);
         if (PEAR::isError($info)) {
             return PEAR::raiseError('No releases available for package "' .
                 $channel . '/' . $package . '"');
@@ -122,22 +124,27 @@ class PEAR_REST_10
     function getDepDownloadURL($base, $xsdversion, $dependency, $deppackage,
                                $prefstate = 'stable', $installed = false, $channel = false)
     {
-        $channel = $dependency['channel'];
-        $package = $dependency['name'];
         $states = $this->betterStates($prefstate, true);
         if (!$states) {
             return PEAR::raiseError('"' . $prefstate . '" is not a valid state');
         }
-        $state   = isset($dependency['state'])   ? $dependency['state']   : null;
-        $version = isset($dependency['version']) ? $dependency['version'] : null;
-        $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml', false, false, $channel);
+
+        $channel  = $dependency['channel'];
+        $package  = $dependency['name'];
+        $state    = isset($dependency['state'])   ? $dependency['state']   : null;
+        $version  = isset($dependency['version']) ? $dependency['version'] : null;
+        $restFile = $base . 'r/' . strtolower($package) . '/allreleases.xml';
+
+        $info = $this->_rest->retrieveData($restFile, false, false, $channel);
         if (PEAR::isError($info)) {
             return PEAR::raiseError('Package "' . $deppackage['channel'] . '/' . $deppackage['package']
                 . '" dependency "' . $channel . '/' . $package . '" has no releases');
         }
+
         if (!is_array($info) || !isset($info['r'])) {
             return false;
         }
+
         $exclude = array();
         $min = $max = $recommended = false;
         if ($xsdversion == '1.0') {
@@ -255,19 +262,23 @@ class PEAR_REST_10
         if (!$found) {
             $release = $info['r'][0];
         }
-        $pinfo = $this->_rest->retrieveCacheFirst($base . 'p/' . strtolower($package) . '/' .
+
+        $packageLower = strtolower($package);
+        $pinfo = $this->_rest->retrieveCacheFirst($base . 'p/' . $packageLower . '/' .
             'info.xml', false, false, $channel);
         if (PEAR::isError($pinfo)) {
             return PEAR::raiseError('Package "' . $package .
                 '" does not have REST info xml available');
         }
-        $releaseinfo = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' .
+
+        $releaseinfo = $this->_rest->retrieveCacheFirst($base . 'r/' . $packageLower . '/' .
             $release['v'] . '.xml', false, false, $channel);
         if (PEAR::isError($releaseinfo)) {
             return PEAR::raiseError('Package "' . $package . '" Version "' . $release['v'] .
                 '" does not have REST xml available');
         }
-        $packagexml = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' .
+
+        $packagexml = $this->_rest->retrieveCacheFirst($base . 'r/' . $packageLower . '/' .
             'deps.' . $release['v'] . '.txt', false, true, $channel);
         if (PEAR::isError($packagexml)) {
             return PEAR::raiseError('Package "' . $package . '" Version "' . $release['v'] .
@@ -278,39 +289,49 @@ class PEAR_REST_10
         if (!$packagexml) {
             $packagexml = array();
         }
-        $allinfo = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+
+        $allinfo = $this->_rest->retrieveData($base . 'r/' . $packageLower .
             '/allreleases.xml', false, false, $channel);
         if (!is_array($allinfo['r']) || !isset($allinfo['r'][0])) {
             $allinfo['r'] = array($allinfo['r']);
         }
+
         $compatible = false;
         foreach ($allinfo['r'] as $release) {
             if ($release['v'] != $releaseinfo['v']) {
                 continue;
             }
+
             if (!isset($release['co'])) {
                 break;
             }
+
             $compatible = array();
             if (!is_array($release['co']) || !isset($release['co'][0])) {
                 $release['co'] = array($release['co']);
             }
+
             foreach ($release['co'] as $entry) {
                 $comp = array();
-                $comp['name'] = $entry['p'];
+                $comp['name']    = $entry['p'];
                 $comp['channel'] = $entry['c'];
-                $comp['min'] = $entry['min'];
-                $comp['max'] = $entry['max'];
+                $comp['min']     = $entry['min'];
+                $comp['max']     = $entry['max'];
                 if (isset($entry['x']) && !is_array($entry['x'])) {
                     $comp['exclude'] = $entry['x'];
                 }
+
                 $compatible[] = $comp;
             }
+
             if (count($compatible) == 1) {
                 $compatible = $compatible[0];
             }
+
             break;
         }
+
+        $deprecated = false;
         if (isset($pinfo['dc']) && isset($pinfo['dp'])) {
             if (is_array($pinfo['dp'])) {
                 $deprecated = array('channel' => (string) $pinfo['dc'],
@@ -319,30 +340,24 @@ class PEAR_REST_10
                 $deprecated = array('channel' => (string) $pinfo['dc'],
                                     'package' => trim($pinfo['dp']));
             }
-        } else {
-            $deprecated = false;
         }
+
+        $return = array(
+            'version'    => $releaseinfo['v'],
+            'info'       => $packagexml,
+            'package'    => $releaseinfo['p']['_content'],
+            'stability'  => $releaseinfo['st'],
+            'compatible' => $compatible,
+            'deprecated' => $deprecated,
+        );
+
         if ($found) {
-            return
-                array('version' => $releaseinfo['v'],
-                      'info' => $packagexml,
-                      'package' => $releaseinfo['p']['_content'],
-                      'stability' => $releaseinfo['st'],
-                      'url' => $releaseinfo['g'],
-                      'compatible' => $compatible,
-                      'deprecated' => $deprecated,
-                );
-        } else {
-            return
-                array('version' => $releaseinfo['v'],
-                      'package' => $releaseinfo['p']['_content'],
-                      'stability' => $releaseinfo['st'],
-                      'info' => $packagexml,
-                      'compatible' => $compatible,
-                      'deprecated' => $deprecated,
-                      'php' => $phpversion
-                );
+            $return['url'] = $releaseinfo['g'];
+            return $return;
         }
+
+        $return['php'] = $phpversion;
+        return $return;
     }
 
     function listPackages($base, $channel = false)
@@ -351,12 +366,15 @@ class PEAR_REST_10
         if (PEAR::isError($packagelist)) {
             return $packagelist;
         }
+
         if (!is_array($packagelist) || !isset($packagelist['p'])) {
             return array();
         }
+
         if (!is_array($packagelist['p'])) {
             $packagelist['p'] = array($packagelist['p']);
         }
+
         return $packagelist['p'];
     }
 
@@ -377,10 +395,12 @@ class PEAR_REST_10
         if (PEAR::isError($packagelist)) {
             return $packagelist;
         }
+
         if (!is_array($packagelist) || !isset($packagelist['p'])) {
             $ret = array();
             return $ret;
         }
+
         if (!is_array($packagelist['p'])) {
             $packagelist['p'] = array($packagelist['p']);
         }
@@ -397,6 +417,7 @@ class PEAR_REST_10
                     $categories[$cat] = $inf['ca'];
                 }
         }
+
         return array_values($categories);
     }
 
@@ -415,9 +436,11 @@ class PEAR_REST_10
         if (PEAR::isError($packagelist)) {
             return $packagelist;
         }
+
         if (!is_array($packagelist) || !isset($packagelist['p'])) {
             return array();
         }
+
         if (!is_array($packagelist['p']) ||
             !isset($packagelist['p'][0])) { // only 1 pkg
             $packagelist = array($packagelist['p']);
@@ -461,7 +484,7 @@ class PEAR_REST_10
         }
         if ($this->_rest->config->get('verbose') > 0) {
             $ui = &PEAR_Frontend::singleton();
-            $ui->log('Retrieving data...0%', false);
+            $ui->log('Retrieving data...0%', true);
         }
         $ret = array();
         if (!is_array($packagelist) || !isset($packagelist['p'])) {

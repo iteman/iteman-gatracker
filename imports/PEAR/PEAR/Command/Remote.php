@@ -11,7 +11,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: Remote.php,v 1.120 2009/03/09 01:33:20 dufuz Exp $
+ * @version    CVS: $Id: Remote.php 287477 2009-08-19 14:19:43Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 0.1
  */
@@ -31,7 +31,7 @@ require_once 'PEAR/REST.php';
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
  */
@@ -664,9 +664,22 @@ parameter.
             }
 
             $latest = array();
-            if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
-                  $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
-                $rest = &$this->config->getREST('1.0', array());
+            $base2  = false;
+            $preferred_mirror = $this->config->get('preferred_mirror');
+            if ($chan->supportsREST($preferred_mirror) &&
+                (
+                   //($base2 = $chan->getBaseURL('REST1.4', $preferred_mirror)) ||
+                   ($base  = $chan->getBaseURL('REST1.0', $preferred_mirror))
+                )
+
+            ) {
+                if ($base2) {
+                    $rest = &$this->config->getREST('1.4', array());
+                    $base = $base2;
+                } else {
+                    $rest = &$this->config->getREST('1.0', array());
+                }
+
                 if (empty($state) || $state == 'any') {
                     $state = false;
                 } else {

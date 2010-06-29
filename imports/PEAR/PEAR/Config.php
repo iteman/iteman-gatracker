@@ -10,7 +10,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: Config.php,v 1.157 2009/02/25 00:23:26 dufuz Exp $
+ * @version    CVS: $Id: Config.php 286480 2009-07-29 02:50:02Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 0.1
  */
@@ -246,7 +246,7 @@ if (getenv('PHP_PEAR_SIG_KEYDIR')) {
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
  */
@@ -1831,13 +1831,17 @@ class PEAR_Config extends PEAR
      *
      * @param string config key
      * @param string (optional) config layer
+     * @param string (optional) channel (defaults to default channel)
      * @return bool TRUE on success, FALSE on failure
      *
      * @access public
      */
-    function remove($key, $layer = 'user')
+    function remove($key, $layer = 'user', $channel = null)
     {
-        $channel = $this->getDefaultChannel();
+        if ($channel === null) {
+            $channel = $this->getDefaultChannel();
+        }
+
         if ($channel !== 'pear.php.net') {
             if (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
                 unset($this->configuration[$layer]['__channels'][$channel][$key]);

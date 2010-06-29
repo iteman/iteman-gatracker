@@ -25,25 +25,14 @@
 //
 
 require_once 'Structures/Graph.php';
-require_once 'PHPUnit.php';
+require_once 'PHPUnit/Framework.php';
 
 /**
  * @access private
  */
-class BasicGraph extends PHPUnit_TestCase
+class BasicGraph extends PHPUnit_Framework_TestCase
 {
     var $_graph = null;
-
-    // constructor of the test suite
-    function StringTest($name) {
-       $this->PHPUnit_TestCase($name);
-    }
-
-    function setUp() {
-    }
-
-    function tearDown() {
-    }
 
     function test_create_graph() {
         $this->_graph = new Structures_Graph();

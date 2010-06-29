@@ -9,7 +9,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: REST.php,v 1.40 2009/03/26 23:12:46 dufuz Exp $
+ * @version    CVS: $Id: REST.php 296767 2010-03-25 00:58:33Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 1.4.0a1
  */
@@ -28,7 +28,7 @@ require_once 'PEAR/XMLParser.php';
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -39,7 +39,7 @@ class PEAR_REST
 
     function PEAR_REST(&$config, $options = array())
     {
-        $this->config = &$config;
+        $this->config   = &$config;
         $this->_options = $options;
     }
 
@@ -56,7 +56,6 @@ class PEAR_REST
      */
     function retrieveCacheFirst($url, $accept = false, $forcestring = false, $channel = false)
     {
-
         $cachefile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
             md5($url) . 'rest.cachefile';
 
@@ -213,11 +212,9 @@ class PEAR_REST
      */
     function saveCache($url, $contents, $lastmodified, $nochange = false, $cacheid = null)
     {
-        $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
-            md5($url) . 'rest.cacheid';
-
-        $cachefile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
-            md5($url) . 'rest.cachefile';
+        $cachedir    = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR . md5($url);
+        $cacheidfile = $cachedir . 'rest.cacheid';
+        $cachefile   = $cachedir . 'rest.cachefile';
 
         if ($cacheid === null && $nochange) {
             $cacheid = unserialize(implode('', file($cacheidfile)));
@@ -336,7 +333,7 @@ class PEAR_REST
             $request = "GET $path HTTP/1.1\r\n";
         }
 
-        $request .= "Host: $host:$port\r\n";
+        $request .= "Host: $host\r\n";
         $ifmodifiedsince = '';
         if (is_array($lastmodified)) {
             if (isset($lastmodified['Last-Modified'])) {
@@ -351,7 +348,7 @@ class PEAR_REST
         }
 
         $request .= $ifmodifiedsince .
-            "User-Agent: PEAR/1.8.1/PHP/" . PHP_VERSION . "\r\n";
+            "User-Agent: PEAR/1.9.1/PHP/" . PHP_VERSION . "\r\n";
 
         $username = $this->config->get('username', null, $channel);
         $password = $this->config->get('password', null, $channel);

@@ -34,17 +34,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   Testing
  * @package    PHPUnit
+ * @subpackage Extensions_Database_DataSet_Specs
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2002-2010 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.phpunit.de/
- * @since      File available since Release 3.4.0
+ * @since      File available since Release 1.0.0
  */
-
-require_once ('PHPUnit/Extensions/Database/DataSet/ISpec.php');
-require_once ('PHPUnit/Extensions/Database/DataSet/CsvDataSet.php');
 
 /**
  * Creates CsvDataSets based off of a spec string.
@@ -60,14 +57,14 @@ require_once ('PHPUnit/Extensions/Database/DataSet/CsvDataSet.php');
  *
  * Any additional characters in the csv options will be discarded.
  *
- * @category   Testing
  * @package    PHPUnit
+ * @subpackage Extensions_Database_DataSet_Specs
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2010 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.4.11
+ * @version    Release: 1.0.0beta1
  * @link       http://www.phpunit.de/
- * @since      Class available since Release 3.4.0
+ * @since      Class available since Release 1.0.0
  */
 class PHPUnit_Extensions_Database_DataSet_Specs_Csv implements PHPUnit_Extensions_Database_DataSet_ISpec
 {
@@ -128,4 +125,3 @@ class PHPUnit_Extensions_Database_DataSet_Specs_Csv implements PHPUnit_Extension
     }
 }
 
-?>

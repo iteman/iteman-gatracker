@@ -9,7 +9,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: Dependency2.php,v 1.59 2009/02/24 23:38:22 dufuz Exp $
+ * @version    CVS: $Id: Dependency2.php 286494 2009-07-29 06:57:11Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 1.4.0a1
  */
@@ -31,7 +31,7 @@ require_once 'PEAR/Validate.php';
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -346,7 +346,8 @@ class PEAR_Dependency2
         }
 
         if (!isset($dep['min']) && !isset($dep['max']) &&
-              !isset($dep['recommended']) && !isset($dep['exclude'])) {
+            !isset($dep['recommended']) && !isset($dep['exclude'])
+        ) {
             if ($loaded) {
                 if (isset($dep['conflicts'])) {
                     if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
@@ -359,24 +360,24 @@ class PEAR_Dependency2
                 }
 
                 return true;
-            } else {
-                if (isset($dep['conflicts'])) {
-                    return true;
-                }
+            }
 
-                if ($required) {
-                    if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                        return $this->raiseError('%s requires PHP extension "' .
-                            $dep['name'] . '"' . $extra);
-                    }
+            if (isset($dep['conflicts'])) {
+                return true;
+            }
 
-                    return $this->warning('warning: %s requires PHP extension "' .
+            if ($required) {
+                if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+                    return $this->raiseError('%s requires PHP extension "' .
                         $dep['name'] . '"' . $extra);
                 }
 
-                return $this->warning('%s can optionally use PHP extension "' .
+                return $this->warning('warning: %s requires PHP extension "' .
                     $dep['name'] . '"' . $extra);
             }
+
+            return $this->warning('%s can optionally use PHP extension "' .
+                $dep['name'] . '"' . $extra);
         }
 
         if (!$loaded) {
@@ -540,7 +541,7 @@ class PEAR_Dependency2
      */
     function getPEARVersion()
     {
-        return '1.8.1';
+        return '1.9.1';
     }
 
     function validatePearinstallerDependency($dep)

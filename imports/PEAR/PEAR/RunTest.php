@@ -10,7 +10,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: RunTest.php,v 1.74 2009/02/24 23:38:22 dufuz Exp $
+ * @version    CVS: $Id: RunTest.php 297621 2010-04-07 15:09:33Z sebastian $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 1.3.3
  */
@@ -38,7 +38,7 @@ putenv("PHP_PEAR_RUNTESTS=1");
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.3.3
  */
@@ -245,12 +245,11 @@ class PEAR_RunTest
     {
         if (!file_exists($file) && file_exists(getcwd() . DIRECTORY_SEPARATOR . $file)) {
             $file = realpath(getcwd() . DIRECTORY_SEPARATOR . $file);
-            break;
         } elseif (file_exists($file)) {
             $file = realpath($file);
         }
 
-        $cmd = $this->_preparePhpBin($this->_php, $file. $ini_settings);
+        $cmd = $this->_preparePhpBin($this->_php, $file, $ini_settings);
         if (isset($this->_logger)) {
             $this->_logger->log(2, 'Running command "' . $cmd . '"');
         }
@@ -371,9 +370,8 @@ class PEAR_RunTest
         // We've satisfied the preconditions - run the test!
         if (isset($this->_options['coverage']) && $this->xdebug_loaded) {
             $xdebug_file = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name . 'xdebug';
-            $text = '<?php';
-            $text .= "\n" . 'function coverage_shutdown() {' .
-                     "\n" . '    $xdebug = var_export(xdebug_get_code_coverage(), true);';
+            $text = "\n" . 'function coverage_shutdown() {' .
+                    "\n" . '    $xdebug = var_export(xdebug_get_code_coverage(), true);';
             if (!function_exists('file_put_contents')) {
                 $text .= "\n" . '    $fh = fopen(\'' . $xdebug_file . '\', "wb");' .
                         "\n" . '    if ($fh !== false) {' .
@@ -389,14 +387,26 @@ class PEAR_RunTest
                 "\n" . 'register_shutdown_function("coverage_shutdown");';
             $text .= "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n?>";
 
-            $len_f = 5;
-            if (substr($section_text['FILE'], 0, 5) != '<?php'
-                && substr($section_text['FILE'], 0, 2) == '<?') {
-                $len_f = 2;
-            }
-            $text .= $section_text['FILE'];
+            // Workaround for http://pear.php.net/bugs/bug.php?id=17292
+            $lines     = explode("\n", $section_text['FILE']);
+            $numLines  = count($lines);
+            $namespace = '';
 
-            $this->save_text($temp_file, $text);
+            for ($i = 0; $i < $numLines; $i++) {
+                $lines[$i] = trim($lines[$i]);
+
+                if ($lines[$i] == '<?' || $lines[$i] == '<?php') {
+                    unset($lines[$i]);
+                }
+
+                if (substr($lines[$i], 0, 9) == 'namespace') {
+                    $namespace = $lines[$i] . "\n";
+                    unset($lines[$i]);
+                    break;
+                }
+            }
+
+            $this->save_text($temp_file, "<?php\n" . $namespace . join("\n", $lines));
         } else {
             $this->save_text($temp_file, $section_text['FILE']);
         }
@@ -551,7 +561,13 @@ class PEAR_RunTest
                     fclose($fp);
                     $section_text['EXPECT'] = file_get_contents($f);
                 }
-                $wanted = preg_replace('/\r\n/', "\n", trim($section_text['EXPECT']));
+
+                if (isset($section_text['EXPECT'])) {
+                    $wanted = preg_replace('/\r\n/', "\n", trim($section_text['EXPECT']));
+                } else {
+                    $wanted = '';
+                }
+
                 // compare and leave on success
                 if (!$returnfail && 0 == strcmp($output, $wanted)) {
                     if (file_exists($temp_file)) {
@@ -934,7 +950,10 @@ $text
         if ($section_text['CLEAN']) {
             // perform test cleanup
             $this->save_text($temp_clean, $section_text['CLEAN']);
-            $this->system_with_timeout("$this->_php $temp_clean");
+            $output = $this->system_with_timeout("$this->_php $temp_clean  2>&1");
+            if (strlen($output[1])) {
+                echo "BORKED --CLEAN-- section! output:\n", $output[1];
+            }
             if (file_exists($temp_clean)) {
                 unlink($temp_clean);
             }

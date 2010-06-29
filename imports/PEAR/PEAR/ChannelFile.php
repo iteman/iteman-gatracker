@@ -9,7 +9,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: ChannelFile.php,v 1.84 2009/03/09 01:03:51 dufuz Exp $
+ * @version    CVS: $Id: ChannelFile.php 286951 2009-08-09 14:41:22Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 1.4.0a1
  */
@@ -146,7 +146,7 @@ $GLOBALS['_PEAR_CHANNELS_MIRROR_TYPES'] =  array('server');
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -498,12 +498,15 @@ class PEAR_ChannelFile
     function _makeRestXml($info, $indent)
     {
         $ret = $indent . "<rest>\n";
-        if (!isset($info['baseurl'][0])) {
+        if (isset($info['baseurl']) && !isset($info['baseurl'][0])) {
             $info['baseurl'] = array($info['baseurl']);
         }
-        foreach ($info['baseurl'] as $url) {
-            $ret .= "$indent <baseurl type=\"" . $url['attribs']['type'] . "\"";
-            $ret .= ">" . $url['_content'] . "</baseurl>\n";
+
+        if (isset($info['baseurl'])) {
+            foreach ($info['baseurl'] as $url) {
+                $ret .= "$indent <baseurl type=\"" . $url['attribs']['type'] . "\"";
+                $ret .= ">" . $url['_content'] . "</baseurl>\n";
+            }
         }
         $ret .= $indent . "</rest>\n";
         return $ret;
@@ -687,15 +690,17 @@ class PEAR_ChannelFile
         if (!isset($functions[0])) {
             $functions = array($functions);
         }
+
         foreach ($functions as $function) {
             if (!isset($function['_content']) || empty($function['_content'])) {
                 $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_FUNCTIONNAME,
                     array('parent' => $parent, 'protocol' => $protocol));
             }
+
             if ($protocol == 'rest') {
                 if (!isset($function['attribs']['type']) ||
                       empty($function['attribs']['type'])) {
-                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_BASEURLTYPE,
+                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NOBASEURLTYPE,
                         array('parent' => $parent, 'protocol' => $protocol));
                 }
             } else {
@@ -1019,6 +1024,14 @@ class PEAR_ChannelFile
         switch ($version) {
             case '1.0' :
                 $this->resetREST($mirror);
+
+                if (!isset($this->_channelInfo['servers'])) {
+                    $this->_channelInfo['servers'] = array('primary' =>
+                        array('rest' => array()));
+                } elseif (!isset($this->_channelInfo['servers']['primary'])) {
+                    $this->_channelInfo['servers']['primary'] = array('rest' => array());
+                }
+
                 return true;
             break;
             default :

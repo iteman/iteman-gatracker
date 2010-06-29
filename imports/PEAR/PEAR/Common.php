@@ -11,7 +11,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: Common.php,v 1.168 2009/03/27 19:35:47 dufuz Exp $
+ * @version    CVS: $Id: Common.php 282969 2009-06-28 23:09:27Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 0.1.0
  * @deprecated File deprecated since Release 1.4.0a1
@@ -118,7 +118,7 @@ $GLOBALS['_PEAR_Common_script_phases'] = array('pre-install', 'post-install', 'p
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  * @deprecated This class will disappear, and its components will be spread
@@ -459,6 +459,22 @@ class PEAR_Common extends PEAR
         return false;
     }
 
+    function _postProcessChecks($pf)
+    {
+        if (!PEAR::isError($pf)) {
+            return $this->_postProcessValidPackagexml($pf);
+        }
+
+        $errs = $pf->getUserinfo();
+        if (is_array($errs)) {
+            foreach ($errs as $error) {
+                $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
+            }
+        }
+
+        return $pf;
+    }
+
     /**
      * Returns information about a package file.  Expects the name of
      * a gzipped tar file as input.
@@ -475,18 +491,7 @@ class PEAR_Common extends PEAR
     {
         $packagefile = &new PEAR_PackageFile($this->config);
         $pf = &$packagefile->fromTgzFile($file, PEAR_VALIDATE_NORMAL);
-        if (PEAR::isError($pf)) {
-            $errs = $pf->getUserinfo();
-            if (is_array($errs)) {
-                foreach ($errs as $error) {
-                    $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
-                }
-            }
-
-            return $pf;
-        }
-
-        return $this->_postProcessValidPackagexml($pf);
+        return $this->_postProcessChecks($pf);
     }
 
     /**
@@ -505,18 +510,7 @@ class PEAR_Common extends PEAR
     {
         $packagefile = &new PEAR_PackageFile($this->config);
         $pf = &$packagefile->fromPackageFile($descfile, PEAR_VALIDATE_NORMAL);
-        if (PEAR::isError($pf)) {
-            $errs = $pf->getUserinfo();
-            if (is_array($errs)) {
-                foreach ($errs as $error) {
-                    $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
-                }
-            }
-
-            return $pf;
-        }
-
-        return $this->_postProcessValidPackagexml($pf);
+        return $this->_postProcessChecks($pf);
     }
 
     /**
@@ -535,18 +529,7 @@ class PEAR_Common extends PEAR
     {
         $packagefile = &new PEAR_PackageFile($this->config);
         $pf = &$packagefile->fromXmlString($data, PEAR_VALIDATE_NORMAL, false);
-        if (PEAR::isError($pf)) {
-            $errs = $pf->getUserinfo();
-            if (is_array($errs)) {
-                foreach ($errs as $error) {
-                    $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
-                }
-            }
-
-            return $pf;
-        }
-
-        return $this->_postProcessValidPackagexml($pf);
+        return $this->_postProcessChecks($pf);
     }
 
     /**
@@ -564,23 +547,11 @@ class PEAR_Common extends PEAR
         // changelog is not converted to old format.
         $arr = $pf->toArray(true);
         $arr = array_merge($arr, $arr['old']);
-        unset($arr['old']);
-        unset($arr['xsdversion']);
-        unset($arr['contents']);
-        unset($arr['compatible']);
-        unset($arr['channel']);
-        unset($arr['uri']);
-        unset($arr['dependencies']);
-        unset($arr['phprelease']);
-        unset($arr['extsrcrelease']);
-        unset($arr['zendextsrcrelease']);
-        unset($arr['extbinrelease']);
-        unset($arr['zendextbinrelease']);
-        unset($arr['bundle']);
-        unset($arr['lead']);
-        unset($arr['developer']);
-        unset($arr['helper']);
-        unset($arr['contributor']);
+        unset($arr['old'], $arr['xsdversion'], $arr['contents'], $arr['compatible'],
+              $arr['channel'], $arr['uri'], $arr['dependencies'], $arr['phprelease'],
+              $arr['extsrcrelease'], $arr['zendextsrcrelease'], $arr['extbinrelease'],
+              $arr['zendextbinrelease'], $arr['bundle'], $arr['lead'], $arr['developer'],
+              $arr['helper'], $arr['contributor']);
         $arr['filelist'] = $pf->getFilelist();
         $this->pkginfo = $arr;
         return $arr;

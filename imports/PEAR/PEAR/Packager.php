@@ -11,7 +11,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: Packager.php,v 1.75 2009/02/24 23:38:22 dufuz Exp $
+ * @version    CVS: $Id: Packager.php 286809 2009-08-04 15:10:26Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 0.1
  */
@@ -31,7 +31,7 @@ require_once 'System.php';
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
  */
@@ -163,6 +163,12 @@ class PEAR_Packager extends PEAR_Common
                 $this->log(1, 'Tag the released code with "pear cvstag ' .
                     $main->getPackageFile() . '"');
                 $this->log(1, "(or set the CVS tag $cvstag by hand)");
+            } elseif (file_exists("$pkgdir/.svn")) {
+                $svnversion = preg_replace('/[^a-z0-9]/i', '.', $pf->getVersion());
+                $svntag = $pf->getName() . "-$svnversion";
+                $this->log(1, 'Tag the released code with "pear svntag ' .
+                    $main->getPackageFile() . '"');
+                $this->log(1, "(or set the SVN tag $svntag by hand)");
             }
         } else { // this branch is executed for single packagefile packaging
             $gen = &$pf->getDefaultGenerator();
@@ -182,6 +188,11 @@ class PEAR_Packager extends PEAR_Common
                 $cvstag = "RELEASE_$cvsversion";
                 $this->log(1, "Tag the released code with `pear cvstag $pkgfile'");
                 $this->log(1, "(or set the CVS tag $cvstag by hand)");
+            } elseif (file_exists("$pkgdir/.svn")) {
+                $svnversion = preg_replace('/[^a-z0-9]/i', '.', $pf->getVersion());
+                $svntag = $pf->getName() . "-$svnversion";
+                $this->log(1, "Tag the released code with `pear svntag $pkgfile'");
+                $this->log(1, "(or set the SVN tag $svntag by hand)");
             }
         }
 

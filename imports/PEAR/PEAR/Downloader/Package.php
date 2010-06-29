@@ -9,7 +9,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id: Package.php,v 1.126 2009/03/07 21:51:52 dufuz Exp $
+ * @version    CVS: $Id: Package.php 287560 2009-08-21 22:36:18Z dufuz $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 1.4.0a1
  */
@@ -50,7 +50,7 @@ define('PEAR_DOWNLOADER_PACKAGE_PHPVERSION', -1004);
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.8.1
+ * @version    Release: 1.9.1
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -165,6 +165,12 @@ class PEAR_Downloader_Package
         $options = $this->_downloader->getOptions();
         if (isset($options['offline'])) {
             if (PEAR::isError($origErr) && !isset($options['soft'])) {
+                foreach ($origErr->getUserInfo() as $userInfo) {
+                    if (isset($userInfo['message'])) {
+                        $this->_downloader->log(0, $userInfo['message']);
+                    }
+                }
+
                 $this->_downloader->log(0, $origErr->getMessage());
             }
 
@@ -262,8 +268,15 @@ class PEAR_Downloader_Package
 
             if ($info != $newinfo) {
                 do {
-                    if ($info['package'] == 'pecl.php.net' && $newinfo['package'] == 'pear.php.net') {
-                        $info['package'] = 'pear.php.net';
+                    if ($info['channel'] == 'pecl.php.net' && $newinfo['channel'] == 'pear.php.net') {
+                        $info['channel'] = 'pear.php.net';
+                        if ($info == $newinfo) {
+                            // skip the channel check if a pecl package says it's a PEAR package
+                            break;
+                        }
+                    }
+                    if ($info['channel'] == 'pear.php.net' && $newinfo['channel'] == 'pecl.php.net') {
+                        $info['channel'] = 'pecl.php.net';
                         if ($info == $newinfo) {
                             // skip the channel check if a pecl package says it's a PEAR package
                             break;
@@ -652,8 +665,7 @@ class PEAR_Downloader_Package
         // we can't determine whether upgrade is necessary until we know what
         // version would be downloaded
         if (!isset($options['force']) && $this->isInstalled($ret, $oper)) {
-            $version = $this->_installRegistry->packageInfo($dep['name'], 'version',
-                $dep['channel']);
+            $version = $this->_installRegistry->packageInfo($dep['name'], 'version', $dep['channel']);
             $dep['package'] = $dep['name'];
             if (!isset($options['soft'])) {
                 $this->_downloader->log(3, $this->getShortName() . ': Skipping ' . $group .
@@ -730,8 +742,7 @@ class PEAR_Downloader_Package
                     $newdep = $newdep[0];
                     $newdep['channel'] = 'pecl.php.net';
                     $chan = 'pecl.php.net';
-                    $url =
-                        $this->_downloader->_getDepPackageDownloadUrl($newdep, $pname);
+                    $url = $this->_downloader->_getDepPackageDownloadUrl($newdep, $pname);
                     $obj = &$this->_installRegistry->getPackage($dep['name']);
                     if (PEAR::isError($url)) {
                         PEAR::popErrorHandling();
@@ -815,8 +826,7 @@ class PEAR_Downloader_Package
                         'optional';
                     $dep['package'] = $dep['name'];
                     if (isset($newdep)) {
-                        $version = $this->_installRegistry->packageInfo($newdep['name'], 'version',
-                            $newdep['channel']);
+                        $version = $this->_installRegistry->packageInfo($newdep['name'], 'version', $newdep['channel']);
                     } else {
                         $version = $this->_installRegistry->packageInfo($dep['name'], 'version');
                     }
@@ -1135,6 +1145,7 @@ class PEAR_Downloader_Package
                     $channel = 'pear.php.net';
                 }
             }
+
             return (strtolower($package) == strtolower($this->getPackage()) &&
                 $channel == $this->getChannel() &&
                 version_compare($newdep['min'], $this->getVersion(), '<=') &&
@@ -1279,13 +1290,9 @@ class PEAR_Downloader_Package
             if (!$param) {
                 continue;
             }
-            if ($param->getPackage()) {
-                if ($ignoreGroups) {
-                    $group = '';
-                } else {
-                    $group = $param->getGroup();
-                }
 
+            if ($param->getPackage()) {
+                $group = $ignoreGroups ? '' : $param->getGroup();
                 $pnames[$i] = $param->getChannel() . '/' .
                     $param->getPackage() . '-' . $param->getVersion() . '#' . $group;
             }
@@ -1815,7 +1822,7 @@ class PEAR_Downloader_Package
             if ($info['version'] === $package_version) {
                 if (!isset($options['soft'])) {
                     $this->_downloader->log(1, 'WARNING: failed to download ' . $pname['channel'] .
-                        '/' . $pname['package'] . '-' . $pname['version'] . ', additionally the suggested version' .
+                        '/' . $pname['package'] . '-' . $package_version. ', additionally the suggested version' .
                         ' (' . $package_version . ') is the same as the locally installed one.');
                 }
 
@@ -1825,7 +1832,7 @@ class PEAR_Downloader_Package
             if (version_compare($info['version'], $package_version, '<=')) {
                 if (!isset($options['soft'])) {
                     $this->_downloader->log(1, 'WARNING: failed to download ' . $pname['channel'] .
-                        '/' . $pname['package'] . '-' . $pname['version'] . ', additionally the suggested version' .
+                        '/' . $pname['package'] . '-' . $package_version . ', additionally the suggested version' .
                         ' (' . $info['version'] . ') is a lower version than the locally installed one (' . $package_version . ').');
                 }
 
