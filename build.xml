@@ -16,8 +16,7 @@
   </target>
 
   <target name="build" depends="prepare">
-    <copy file="${binDir}/gafilter" todir="${buildDir}/bin"/>
-    <copy file="${binDir}/testrunner" todir="${buildDir}/bin"/>
+    <copy file="${binDir}/gatracker" todir="${buildDir}/bin"/>
     <copy todir="${buildDir}/${importsDir}">
       <fileset dir="${importsDir}"/>
     </copy>

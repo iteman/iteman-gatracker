@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008-2009 ITEMAN, Inc. All rights reserved.
+ * Copyright (c) 2008-2010 ITEMAN, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,9 +28,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    ITEMAN_GATracker
- * @copyright  2008-2009 ITEMAN, Inc.
+ * @copyright  2008-2010 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    GIT: $Id$
+ * @version    Release: @package_version@
  * @since      File available since Release 0.1.0
  */
 
@@ -40,7 +40,7 @@
  * ITEMAN_GATracker_Tracker のためのテスト。
  *
  * @package    ITEMAN_GATracker
- * @copyright  2008-2009 ITEMAN, Inc.
+ * @copyright  2008-2010 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
@@ -81,6 +81,7 @@ class ITEMAN_GATracker_TrackerTest extends PHPUnit_Framework_TestCase
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
         $_SERVER['REQUEST_URI'] = '/blog/';
         $_SERVER['SERVER_NAME'] = 'www.example.com';
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja,en-us;q=0.7,en;q=0.3';
 
         $adapter = new HTTP_Request2_Adapter_Mock();
         $adapter->addResponse('HTTP/1.1 200 OK');
@@ -105,8 +106,9 @@ class ITEMAN_GATracker_TrackerTest extends PHPUnit_Framework_TestCase
 
         $headers = $this->_request->getHeaders();
 
-        $this->assertEquals(1, count($headers));
+        $this->assertEquals(2, count($headers));
         $this->assertEquals($_SERVER['HTTP_USER_AGENT'], $headers['user-agent']);
+        $this->assertEquals($_SERVER['HTTP_ACCEPT_LANGUAGE'], $headers['accepts-language']);
 
         $url = $this->_request->getUrl();
 
@@ -116,54 +118,26 @@ class ITEMAN_GATracker_TrackerTest extends PHPUnit_Framework_TestCase
 
         $queryVariables = $tracker->extractQueryVariables();
 
-        $this->assertEquals('4.3', $queryVariables['utmwv']);
+        $this->assertEquals(9, count(array_keys($queryVariables)));
+        $this->assertEquals('4.4sh', $queryVariables['utmwv']);
         $this->assertGreaterThanOrEqual(0, $queryVariables['utmn']);
         $this->assertLessThanOrEqual(2147483647, $queryVariables['utmn']);
         $this->assertEquals('www.example.com', $queryVariables['utmhn']);
-        $this->assertEquals('UTF-8', $queryVariables['utmcs']);
-        $this->assertEquals('-', $queryVariables['utmsr']);
-        $this->assertEquals('-', $queryVariables['utmsc']);
-        $this->assertEquals('-', $queryVariables['utmul']);
-        $this->assertEquals('0', $queryVariables['utmje']);
-        $this->assertEquals('-', $queryVariables['utmfl']);
-        $this->assertEquals('-', $tracker->getPageTitle());
-        $this->assertGreaterThanOrEqual(0, $queryVariables['utmhid']);
-        $this->assertLessThanOrEqual(2147483647, $queryVariables['utmhid']);
         $this->assertEquals('-', $queryVariables['utmr']);
         $this->assertEquals('/blog/', $queryVariables['utmp']);
         $this->assertEquals(self::$_webPropertyID, $queryVariables['utmac']);
-        $this->assertRegExp('/^__utma%3D\d+\.\d+\.\d+\.\d+\.\d+\.\d+%3B%2B__utmz%3D\d+\.\d+\.\d+\.\d+\.utmccn%3D\(direct\)%7Cutmcsr%3D\(direct\)%7Cutmcmd%3D\(none\)%3B$/',
-                            $queryVariables['utmcc']
-                            );
-
-        $queryVariableKeys = array_keys($queryVariables);
-
-        $this->assertEquals('utmwv', $queryVariableKeys[0]);
-        $this->assertEquals('utmn', $queryVariableKeys[1]);
-        $this->assertEquals('utmhn', $queryVariableKeys[2]);
-        $this->assertEquals('utmcs', $queryVariableKeys[3]);
-        $this->assertEquals('utmsr', $queryVariableKeys[4]);
-        $this->assertEquals('utmsc', $queryVariableKeys[5]);
-        $this->assertEquals('utmul', $queryVariableKeys[6]);
-        $this->assertEquals('utmje', $queryVariableKeys[7]);
-        $this->assertEquals('utmfl', $queryVariableKeys[8]);
-        $this->assertEquals('utmdt', $queryVariableKeys[9]);
-        $this->assertEquals('utmhid', $queryVariableKeys[10]);
-        $this->assertEquals('utmr', $queryVariableKeys[11]);
-        $this->assertEquals('utmp', $queryVariableKeys[12]);
-        $this->assertEquals('utmac', $queryVariableKeys[13]);
-        $this->assertEquals('utmcc', $queryVariableKeys[14]);
+        $this->assertEquals('__utma%3D999.999.999.999.999.1%3B', $queryVariables['utmcc']);
+        $this->assertRegExp('/^0x.{16}$/', $queryVariables['utmvid']);
+        $this->assertEquals('1.2.3.0', $queryVariables['utmip']);
     }
 
     /**
      * @test
      * @expectedException ITEMAN_GATracker_Exception
      */
-    public function ページが与えられなかった場合例外を発生させる()
+    public function ウェブプロパティIdが与えられなかった場合例外を発生させる()
     {
-        unset($_SERVER['REQUEST_URI']);
         $tracker = new ITEMAN_GATracker_Tracker();
-        $tracker->setWebPropertyID(self::$_webPropertyID);
         $tracker->trackPageView();
     }
 

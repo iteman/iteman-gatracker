@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2009 ITEMAN, Inc. All rights reserved.
+ * Copyright (c) 2009-2010 ITEMAN, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,9 +28,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    ITEMAN_GATracker
- * @copyright  2009 ITEMAN, Inc.
+ * @copyright  2009-2010 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    GIT: $Id$
+ * @version    Release: @package_version@
  * @since      File available since Release 0.1.0
  */
 
@@ -40,7 +40,7 @@
  * コマンドラインから Google Analytics のトラッキングを行うためのインターフェイス。
  *
  * @package    ITEMAN_GATracker
- * @copyright  2009 ITEMAN, Inc.
+ * @copyright  2009-2010 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
@@ -64,7 +64,6 @@ class ITEMAN_GATracker_CLI extends Stagehand_CLIController
     protected $shortOptions = 'hV';
     protected $longOptions = array('run-as-filter==',
                                    'web-property-id=',
-                                   'converters='
                                    );
 
     /**#@-*/
@@ -77,7 +76,6 @@ class ITEMAN_GATracker_CLI extends Stagehand_CLIController
                              'displayVersion' => false,
                              'runAsFilter' => false,
                              'webPropertyID' => null,
-                             'converters' => array()
                              );
 
     /**#@-*/
@@ -95,18 +93,6 @@ class ITEMAN_GATracker_CLI extends Stagehand_CLIController
     public function createTracker()
     {
         return new ITEMAN_GATracker_Tracker();
-    }
-
-    // }}}
-    // {{{ createConverter()
-
-    /**
-     * @param string $converterClass
-     * @return ITEMAN_GATracker_Converter_ConverterInterface
-     */
-    public function createConverter($converterClass)
-    {
-        return new $converterClass();
     }
 
     /**#@-*/
@@ -137,10 +123,6 @@ class ITEMAN_GATracker_CLI extends Stagehand_CLIController
             break;
         case '--web-property-id':
             $this->_config['webPropertyID'] = $value;
-            break;
-        case '--converters':
-            $this->_config['converters'] =
-                explode(',', preg_replace('/,$/', '', $value));
             break;
         }
 
@@ -219,9 +201,6 @@ class ITEMAN_GATracker_CLI extends Stagehand_CLIController
      https://www.google.com/analytics/settings/home
      で確認することができます。
 
-  --converters=CONVERTER1,CONVERTER2,...
-     デフォルトコンバータのあとに実行するコンバータをひとつ以上指定します。
-
   --run-as-filter (任意)
      フィルタとして実行します。このコマンドを Apache のフィルタとして動作させる場
      合、このオプションを指定する必要があります。
@@ -256,7 +235,7 @@ SSI による実行:
   このコマンドを Apache の SSI を使って動作させる場合、下記の exec コマンドをペー
   ジに含める必要があります。
 
-  <!--#exec cmd=\"$scriptPath --web-property-id=WEB-PROPERTY-ID --converters=CONVERTER1,CONVERTER2,...\" -->
+  <!--#exec cmd=\"$scriptPath --web-property-id=WEB-PROPERTY-ID\" -->
 
   詳細は、
   http://httpd.apache.org/docs/2.2/mod/mod_include.html#element.exec
@@ -274,7 +253,7 @@ SSI による実行:
     {
         echo 'ITEMAN_GATracker @package_version@
 
-Copyright (c) 2008-2009 ITEMAN, Inc. All rights reserved.
+Copyright (c) 2008-2010 ITEMAN, Inc. All rights reserved.
 ';
     }
 
@@ -287,15 +266,6 @@ Copyright (c) 2008-2009 ITEMAN, Inc. All rights reserved.
     {
         $tracker = $this->createTracker();
         $tracker->setWebPropertyID($this->_config['webPropertyID']);
-
-        foreach ($this->_config['converters'] as $converterClass) {
-            if (!class_exists($converterClass)) {
-                throw new ITEMAN_GATracker_Exception("指定されたコンバータ [ $converterClass ] が見つかりません");
-            }
-
-            $tracker->addConverter($this->createConverter($converterClass));
-        }
-
         $tracker->trackPageView();
     }
 

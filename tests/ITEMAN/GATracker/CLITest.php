@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2009 ITEMAN, Inc. All rights reserved.
+ * Copyright (c) 2009-2010 ITEMAN, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,9 +28,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    ITEMAN_GATracker
- * @copyright  2009 ITEMAN, Inc.
+ * @copyright  2009-2010 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    GIT: $Id$
+ * @version    Release: @package_version@
  * @since      File available since Release 0.1.0
  */
 
@@ -40,7 +40,7 @@
  * ITEMAN_GATracker_CLI のためのテスト。
  *
  * @package    ITEMAN_GATracker
- * @copyright  2009 ITEMAN, Inc.
+ * @copyright  2009-2010 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
@@ -79,6 +79,7 @@ class ITEMAN_GATracker_CLITest extends PHPUnit_Framework_TestCase
         $_SERVER['REQUEST_URI'] = '/blog/';
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
         $_SERVER['SERVER_NAME'] = 'www.example.com';
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja,en-us;q=0.7,en;q=0.3';
     }
 
     /**
@@ -164,134 +165,6 @@ class ITEMAN_GATracker_CLITest extends PHPUnit_Framework_TestCase
         $result = $cli->run();
 
         $this->assertEquals(0, $result);
-        $this->assertEquals($_SERVER['REQUEST_URI'], $tracker->getPage());
-        $this->assertEquals($_SERVER['SERVER_NAME'], $tracker->getHostname());
-    }
-
-    /**
-     * @test
-     */
-    public function コンバータを指定する()
-    {
-        $_SERVER['REQUEST_URI'] = '/get/Stagehand_TestRunner-2.6.1.tgz';
-        $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'],
-                                 '--web-property-id=UA-6415151-2',
-                                 '--converters=ITEMAN_GATracker_Converter_PEARPackageToPageTitle'
-                                 );
-        $GLOBALS['argc'] = count($_SERVER['argv']);
-
-        $adapter = new HTTP_Request2_Adapter_Mock();
-        $adapter->addResponse('HTTP/1.1 200 OK');
-        $request = new HTTP_Request2();
-        $request->setAdapter($adapter);
-
-        $tracker = $this->getMock('ITEMAN_GATracker_Tracker',
-                                  array('createHTTPRequest')
-                                  );
-        $tracker->expects($this->any())
-                ->method('createHTTPRequest')
-                ->will($this->returnValue($request));
-
-        $cli = $this->getMock('ITEMAN_GATracker_CLI', array('createTracker'));
-        $cli->expects($this->any())
-            ->method('createTracker')
-            ->will($this->returnValue($tracker));
-        $result = $cli->run();
-
-        $this->assertEquals(0, $result);
-        $this->assertEquals(rawurlencode('Stagehand_TestRunner 2.6.1'),
-                            $tracker->getPageTitle()
-                            );
-    }
-
-    /**
-     * @param string $convertersOption
-     * @test
-     * @dataProvider provideConvertersOption
-     */
-    public function 複数のコンバータを指定する($convertersOption)
-    {
-        $_SERVER['REQUEST_URI'] = '/get/Stagehand_TestRunner-2.6.1.tgz';
-        $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'],
-                                 '--web-property-id=UA-6415151-2',
-                                 "--converters=$convertersOption"
-                                 );
-        $GLOBALS['argc'] = count($_SERVER['argv']);
-
-        $adapter = new HTTP_Request2_Adapter_Mock();
-        $adapter->addResponse('HTTP/1.1 200 OK');
-        $request = new HTTP_Request2();
-        $request->setAdapter($adapter);
-
-        $tracker = $this->getMock('ITEMAN_GATracker_Tracker',
-                                  array('createHTTPRequest')
-                                  );
-        $tracker->expects($this->any())
-                ->method('createHTTPRequest')
-                ->will($this->returnValue($request));
-
-        $cli = $this->getMock('ITEMAN_GATracker_CLI',
-                              array('createTracker', 'createConverter')
-                              );
-        $cli->expects($this->any())
-            ->method('createTracker')
-            ->will($this->returnValue($tracker));
-        $cli->expects($this->any())
-            ->method('createConverter')
-            ->will($this->returnCallback(array($this, 'createConverter')));
-        $result = $cli->run();
-
-        $this->assertEquals(0, $result);
-        $this->assertEquals(rawurlencode('Stagehand_TestRunner 2.6.1'),
-                            $tracker->getPageTitle()
-                            );
-        $this->assertEquals('www.example.org', $tracker->getHostname());
-    }
-
-    public function createConverter($converterClass)
-    {
-        if ($converterClass != 'ITEMAN_GATracker_Converter_RemoteAddrToHostname') {
-            return new $converterClass();
-        }
-
-        $converter = $this->getMock('ITEMAN_GATracker_Converter_RemoteAddrToHostname',
-                                    array('getHostByAddr')
-                                    );
-        $converter->expects($this->any())
-                  ->method('getHostByAddr')
-                  ->will($this->returnValue('www.example.org'));
-
-        return $converter;
-    }
-
-    public function provideConvertersOption()
-    {
-        return array(array('ITEMAN_GATracker_Converter_PEARPackageToPageTitle,ITEMAN_GATracker_Converter_RemoteAddrToHostname'),
-                     array('ITEMAN_GATracker_Converter_PEARPackageToPageTitle,ITEMAN_GATracker_Converter_RemoteAddrToHostname,')
-                     );
-    }
-
-    /**
-     * @test
-     */
-    public function 存在しないコンバータを指定された場合メッセージを表示しエラーにする()
-    {
-        $GLOBALS['argv'] = array($_SERVER['SCRIPT_NAME'],
-                                 '--web-property-id=UA-6415151-2',
-                                 '--converters=Foo'
-                                 );
-        $GLOBALS['argc'] = count($_SERVER['argv']);
-
-        $cli = new ITEMAN_GATracker_CLI();
-        ob_start();
-        $result = $cli->run();
-        $content = ob_get_contents();
-        ob_end_clean();
-
-        $this->assertEquals(1, $result);
-        $this->assertRegExp('/^ERROR: 指定されたコンバータ \[ Foo \] が見つかりません/',
-                            $content
-                            );
     }
 
     /**#@-*/

@@ -4,7 +4,7 @@
 /**
  * PHP version 5
  *
- * Copyright (c) 2008-2009 ITEMAN, Inc. All rights reserved.
+ * Copyright (c) 2008-2010 ITEMAN, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,9 +28,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    ITEMAN_GATracker
- * @copyright  2008-2009 ITEMAN, Inc.
+ * @copyright  2008-2010 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
- * @version    GIT: $Id$
+ * @version    Release: @package_version@
  * @link       http://www.vdgraaf.info/google-analytics-without-javascript.html
  * @link       http://www.ianlewis.org/jp/google-analytics
  * @link       http://code.google.com/p/gaforflash/
@@ -41,7 +41,7 @@
 
 /**
  * @package    ITEMAN_GATracker
- * @copyright  2008-2009 ITEMAN, Inc.
+ * @copyright  2008-2010 ITEMAN, Inc.
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
  * @link       http://www.vdgraaf.info/google-analytics-without-javascript.html
@@ -71,14 +71,7 @@ class ITEMAN_GATracker_Tracker
      */
 
     private $_queryVariables = array();
-    private $_userAgent;
-    private $_converters = array();
     private $_request;
-    private $_domainHash;
-    private $_sessionID;
-    private $_firstVisitTime;
-    private $_lastVisitTime;
-    private $_sessionCount = 0;
 
     /**#@-*/
 
@@ -94,23 +87,6 @@ class ITEMAN_GATracker_Tracker
     public function __construct()
     {
         $this->_initializeQueryVariables();
-        $this->_configureConverters();
-    }
-
-    // }}}
-    // {{{ generateCookieConfiguration()
-
-    /**
-     * @return string
-     */
-    public function generateCookieConfiguration()
-    {
-        $this->_domainHash = $this->_generateHash(@$_SERVER['SERVER_NAME']);
-        $this->_generateVisitorTrackingCookie();
-        return strtr(rawurlencode(implode('+', array('__utma=' . $this->_generateVisitorTrackingCookie() . ';',
-                                                     '__utmz=' . $this->_generateCampaignTrackingCookie() . ';'))),
-                     array('%28' => '(', '%29' => ')')
-                     );
     }
 
     // }}}
@@ -120,7 +96,6 @@ class ITEMAN_GATracker_Tracker
      */
     public function trackPageView()
     {
-        $this->_convert();
         $this->_validate();
         $this->_buildRequest();
         $this->_sendRequest();
@@ -135,28 +110,6 @@ class ITEMAN_GATracker_Tracker
     public function createHTTPRequest()
     {
         return new HTTP_Request2();
-    }
-
-    // }}}
-    // {{{ setPageTitle()
-
-    /**
-     * @param string $pageTitle
-     */
-    public function setPageTitle($pageTitle)
-    {
-        $this->_queryVariables['utmdt'] = rawurlencode($pageTitle);
-    }
-
-    // }}}
-    // {{{ addConverter()
-
-    /**
-     * @param ITEMAN_GATracker_Converter_ConverterInterface $converter
-     */
-    public function addConverter(ITEMAN_GATracker_Converter_ConverterInterface $converter)
-    {
-        $this->_converters[] = $converter;
     }
 
     // }}}
@@ -181,39 +134,6 @@ class ITEMAN_GATracker_Tracker
     }
 
     // }}}
-    // {{{ setPage()
-
-    /**
-     * @paran string $page
-     */
-    public function setPage($page)
-    {
-        $this->_queryVariables['utmp'] = $page;
-    }
-
-    // }}}
-    // {{{ getPage()
-
-    /**
-     * @return string
-     */
-    public function getPage()
-    {
-        return $this->_queryVariables['utmp'];
-    }
-
-    // }}}
-    // {{{ setHostname()
-
-    /**
-     * @paran string $hostname
-     */
-    public function setHostname($hostname)
-    {
-        $this->_queryVariables['utmhn'] = rawurlencode($hostname);
-    }
-
-    // }}}
     // {{{ getHostname()
 
     /**
@@ -222,17 +142,6 @@ class ITEMAN_GATracker_Tracker
     public function getHostname()
     {
         return $this->_queryVariables['utmhn'];
-    }
-
-    // }}}
-    // {{{ getPageTitle()
-
-    /**
-     * @return string
-     */
-    public function getPageTitle()
-    {
-        return $this->_queryVariables['utmdt'];
     }
 
     // }}}
@@ -258,17 +167,6 @@ class ITEMAN_GATracker_Tracker
     }
 
     // }}}
-    // {{{ setUserAgent()
-
-    /**
-     * @param string $userAgent
-     */
-    public function setUserAgent($userAgent)
-    {
-        $this->_userAgent = $userAgent;
-    }
-
-    // }}}
     // {{{ setWebPropertyID()
 
     /**
@@ -288,171 +186,6 @@ class ITEMAN_GATracker_Tracker
     public function getWebPropertyID()
     {
         return $this->_queryVariables['utmac'];
-    }
-
-    // }}}
-    // {{{ setLanguage()
-
-    /**
-     * @param string $language
-     */
-    public function setLanguage($language)
-    {
-        $this->_queryVariables['utmul'] = $language;
-    }
-
-    // }}}
-    // {{{ getLanguage()
-
-    /**
-     * @return string
-     */
-    public function getLanguage()
-    {
-        return $this->_queryVariables['utmul'];
-    }
-
-    // }}}
-    // {{{ getUserAgent()
-
-    /**
-     * @return string
-     */
-    public function getUserAgent()
-    {
-        return $this->_userAgent;
-    }
-
-    // }}}
-    // {{{ setScreenColors()
-
-    /**
-     * @param string $screenColors
-     */
-    public function setScreenColors($screenColors)
-    {
-        $this->_queryVariables['utmsc'] = $screenColors;
-    }
-
-    // }}}
-    // {{{ getScreenColors()
-
-    /**
-     * @return string
-     */
-    public function getScreenColors()
-    {
-        return $this->_queryVariables['utmsc'];
-    }
-
-    // }}}
-    // {{{ setScreenResolution()
-
-    /**
-     * @param string $screenResolution
-     */
-    public function setScreenResolution($screenResolution)
-    {
-        $this->_queryVariables['utmsr'] = $screenResolution;
-    }
-
-    // }}}
-    // {{{ getScreenResolution()
-
-    /**
-     * @return string
-     */
-    public function getScreenResolution()
-    {
-        return $this->_queryVariables['utmsr'];
-    }
-
-    // }}}
-    // {{{ setSessionID()
-
-    /**
-     * @param string $sessionID
-     */
-    public function setSessionID($sessionID)
-    {
-        $this->_sessionID = $this->_generateHash($sessionID);
-    }
-
-    // }}}
-    // {{{ getSessionID()
-
-    /**
-     * @return string
-     */
-    public function getSessionID()
-    {
-        return $this->_sessionID;
-    }
-
-    // }}}
-    // {{{ setFirstVisitTime()
-
-    /**
-     * @param integer $firstVisitTime
-     */
-    public function setFirstVisitTime($firstVisitTime)
-    {
-        $this->_firstVisitTime = $firstVisitTime;
-    }
-
-    // }}}
-    // {{{ getFirstVisitTime()
-
-    /**
-     * @return integer
-     */
-    public function getFirstVisitTime()
-    {
-        return $this->_firstVisitTime;
-    }
-
-    // }}}
-    // {{{ setLastVisitTime()
-
-    /**
-     * @param integer $lastVisitTime
-     */
-    public function setLastVisitTime($lastVisitTime)
-    {
-        $this->_lastVisitTime = $lastVisitTime;
-    }
-
-    // }}}
-    // {{{ getLastVisitTime()
-
-    /**
-     * @return integer
-     */
-    public function getLastVisitTime()
-    {
-        return $this->_lastVisitTime;
-    }
-
-    // }}}
-    // {{{ setSessionCount()
-
-    /**
-     * @param integer $sessionCount
-     */
-    public function setSessionCount($sessionCount)
-    {
-        $this->_sessionCount = $sessionCount;
-    }
-
-    // }}}
-    // {{{ getSessionCount()
-
-    /**
-     * @return integer
-     */
-    public function getSessionCount()
-    {
-        return $this->_sessionCount;
     }
 
     /**#@-*/
@@ -476,18 +209,6 @@ class ITEMAN_GATracker_Tracker
     {
         if (is_null($this->getWebPropertyID())) {
             throw new ITEMAN_GATracker_Exception('ウェブプロパティIDが設定されていません');
-        }
-
-        if (is_null($this->getPage())) {
-            throw new ITEMAN_GATracker_Exception('ページが設定されていません');
-        }
-
-        if (is_null($this->getHostname())) {
-            throw new ITEMAN_GATracker_Exception('ホスト名が設定されていません');
-        }
-
-        if (is_null($this->_userAgent)) {
-            throw new ITEMAN_GATracker_Exception('ユーザエージェントが設定されていません');
         }
     }
 
@@ -515,18 +236,6 @@ class ITEMAN_GATracker_Tracker
     }
 
     // }}}
-    // {{{ _convert()
-
-    /**
-     */
-    private function _convert()
-    {
-        foreach ($this->_converters as $converter) {
-            $converter->convert($this);
-        }
-    }
-
-    // }}}
     // {{{ _buildRequest()
 
     /**
@@ -537,7 +246,10 @@ class ITEMAN_GATracker_Tracker
         $this->_request->setUrl($this->_generateTrackingURI());
         $this->_request->setMethod(HTTP_Request2::METHOD_GET);
         $this->_request->setConfig(array('connect_timeout' => 10, 'timeout' => 30));
-        $this->_request->setHeader('User-Agent', $this->_userAgent);
+        $this->_request->setHeader('User-Agent', $_SERVER['HTTP_USER_AGENT']);
+        if (array_key_exists('HTTP_ACCEPT_LANGUAGE', $_SERVER)) {
+            $this->_request->setHeader('Accepts-Language', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        }
     }
 
     // }}}
@@ -561,35 +273,20 @@ class ITEMAN_GATracker_Tracker
      */
     private function _initializeQueryVariables()
     {
-        $this->_queryVariables['utmwv'] = '4.3';
+        $this->_queryVariables['utmwv'] = '4.4sh';
         $this->_queryVariables['utmn'] = $this->_generateRandomInteger();
-        $this->setHostname(null);
-        $this->_queryVariables['utmcs'] = 'UTF-8';
-        $this->setScreenResolution('-');
-        $this->setScreenColors('-');
-        $this->setLanguage('-');
-        $this->_queryVariables['utmje'] = '0';
-        $this->_queryVariables['utmfl'] = '-';
-        $this->setPageTitle('-');
-        $this->_queryVariables['utmhid'] = $this->_generateRandomInteger();
-        $this->setSource('-');
-        $this->setPage(null);
+        $this->_queryVariables['utmhn'] =
+            array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : '';
+        $this->_queryVariables['utmr'] =
+            array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : '-';
+        $this->_queryVariables['utmp'] =
+            array_key_exists('REQUEST_URI', $_SERVER) ? $_SERVER['REQUEST_URI'] : '';
         $this->setWebPropertyID(null);
-        $this->_queryVariables['utmcc'] = array($this, 'generateCookieConfiguration');
-    }
-
-    // }}}
-    // {{{ _configureConverters()
-
-    /**
-     */
-    private function _configureConverters()
-    {
-        $this->addConverter(new ITEMAN_GATracker_Converter_ServerNameToHostname());
-        $this->addConverter(new ITEMAN_GATracker_Converter_RequestURIToPage());
-        $this->addConverter(new ITEMAN_GATracker_Converter_UserAgent());
-        $this->addConverter(new ITEMAN_GATracker_Converter_RefererToSource());
-        $this->addConverter(new ITEMAN_GATracker_Converter_AcceptLanguageToLanguage());
+        $this->_queryVariables['utmcc'] = '__utma%3D999.999.999.999.999.1%3B';
+        $this->_queryVariables['utmvid'] = $this->_generateVisitorId();
+        $this->_queryVariables['utmip'] =
+            array_key_exists('REMOTE_ADDR', $_SERVER) ? $this->_maskLastOctectOfIpAddress($_SERVER['REMOTE_ADDR'])
+                                                      : '';
     }
 
     // }}}
@@ -602,92 +299,21 @@ class ITEMAN_GATracker_Tracker
      */
     private function _generateRandomInteger()
     {
-        return mt_rand(0, 2147483647);
+        return mt_rand(0, 0x7fffffff);
     }
 
-    // }}}
-    // {{{ _generateHash()
-
-    /**
-     * 与えられた文字列に対応するハッシュを生成する。
-     * このメソッドは com.google.analytics.core.Utils.generateHash() の移植である。
-     *
-     * @param string $input
-     * @return integer
-     * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/core/Utils.as
-     */
-    private function _generateHash($input)
+    private function _generateVisitorId()
     {
-        $hash = 1;
-        $leftMost7 = 0;
-
-        for ($position = strlen($input) - 1; $position >= 0; --$position) {
-            $current = ord(substr($input, $position, 1));
-            $hash = (($hash << 6) & 0xfffffff) + $current + ($current << 14);
-            $leftMost7 = $hash & 0xfe00000;
-
-            if ($leftMost7 != 0) {
-                $hash ^= $leftMost7 >> 21;
-            }
-        }
-
-        return $hash;
+        return '0x' . substr(md5($_SERVER['HTTP_USER_AGENT'] . uniqid(mt_rand(), true)), 0, 16);
     }
 
-    // }}}
-    // {{{ _generateVisitorTrackingCookie()
-
-    /**
-     * ユーザトラッキング Cookie (utma) を生成する。
-     *
-     * @return string
-     */
-    private function _generateVisitorTrackingCookie()
+    private function _maskLastOctectOfIpAddress($ipAddress)
     {
-        $sessionID = $this->getSessionID();
-        if (is_null($sessionID)) {
-            $this->setSessionID(uniqid(mt_rand(), true));
-            $sessionID = $this->getSessionID();
+        if (!preg_match('/^(\d+\.\d+\.\d+\.)\d+$/', $ipAddress, $matches)) {
+            return '';
         }
 
-        $firstVisitTime = $this->getFirstVisitTime();
-        $lastVisitTime = $this->getLastVisitTime();
-        $currentTime = time();
-
-        if (!(!is_null($firstVisitTime) && !is_null($lastVisitTime)
-              && $firstVisitTime <= $lastVisitTime
-              && $lastVisitTime <= $currentTime)
-            ) {
-            $this->setFirstVisitTime($currentTime);
-            $this->setLastVisitTime($currentTime);
-            $firstVisitTime = $this->getFirstVisitTime();
-            $lastVisitTime = $this->getLastVisitTime();
-        }
-
-        $sessionCount = $this->getSessionCount();
-        $sessionCount += 1;
-
-        return "{$this->_domainHash}.$sessionID.$firstVisitTime.$lastVisitTime.$currentTime.$sessionCount";
-    }
-
-    // }}}
-    // {{{ _generateCampaignTrackingCookie()
-
-    /**
-     * キャンペーントラッキング Cookie (utmz) を生成する。
-     *
-     * @return string
-     */
-    private function _generateCampaignTrackingCookie()
-    {
-        $creation = time();
-        $sessions = 1;
-        $responseCount = 1;
-        $name = '(direct)';
-        $clickSource = '(direct)';
-        $deliveryMethod = '(none)';
-
-        return "{$this->_domainHash}.$creation.$sessions.$responseCount.utmccn=$name|utmcsr=$clickSource|utmcmd=$deliveryMethod";
+        return $matches[1] . '0';
     }
 
     /**#@-*/
