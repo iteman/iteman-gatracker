@@ -46,7 +46,6 @@ set_include_path(
     realpath(dirname(__FILE__) . '/../imports/PEAR')
 );
 
-require_once 'PHPUnit/Framework.php';
 require_once 'Stagehand/Autoload.php';
 
 $loader = Stagehand_Autoload::legacyLoader();
